@@ -10,7 +10,7 @@ by adding `bulma_components` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:bulma_components, "~> 0.1.0"}
+    {:bulma_widgets, "~> 0.1.0"}
   ]
 end
 ```

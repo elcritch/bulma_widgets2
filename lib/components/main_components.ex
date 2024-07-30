@@ -73,4 +73,39 @@ defmodule BulmaWidgets.MainComponents do
     """
   end
 
+  attr(:page_title, :any, required: true, doc: "the page title")
+  attr(:menu_items, :any, required: true, doc: "the data structure for the form")
+
+  slot(:title, doc: "place title here")
+  def root_example(assigns) do
+    ~H"""
+    <!DOCTYPE html>
+    <html lang="en" class="has-navbar-fixed-top theme-dark">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="csrf-token" content={get_csrf_token()} />
+
+        <%= render_slot(@title) %>
+        <link phx-track-static rel="stylesheet" href="/bulma/assets/bulma_widgets.css" />
+        <link phx-track-static rel="stylesheet" href="/assets/app.css" />
+
+        <!-- font awesome -->
+        <link phx-track-static rel="stylesheet" href="/bulma/fonts/fontawesome6/css/fontawesome.min.css" />
+        <link phx-track-static rel="stylesheet" href="/bulma/fonts/fontawesome6/css/solid.min.css" />
+
+        <script defer phx-track-static type="text/javascript" src=~p"/assets/app.js">
+        </script>
+      </head>
+      <body>
+        <BulmaWidgets.MainComponents.topbard page_title={@page_title} menu_items={@menu_items} />
+
+        <section class="hero is-dark is-fullheight-with-navbar">
+            <%= @inner_content %>
+        </section>
+      </body>
+    </html>
+
+    """
+  end
 end

@@ -1,4 +1,4 @@
-defmodule BulmaWidgets.ScrollMenu do
+defmodule BulmaWidgets.Widgets.ScrollMenu do
   use Phoenix.LiveComponent
   use BulmaWidgets, :html_helpers
 

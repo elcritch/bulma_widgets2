@@ -1,4 +1,4 @@
-defmodule BulmaWidgets.ActionButton do
+defmodule BulmaWidgets.Widgets.ActionButton do
   use Phoenix.LiveComponent
   use BulmaWidgets, :html_helpers
 

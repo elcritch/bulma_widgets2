@@ -7,6 +7,7 @@ defmodule BulmaWidgets.MixProject do
       version: "0.1.0",
       elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
+      aliases: aliases(),
       deps: deps()
     ]
   end
@@ -38,6 +39,20 @@ defmodule BulmaWidgets.MixProject do
       {:ex_cldr_dates_times, "~> 2.4", optional: true},
       {:ex_cldr, "~> 2.16", optional: true},
 
+
     ]
   end
+
+  defp aliases do
+    [
+      setup: ["deps.get", "assets.setup", "assets.deploy"],
+      "assets.setup": ["esbuild.install --if-missing"],
+      "assets.deploy": [
+        "esbuild lw_display --minify",
+        "sass default --no-source-map --style=compressed",
+        "phx.digest"
+      ]
+    ]
+  end
+
 end

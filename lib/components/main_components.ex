@@ -1,5 +1,6 @@
 defmodule BulmaWidgets.MainComponents do
   use Phoenix.LiveComponent
+  use BulmaWidgets, :html_helpers
   require Logger
 
   attr(:menu_items, :any, required: true, doc: "the data structure for the form")
@@ -17,7 +18,7 @@ defmodule BulmaWidgets.MainComponents do
         <a class="navbar-item px-4 is-italic m-0 p-0 ">
           <button class="button is-link is-soft is-outlined">
             <%= case assigns[:page_title] do %>
-              <% title -> %>
+              <% title when is_binary(title) -> %>
                 <span class="icon">
                   <i class={@menu_items[title][:icon]}></i>
                 </span>

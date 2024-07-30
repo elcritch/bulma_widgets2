@@ -45,7 +45,8 @@ defmodule BulmaWidgets do
       # Core UI components and translation
       import BulmaWidgets.CoreComponents
       alias BulmaWidgets.Bulma
-      alias BulmaWidgets.Widgets.EventAction
+      alias BulmaWidgets.EventAction
+      alias BulmaWidgets.Actions
 
       import BulmaWidgets.Gettext
 

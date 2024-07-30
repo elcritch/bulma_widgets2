@@ -1,8 +1,6 @@
 defmodule BulmaWidgets.ScrollMenu do
   use Phoenix.LiveComponent
-
-  alias BulmaWidgets.EventAction
-  alias BulmaWidgets.Actions
+  use BulmaWidgets, :html_helpers
 
   require Logger
 

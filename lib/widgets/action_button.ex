@@ -2,9 +2,6 @@ defmodule BulmaWidgets.ActionButton do
   use Phoenix.LiveComponent
   use BulmaWidgets, :html_helpers
 
-  alias BulmaWidgets.EventAction
-  alias BulmaWidgets.Actions
-
   require Logger
 
   def mount(socket) do
@@ -25,8 +22,6 @@ defmodule BulmaWidgets.ActionButton do
   attr :loading, :boolean, default: false
   attr :extra_actions, :list, default: []
   attr :rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs()
-
-  @slotty Module.get_attribute(__MODULE__, :__attrs__)
 
   def render(assigns) do
     # Logger.debug("#{__MODULE__}:render: assigns:rest: #{inspect(assigns.rest |> Map.keys(), pretty: true)}")

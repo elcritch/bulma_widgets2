@@ -34,6 +34,10 @@ defmodule BulmaWidgets.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
+
+      {:ex_cldr_dates_times, "~> 2.4", optional: true},
+      {:ex_cldr, "~> 2.16", optional: true},
+
     ]
   end
 end

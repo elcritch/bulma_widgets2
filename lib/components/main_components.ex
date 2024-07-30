@@ -3,6 +3,9 @@ defmodule BulmaWidgets.MainComponents do
   use BulmaWidgets, :html_helpers
   require Logger
 
+  import Phoenix.Controller,
+    only: [get_csrf_token: 0, view_module: 1, view_template: 1]
+
   attr(:page_title, :any, required: true, doc: "the page title")
   attr(:menu_items, :any, required: true, doc: "the data structure for the form")
 

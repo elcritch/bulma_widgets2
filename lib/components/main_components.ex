@@ -3,11 +3,19 @@ defmodule BulmaWidgets.MainComponents do
   use BulmaWidgets, :html_helpers
   require Logger
 
+  attr(:page_title, :any, required: true, doc: "the page title")
   attr(:menu_items, :any, required: true, doc: "the data structure for the form")
 
   slot(:logo, doc: "place logo here")
 
   def topbard(assigns) do
+    icons = assigns.menu_items |> Enum.map(fn {k,v} -> {k,v[:icon]} end) |> Map.new()
+
+    assigns =
+      assigns
+      |> assign(:icons, icons)
+      |> assign(:title_icon, icons[assigns.page_title])
+
     ~H"""
     <!-- START NAV -->
     <nav class="navbar is-info is-fixed-top" role="navigation" aria-label="main navigation">
@@ -17,15 +25,12 @@ defmodule BulmaWidgets.MainComponents do
         </a>
         <a class="navbar-item px-4 is-italic m-0 p-0 ">
           <button class="button is-link is-soft is-outlined">
-            <%= case assigns[:page_title] do %>
-              <% title when is_binary(title) -> %>
-                <span class="icon">
-                  <i class={@menu_items[title][:icon]}></i>
-                </span>
-              <% _ -> %>
-                <!-- none -->
+            <%= if @page_title do %>
+              <span class="icon">
+                <i class={@title_icon}></i>
+              </span>
             <% end %>
-            <span> <%= assigns[:page_title] || "" %> </span>
+            <span> <%= @page_title || "" %> </span>
           </button>
         </a>
 

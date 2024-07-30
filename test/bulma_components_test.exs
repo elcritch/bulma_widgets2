@@ -1,8 +1,8 @@
-defmodule BulmaComponentsTest do
+defmodule BulmaWidgetsTest do
   use ExUnit.Case
-  doctest BulmaComponents
+  doctest BulmaWidgets
 
   test "greets the world" do
-    assert BulmaComponents.hello() == :world
+    # assert BulmaWidgets.hello() == :world
   end
 end

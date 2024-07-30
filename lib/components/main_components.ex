@@ -94,7 +94,7 @@ defmodule BulmaWidgets.MainComponents do
         <link phx-track-static rel="stylesheet" href="/bulma/fonts/fontawesome6/css/fontawesome.min.css" />
         <link phx-track-static rel="stylesheet" href="/bulma/fonts/fontawesome6/css/solid.min.css" />
 
-        <script defer phx-track-static type="text/javascript" src=~p"/assets/app.js">
+        <script defer phx-track-static type="text/javascript" src="/assets/app.js">
         </script>
       </head>
       <body>

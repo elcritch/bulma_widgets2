@@ -29,8 +29,8 @@ defmodule BulmaWidgets.Actions do
         )
       end
 
-      def updates(assigns, socket, opts \\ []) do
-        BulmaWidgets.Actions.updates(assigns, socket, __MODULE__, opts)
+      def widget_updates(assigns, socket, opts \\ []) do
+        BulmaWidgets.Actions.widget_updates(assigns, socket, __MODULE__, opts)
       end
 
       def event_send(socket, opts) do
@@ -103,23 +103,16 @@ defmodule BulmaWidgets.Actions do
     end
   end
 
-  def updates(assigns, socket, module, opts \\ []) do
+  def widget_updates(assigns, socket, module, opts \\ []) do
 
-    actions = assigns |> BulmaWidgets.Actions.all_actions([])
-    Logger.warning("Action:handle_updates:actions: #{inspect(actions, pretty: true)}")
-    Logger.debug("Action:handle_updates:assigns: #{inspect(assigns, pretty: true)}")
-    Logger.debug("Action:handle_updates:socket: #{inspect(socket, pretty: true)}")
     {assigns, socket} = TriggerUpdates.run_triggers(assigns, socket, module, opts)
 
-    Logger.debug("Action:handle_updates:socket!: #{inspect(socket, pretty: false)}")
-    Logger.debug("Action:handle_updates:assigns!: #{inspect(assigns, pretty: false)}")
     socket =
       socket
       |> Phoenix.Component.assign(assigns)
       |> BulmaWidgets.Actions.assign_cached()
       |> BulmaWidgets.Actions.assign_sharing()
 
-    Logger.debug("Action:handle_updates:socket!!: #{inspect(socket, pretty: false)}")
     socket
   end
 

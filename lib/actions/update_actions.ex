@@ -26,20 +26,11 @@ defmodule BulmaWidgets.Action.TriggerUpdates do
     %{evt | socket: socket}
   end
 
-  def handle_triggers(trigger, values, assigns, socket) do
-    Logger.debug("TriggerUpdates:handle_triggers:trigger #{inspect(trigger)}")
-    Logger.debug("TriggerUpdates:handle_triggers:values #{inspect(values)}")
-    socket
-  end
 
   def run_triggers(%{__trigger_update__: {trigger, vals}} = assigns, socket, module, opts) do
-    Logger.warning("TriggerUpdates:run_triggers:trigger: #{inspect(trigger, pretty: true)}")
-    Logger.debug("TriggerUpdates:run_triggers:assigns: #{inspect(assigns, pretty: true)}")
-    Logger.debug("TriggerUpdates:run_triggers:socket: #{inspect(socket, pretty: true)}")
     assigns = assigns |> Map.delete(:__trigger_update__)
 
     socket = module.handle_triggers(trigger, vals, assigns, socket)
-    Logger.debug("TriggerUpdates:run_triggers:socket!: #{inspect(socket, pretty: true)}")
     {assigns, socket}
   end
 

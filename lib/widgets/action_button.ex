@@ -12,7 +12,12 @@ defmodule BulmaWidgets.Widgets.ActionButton do
   def update(assigns, socket) do
     # Logger.debug("action_button:comp:update: #{inspect(assigns, pretty: true)}")
     # send message to listen here!
-    {:ok, socket |> Actions.handle_updates(assigns)}
+    # assigns = assigns |> Actions.handle_triggers()
+
+    {:ok,
+     socket
+     |> assign(assigns)
+     |> Actions.assign_cached()}
   end
 
   attr :id, :string, required: true

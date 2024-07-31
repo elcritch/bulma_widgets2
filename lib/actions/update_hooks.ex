@@ -29,22 +29,22 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     assigns = assigns |> Map.delete(:__trigger_hooks__)
 
     # socket = module.handle_triggers(hooks, vals, assigns, socket)
-    for hook <- hooks, reduce: socket do
-      socket ->
-        case hook do
-          fun when is_function(fun, 2) ->
-            fun.(assigns, socket)
-          fun when is_function(fun, 0) ->
-            fun.()
-            socket
-          {:start_async, name, fun} when is_function(fun, 0) ->
-            socket
-            |> Phoenix.LiveView.start_async(name, fun)
-          hook ->
-            Logger.error("invalid trigger hook callback: #{inspect(hook)}")
-            socket
-        end
-    end
+    socket =
+      for hook <- hooks, reduce: socket do
+        socket ->
+          case hook do
+            fun when is_function(fun, 2) ->
+              fun.(assigns, socket)
+            fun when is_function(fun, 0) ->
+              fun.()
+              socket
+            {:start_async, name, cb} when is_function(cb, 0) ->
+              socket |> Phoenix.LiveView.start_async(name, cb)
+            hook ->
+              Logger.error("invalid trigger hook callback: #{inspect(hook)}")
+              socket
+          end
+      end
 
     {assigns, socket}
   end

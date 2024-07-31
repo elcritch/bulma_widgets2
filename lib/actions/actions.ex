@@ -103,7 +103,6 @@ defmodule BulmaWidgets.Actions do
 
   def widget_updates(assigns, socket, _module, opts \\ []) do
 
-    {assigns, socket} = Action.UpdateHooks.run_hooks(assigns, socket, opts)
     # {assigns, socket} = Action.TriggerUpdates.run_triggers(assigns, socket, module, opts)
 
     socket =
@@ -112,6 +111,9 @@ defmodule BulmaWidgets.Actions do
       |> BulmaWidgets.Actions.assign_cached()
       |> BulmaWidgets.Actions.assign_sharing()
 
+    {_assigns, socket} = Action.UpdateHooks.run_hooks(assigns, socket, opts)
+
+    Logger.warning("widget_updates: #{inspect(socket, pretty: true)}")
     socket
   end
 

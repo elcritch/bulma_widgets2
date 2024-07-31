@@ -113,7 +113,6 @@ defmodule BulmaWidgets.Actions do
 
     {_assigns, socket} = Action.UpdateHooks.run_hooks(assigns, socket, opts)
 
-    Logger.warning("widget_updates: #{inspect(socket, pretty: true)}")
     socket
   end
 

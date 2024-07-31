@@ -25,7 +25,7 @@ defmodule BulmaWidget.Action.DefaultAtomParse do
   end
 end
 
-defmodule BulmaWidget.Action.BulmaWidget.Action.FloatNumberParse do
+defmodule BulmaWidget.Action.FloatNumberParse do
   require Logger
   alias BulmaWidgets.Action
 

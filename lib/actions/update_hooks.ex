@@ -38,8 +38,10 @@ defmodule BulmaWidgets.Action.UpdateHooks do
             fun when is_function(fun, 0) ->
               fun.()
               socket
-            {:start_async, name, cb} when is_function(cb, 0) ->
-              socket |> Phoenix.LiveView.start_async(name, cb)
+            {:start_async, name, args, cb} when is_function(cb, 1) ->
+              socket |> Phoenix.LiveView.start_async(name, fn ->
+                cb.(args)
+              end)
             hook ->
               Logger.error("invalid trigger hook callback: #{inspect(hook)}")
               socket

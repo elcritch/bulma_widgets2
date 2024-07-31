@@ -99,12 +99,12 @@ defmodule BulmaWidgets.Actions do
   end
 
   def event_commands(cmds, modify \\ false) do
-    [{Action.EventCommands, modify: modify, commands: cmds}]
+    [{Action.Commands, modify: modify, commands: cmds}]
   end
 
   def set_values(vals) do
     [
-      {Action.EventCommands,
+      {Action.Commands,
        modify: true,
        commands: fn evt = %Action{data: {key, values}} ->
          %{evt | data: {key, values |> Map.merge(vals |> Map.new())}}

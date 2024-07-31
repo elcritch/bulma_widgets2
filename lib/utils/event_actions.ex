@@ -91,17 +91,6 @@ defmodule BulmaWidgets.EventAction do
     end
   end
 
-  defmodule AssignModified do
-    require Logger
-    alias BulmaWidgets.EventAction
-
-    @moduledoc """
-    """
-    def call(%EventAction{data: {_key, _}, socket: socket} = evt, _opts) do
-      %{evt | socket: Phoenix.LiveView.Utils.assign(socket, :modified, true)}
-    end
-  end
-
   defmodule CastMenuEvent do
     require Logger
     alias BulmaWidgets.EventAction

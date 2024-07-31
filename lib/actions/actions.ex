@@ -103,7 +103,7 @@ defmodule BulmaWidgets.Actions do
 
   def widget_updates(assigns, socket, _module, opts \\ []) do
 
-    {assigns, socket} = Action.UpdateHooks.run_hooks(assigns, socket, opts)
+    {assigns, socket} = Action.UpdateHook.run_hooks(assigns, socket, opts)
     # {assigns, socket} = Action.TriggerUpdates.run_triggers(assigns, socket, module, opts)
 
     socket =

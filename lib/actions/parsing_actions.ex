@@ -1,51 +1,51 @@
 
-defmodule EventAction.DefaultNumberParse do
+defmodule Action.DefaultNumberParse do
   require Logger
-  alias BulmaWidgets.EventAction
+  alias BulmaWidgets.Action
 
   @moduledoc """
   """
-  def call(%EventAction{data: {key, value}} = evt, _opts) do
+  def call(%Action{data: {key, value}} = evt, _opts) do
     value! = BulmaWidgets.Utils.NumberParse.number_parse(value)
 
     %{evt | data: {key, value!}}
   end
 end
 
-defmodule EventAction.DefaultAtomParse do
+defmodule Action.DefaultAtomParse do
   require Logger
-  alias BulmaWidgets.EventAction
+  alias BulmaWidgets.Action
 
   @moduledoc """
   """
-  def call(%EventAction{data: {key, value}} = evt, _opts) do
+  def call(%Action{data: {key, value}} = evt, _opts) do
     value! = String.to_existing_atom(value)
 
     %{evt | data: {key, value!}}
   end
 end
 
-defmodule EventAction.EventAction.FloatNumberParse do
+defmodule Action.Action.FloatNumberParse do
   require Logger
-  alias BulmaWidgets.EventAction
+  alias BulmaWidgets.Action
 
   @moduledoc """
   """
-  def call(%EventAction{data: {key, value}} = evt, _opts) do
+  def call(%Action{data: {key, value}} = evt, _opts) do
     value! = BulmaWidgets.Utils.NumberParse.number_parse(value, :float)
 
     %{evt | data: {key, value!}}
   end
 end
 
-defmodule EventAction.DefaultTimeParse do
+defmodule Action.DefaultTimeParse do
   require Logger
-  alias BulmaWidgets.EventAction
+  alias BulmaWidgets.Action
 
   @moduledoc """
   """
 
-  def call(%EventAction{data: {key, value}} = evt, _opts) do
+  def call(%Action{data: {key, value}} = evt, _opts) do
     value! = Time.from_iso8601!(value)
 
     %{evt | data: {key, value!}}

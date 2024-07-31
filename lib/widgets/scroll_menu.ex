@@ -5,7 +5,7 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
   require Logger
 
   @standard_actions [
-    {EventAction.AssignField, field: :data}
+    {Action.AssignField, field: :data}
   ]
 
   def update(assigns, socket) do
@@ -81,13 +81,13 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
     value = socket.assigns.values |> Map.new() |> Map.get(key)
 
     event_action =
-      %EventAction{
+      %Action{
         id: menu_name,
         data: {key, value},
         state: socket.assigns,
         socket: socket
       }
-      |> EventAction.apply(actions)
+      |> Action.apply(actions)
 
     {:noreply, event_action.socket |> assign(%{test: true, other: false})}
   end

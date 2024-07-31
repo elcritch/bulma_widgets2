@@ -1,7 +1,7 @@
-defmodule BulmaWidgets.Actions do
+defmodule BulmaWidgets.Action do
   require Logger
-  alias BulmaWidgets.EventAction
-  alias BulmaWidgets.EventAction.CacheState
+  alias BulmaWidgets.Action
+  alias BulmaWidgets.Action.CacheState
 
   defmacro __using__(opts) do
     pubsub = opts |> Keyword.fetch!(:pubsub)
@@ -57,7 +57,7 @@ defmodule BulmaWidgets.Actions do
     List.flatten(standard ++ extra)
   end
 
-  defdelegate register_updates(assigns, socket, default \\ []), to: EventAction.BroadcastState
+  defdelegate register_updates(assigns, socket, default \\ []), to: Action.BroadcastState
 
   def assign_cached(socket_or_assigns) do
     assign_cached(socket_or_assigns, [])
@@ -81,7 +81,7 @@ defmodule BulmaWidgets.Actions do
     # Logger.debug("action_utils:cached:assigns: #{inspect(assigns)}")
     # Logger.debug(":action_utils:cached:opts: #{inspect(opts)}")
     actions = assigns |> all_actions([])
-    cached_actions = actions |> Keyword.get_values(EventAction.CacheState)
+    cached_actions = actions |> Keyword.get_values(Action.CacheState)
     # Logger.debug("action_utils:cached:cached_actions: #{inspect(cached_actions)}")
 
     for cache_action <- cached_actions, reduce: assigns do
@@ -99,14 +99,14 @@ defmodule BulmaWidgets.Actions do
   end
 
   def event_commands(cmds, modify \\ false) do
-    [{EventAction.EventCommands, modify: modify, commands: cmds}]
+    [{Action.EventCommands, modify: modify, commands: cmds}]
   end
 
   def set_values(vals) do
     [
-      {EventAction.EventCommands,
+      {Action.EventCommands,
        modify: true,
-       commands: fn evt = %EventAction{data: {key, values}} ->
+       commands: fn evt = %Action{data: {key, values}} ->
          %{evt | data: {key, values |> Map.merge(vals |> Map.new())}}
        end}
     ]
@@ -114,14 +114,14 @@ defmodule BulmaWidgets.Actions do
 
   def event_send(topic, pubsub, vals) do
     [
-      {EventAction.BroadcastState, topic: topic, values: vals, pubsub: pubsub},
-      {EventAction.CacheUpdate, topic: topic, values: vals}
+      {Action.BroadcastState, topic: topic, values: vals, pubsub: pubsub},
+      {Action.CacheUpdate, topic: topic, values: vals}
     ]
   end
 
   def update_shared(topic, pubsub, vals) do
     [
-      {EventAction.BroadcastState, topic: topic, values: vals, pubsub: pubsub}
+      {Action.BroadcastState, topic: topic, values: vals, pubsub: pubsub}
     ]
   end
 
@@ -132,12 +132,12 @@ defmodule BulmaWidgets.Actions do
 
     standard_actions = [
       {
-        EventAction.BroadcastState,
+        Action.BroadcastState,
         topics: topics, module: module, pubsub: pubsub
       }
     ]
 
-    EventAction.BroadcastState.register_updates(socket.assigns, socket, standard_actions)
+    Action.BroadcastState.register_updates(socket.assigns, socket, standard_actions)
     socket
   end
 

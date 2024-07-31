@@ -58,13 +58,13 @@ defmodule BulmaWidgets.Widgets.ActionButton do
     actions = socket.assigns |> Actions.all_actions()
 
     event_action =
-      %EventAction{
+      %Action{
         id: name,
         data: {name, values |> Map.delete("name")},
         state: socket.assigns,
         socket: socket
       }
-      |> EventAction.apply(actions)
+      |> Action.apply(actions)
 
     {:noreply, event_action.socket}
   end

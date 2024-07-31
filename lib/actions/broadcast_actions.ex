@@ -4,6 +4,7 @@ defmodule BulmaWidgets.Action.BroadcastEvent do
   alias BulmaWidgets.Action
 
   @moduledoc """
+  Broadcasts an :info event to all listeners
   """
   def call(%Action{socket: socket} = evt, opts \\ []) do
     topic = opts |> Keyword.fetch!(:topic)
@@ -48,8 +49,6 @@ defmodule BulmaWidgets.Action.BroadcastState do
     topics = opts |> Keyword.fetch!(:topics)
     module = opts |> Keyword.fetch!(:module)
 
-    # Logger.debug("BroadcastState:broadcast_register:socket: #{inspect(socket)}")
-    # Logger.debug("BroadcastState:broadcast_register:assigns: #{inspect(assigns)}")
     Logger.debug("BroadcastState:broadcast_register:register_updates: id:#{inspect id} topics:#{topics}")
     send(self(), {:broadcast_register, %{id: id, topics: topics, module: module, view: socket.view}})
   end

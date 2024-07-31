@@ -98,6 +98,21 @@ defmodule BulmaWidgets.Actions do
     end
   end
 
+  def handle_updates(socket, assigns, _opts \\ []) do
+
+    actions = assigns |> all_actions([])
+    Logger.warning("Action:handle_updates:actions: #{inspect(actions, pretty: true)}")
+    Logger.debug("Action:handle_updates:assigns: #{inspect(assigns, pretty: true)}")
+    Logger.debug("Action:handle_updates:socket: #{inspect(socket, pretty: true)}")
+
+    socket =
+      socket
+      |> Phoenix.Component.assign(assigns)
+      |> assign_cached()
+
+    socket
+  end
+
   def event_commands(cmds, modify \\ false) do
     [{Action.Commands, modify: modify, commands: cmds}]
   end

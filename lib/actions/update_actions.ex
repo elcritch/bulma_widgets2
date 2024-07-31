@@ -6,7 +6,7 @@ defmodule BulmaWidgets.Action.TriggerUpdates do
   @moduledoc """
   """
   def call(%Action{data: {_key, values}, socket: socket} = evt, opts \\ []) do
-    Logger.debug("BroadcastState:call:opts: #{inspect(opts, pretty: false)}")
+    Logger.debug("TriggerUpdates:call:opts: #{inspect(opts, pretty: false)}")
 
     target = opts |> Keyword.get(:id, socket.assigns.id)
     topic = opts |> Keyword.fetch!(:topic)
@@ -22,4 +22,8 @@ defmodule BulmaWidgets.Action.TriggerUpdates do
     %{evt | socket: socket}
   end
 
+  def handle_triggers(socket, assigns) do
+
+    {socket, assigns}
+  end
 end

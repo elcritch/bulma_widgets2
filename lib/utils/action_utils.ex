@@ -49,10 +49,6 @@ defmodule BulmaWidgets.Actions do
     List.flatten(standard ++ extra)
   end
 
-  def target(assigns) do
-    assigns[:target] || assigns[:id]
-  end
-
   defdelegate register_updates(assigns, socket, default \\ []), to: EventAction.BroadcastState
 
   def assign_cached(socket_or_assigns) do
@@ -94,8 +90,8 @@ defmodule BulmaWidgets.Actions do
     end
   end
 
-  def menu_commands(cmds) do
-    [{EventAction.MenuCommands, commands: cmds}]
+  def menu_commands(cmds, modify \\ false) do
+    [{EventAction.MenuCommands, modify: modify, commands: cmds}]
   end
 
   def set_values(vals) do

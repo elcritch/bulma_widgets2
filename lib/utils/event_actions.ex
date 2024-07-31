@@ -88,7 +88,7 @@ defmodule BulmaWidgets.EventAction do
     end
   end
 
-  defmodule MenuCommands do
+  defmodule EventCommands do
     require Logger
     alias BulmaWidgets.EventAction
 
@@ -96,10 +96,10 @@ defmodule BulmaWidgets.EventAction do
       Apply a function with event data, or a list of functions:
 
           extra_actions={[
-            {EventAction.MenuCommands, commands: fn x -> Logger.info("HI: \#{inspect x}!!!") end}
+            {EventAction.EventCommands, commands: fn x -> Logger.info("HI: \#{inspect x}!!!") end}
           ]}
           extra_actions={[
-            {EventAction.MenuCommands, commands: [fn x -> Logger.info("HI: \#{inspect x}!!!") end]}
+            {EventAction.EventCommands, commands: [fn x -> Logger.info("HI: \#{inspect x}!!!") end]}
           ]}
     """
     def call(%EventAction{} = evt, opts) do
@@ -112,8 +112,8 @@ defmodule BulmaWidgets.EventAction do
           _ -> []
         end
 
-      # Logger.debug("EventAction:MenuCommands: opts: #{inspect(opts)} ")
-      # Logger.debug("EventAction:MenuCommands: state: #{inspect(commands)} ")
+      # Logger.debug("EventAction:EventCommands: opts: #{inspect(opts)} ")
+      # Logger.debug("EventAction:EventCommands: state: #{inspect(commands)} ")
       evt! =
         for cmd <- commands, reduce: evt do
           evt ->

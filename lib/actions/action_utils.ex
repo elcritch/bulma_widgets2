@@ -1,4 +1,4 @@
-defmodule BulmaWidgets.Action do
+defmodule BulmaWidgets.Actions do
   require Logger
   alias BulmaWidgets.Action
   alias BulmaWidgets.Action.CacheState

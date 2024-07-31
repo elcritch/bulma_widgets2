@@ -144,13 +144,13 @@ defmodule BulmaWidgets.Actions do
   def assign_sharing(socket, opts \\ []) do
     name = opts |> Keyword.get(:into, :shared)
     socket = socket |> Phoenix.Component.assign_new(name, fn -> %{} end)
-    shared_update = socket |> get_field(:__shared_update__)
-    shared = socket |> get_field(name)
+    shared_update = socket |> get_assigned(:__shared_update__)
+    shared_values = socket |> get_assigned(name)
 
     socket =
       case shared_update do
         {_topic, vals} ->
-          socket |> Phoenix.Component.assign(name, shared |> Map.merge(vals))
+          socket |> Phoenix.Component.assign(name, shared_values |> Map.merge(vals))
 
         _ ->
           socket |> Phoenix.Component.assign_new(name, fn -> %{} end)
@@ -159,7 +159,7 @@ defmodule BulmaWidgets.Actions do
     socket
   end
 
-  defp get_field(item, name) do
+  defp get_assigned(item, name) do
     case item do
       %Phoenix.LiveView.Socket{} = socket ->
         socket.assigns[name]

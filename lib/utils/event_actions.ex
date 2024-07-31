@@ -35,58 +35,6 @@ defmodule BulmaWidgets.EventAction do
     end
   end
 
-  defmodule DefaultNumberParse do
-    require Logger
-    alias BulmaWidgets.EventAction
-
-    @moduledoc """
-    """
-    def call(%EventAction{data: {key, value}} = evt, _opts) do
-      value! = BulmaWidgets.Utils.NumberParse.number_parse(value)
-
-      %{evt | data: {key, value!}}
-    end
-  end
-
-  defmodule DefaultAtomParse do
-    require Logger
-    alias BulmaWidgets.EventAction
-
-    @moduledoc """
-    """
-    def call(%EventAction{data: {key, value}} = evt, _opts) do
-      value! = String.to_existing_atom(value)
-
-      %{evt | data: {key, value!}}
-    end
-  end
-
-  defmodule EventAction.FloatNumberParse do
-    require Logger
-    alias BulmaWidgets.EventAction
-
-    @moduledoc """
-    """
-    def call(%EventAction{data: {key, value}} = evt, _opts) do
-      value! = BulmaWidgets.Utils.NumberParse.number_parse(value, :float)
-
-      %{evt | data: {key, value!}}
-    end
-  end
-
-  defmodule DefaultTimeParse do
-    require Logger
-    alias BulmaWidgets.EventAction
-
-    @moduledoc """
-    """
-
-    def call(%EventAction{data: {key, value}} = evt, _opts) do
-      value! = Time.from_iso8601!(value)
-
-      %{evt | data: {key, value!}}
-    end
-  end
 
   defmodule EventCommands do
     require Logger
@@ -232,7 +180,7 @@ defmodule BulmaWidgets.EventAction do
 
     defp maybe_receive_broadcast({:broadcast_register, args}, socket) do
       %{id: id, topics: topics, module: module, view: view} = args
-      event_action_listeners = socket.assigns[:event_action_listeners] || %{}
+      event_action_listeners = socket.assigns[:__event_action_listeners__] || %{}
 
       Logger.debug("BroadcastState:broadcast_register:id: #{inspect(args, pretty: false)}")
       # %{"check-sensor-run" => %{check_sensor: true}}
@@ -248,7 +196,7 @@ defmodule BulmaWidgets.EventAction do
 
       {:halt,
        socket
-       |> Phoenix.Component.assign(:event_action_listeners, event_action_listeners)}
+       |> Phoenix.Component.assign(:__event_action_listeners__, event_action_listeners)}
     end
 
     defp maybe_receive_broadcast({:broadcast_state, %{view: evt_view}}, %{view: view} = socket)
@@ -267,7 +215,7 @@ defmodule BulmaWidgets.EventAction do
       fields = fields |> EventAction.fields_to_assigns()
 
       target_list =
-        socket.assigns[:event_action_listeners]
+        socket.assigns[:__event_action_listeners__]
         |> Map.get(topic, %{})
 
       # send updated values to all "listening" id's

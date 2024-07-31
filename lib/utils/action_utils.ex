@@ -16,7 +16,8 @@ defmodule BulmaWidgets.Actions do
           assign_cached: 2,
           assign_sharing: 1,
           event_send: 3,
-          event_commands: 2
+          event_commands: 2,
+          event_commands: 1
         ]
 
       def register_broadcast(socket, opts) do

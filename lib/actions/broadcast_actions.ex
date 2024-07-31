@@ -25,6 +25,10 @@ defmodule BulmaWidgets.Action.BroadcastState do
 
   @broadcast_topic "widget_state"
 
+  @moduledoc """
+  Broadcasts state to listeners. Provides hooks for LiveView's
+  to handle setting the updated state.
+  """
   def call(%Action{data: {_key, values}, socket: socket} = evt, opts \\ []) do
     Logger.debug("BroadcastState:call:opts: #{inspect(opts, pretty: false)}")
 

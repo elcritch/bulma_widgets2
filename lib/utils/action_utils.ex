@@ -15,7 +15,7 @@ defmodule BulmaWidgets.Actions do
           assign_cached_topics: 2,
           assign_cached: 2,
           assign_sharing: 1,
-          send_topic: 3,
+          event_send: 3,
           event_commands: 2
         ]
 
@@ -27,8 +27,8 @@ defmodule BulmaWidgets.Actions do
         )
       end
 
-      def send_topic(socket, opts) do
-        send_topic(socket, unquote(pubsub), opts)
+      def event_send(socket, opts) do
+        event_send(socket, unquote(pubsub), opts)
       end
 
       def mount_shared(socket, opts) do
@@ -111,7 +111,7 @@ defmodule BulmaWidgets.Actions do
     ]
   end
 
-  def send_topic(topic, pubsub, vals) do
+  def event_send(topic, pubsub, vals) do
     [
       {EventAction.BroadcastState, topic: topic, values: vals, pubsub: pubsub},
       {EventAction.CacheUpdate, topic: topic, values: vals}

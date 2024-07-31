@@ -24,6 +24,13 @@ defmodule BulmaWidgets.Actions do
       def send_topic(socket, opts) do
         send_topic(socket, unquote(pubsub), opts)
       end
+
+      def mount_shared(socket, opts) do
+        topics = opts |> Keyword.fetch!(:topics)
+        socket
+        |> register_broadcast(opts)
+        |> assign_cached_topics(opts)
+      end
     end
   end
 

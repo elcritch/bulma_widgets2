@@ -11,7 +11,13 @@ defmodule BulmaWidgets.Actions do
       alias BulmaWidgets.Actions
 
       import BulmaWidgets.Actions,
-        only: [assign_cached_topics: 2, assign_cached: 2, assign_sharing: 1, send_topic: 3]
+        only: [
+          assign_cached_topics: 2,
+          assign_cached: 2,
+          assign_sharing: 1,
+          send_topic: 3,
+          event_commands: 2
+        ]
 
       def register_broadcast(socket, opts) do
         BulmaWidgets.Actions.register_broadcast(
@@ -27,6 +33,7 @@ defmodule BulmaWidgets.Actions do
 
       def mount_shared(socket, opts) do
         topics = opts |> Keyword.fetch!(:topics)
+
         socket
         |> register_broadcast(opts)
         |> assign_cached_topics(opts)
@@ -90,7 +97,7 @@ defmodule BulmaWidgets.Actions do
     end
   end
 
-  def menu_commands(cmds, modify \\ false) do
+  def event_commands(cmds, modify \\ false) do
     [{EventAction.EventCommands, modify: modify, commands: cmds}]
   end
 
@@ -154,9 +161,10 @@ defmodule BulmaWidgets.Actions do
   defp get_field(item, name) do
     case item do
       %Phoenix.LiveView.Socket{} = socket ->
-          socket.assigns[name]
+        socket.assigns[name]
+
       assigns ->
-          assigns[name]
+        assigns[name]
     end
   end
 end

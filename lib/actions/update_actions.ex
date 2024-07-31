@@ -10,12 +10,11 @@ defmodule BulmaWidgets.Action.TriggerUpdates do
     Logger.debug("TriggerUpdates:call:opts: #{inspect(opts, pretty: false)}")
 
     target = opts |> Keyword.get(:to, socket.assigns.id)
-    topic = opts |> Keyword.fetch!(:topic)
     trigger = opts |> Keyword.fetch!(:trigger)
     values = opts |> Keyword.get(:values, values) # |> Map.take(set_fields)
 
     Logger.debug("TriggerUpdates:call:target: #{inspect(target, pretty: false)}")
-    msg = %{topic: topic, values: values}
+    msg = %{values: values}
     case target do
       %Phoenix.LiveComponent.CID{} = cid ->
         send_update(cid, %{__trigger_update__: {trigger, msg}})

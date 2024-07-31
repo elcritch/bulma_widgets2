@@ -1,7 +1,6 @@
 defmodule BulmaWidgets.Action.TriggerUpdates do
   import Phoenix.LiveView
   alias BulmaWidgets.Action
-  alias BulmaWidgets.Actions
   require Logger
 
   @moduledoc """

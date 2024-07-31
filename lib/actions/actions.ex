@@ -1,8 +1,6 @@
 defmodule BulmaWidgets.Actions do
   require Logger
   alias BulmaWidgets.Action
-  alias BulmaWidgets.Action.CacheState
-  alias BulmaWidgets.Action.TriggerUpdates
 
   defmacro __using__(opts) do
     pubsub = opts |> Keyword.fetch!(:pubsub)
@@ -72,7 +70,7 @@ defmodule BulmaWidgets.Actions do
     topics = opts |> Keyword.fetch!(:topics)
     name = opts |> Keyword.get(:into, :shared)
     # use single global cache for now to match broadcast
-    view = CacheState
+    view = Action.CacheState
 
     for topic <- topics, reduce: socket do
       socket ->
@@ -103,9 +101,10 @@ defmodule BulmaWidgets.Actions do
     end
   end
 
-  def widget_updates(assigns, socket, module, opts \\ []) do
+  def widget_updates(assigns, socket, _module, opts \\ []) do
 
-    {assigns, socket} = TriggerUpdates.run_triggers(assigns, socket, module, opts)
+    {assigns, socket} = Action.UpdateHooks.run_hooks(assigns, socket, opts)
+    # {assigns, socket} = Action.TriggerUpdates.run_triggers(assigns, socket, module, opts)
 
     socket =
       socket

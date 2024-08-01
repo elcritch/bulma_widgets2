@@ -25,7 +25,7 @@ defmodule BulmaWidgets.CoreComponents do
 
 
   @doc """
-  Block div
+  The block element is a simple spacer tool. It allows sibling HTML elements to have a consistent margin between them.
 
   ## Examples
 
@@ -34,7 +34,7 @@ defmodule BulmaWidgets.CoreComponents do
       </.block>
   """
   attr :rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs()
-  slot :inner_block, required: true
+  slot :inner_block, required: false
 
   def block(assigns) do
     assigns = assigns |> BulmaWidgets.assign_extras()
@@ -48,6 +48,29 @@ defmodule BulmaWidgets.CoreComponents do
     """
   end
 
+  @doc """
+  The box element is a simple container with a white background, some padding, and a box shadow.
+
+  ## Examples
+
+      <.block>
+        This text is within a Bulma block
+      </.block>
+  """
+  attr :rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs()
+  slot :inner_block, required: false
+
+  def box(assigns) do
+    assigns = assigns |> BulmaWidgets.assign_extras()
+    ~H"""
+    <div
+      class={["box", BulmaWidgets.classes(@rest)]}
+      {@rest}
+    >
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
 
   @doc """
   Renders a button.

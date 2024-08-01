@@ -14,10 +14,7 @@ defmodule BulmaWidgets.Widgets.ActionButton do
     # send message to listen here!
     # assigns = assigns |> Actions.handle_triggers()
 
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> Actions.assign_cached()}
+    {:ok, Actions.update(assigns, socket)}
   end
 
   attr :id, :string, required: true

@@ -12,8 +12,7 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
     # Logger.debug("scroll_menu:comp:update: #{inspect(assigns, pretty: true)}")
     # send message to listen here!
 
-    # Actions.register_updates(assigns, socket)
-    {:ok, socket |> assign(assigns)}
+    {:ok, Actions.update(assigns, socket)}
   end
 
   attr :id, :atom, required: true

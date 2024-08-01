@@ -82,13 +82,22 @@ defmodule BulmaWidgets.Actions do
   of widget actions. Includes cached topics (`CacheState`), and
   broadcast shared topics (`BroadcastState`). It runs update hooks
   (`UpdateHooks`) action.
+
+  By default this also merges assigns into the socket,
+  but pass `no_merge: true` to skip this.
   """
   def update(assigns, socket, opts \\ []) do
     # {assigns, socket} = Action.TriggerUpdates.run_triggers(assigns, socket, module, opts)
 
     socket =
+      unless true == opts |> Keyword.get(:no_merge) do
+        socket |> Phoenix.Component.assign(assigns)
+      else
+        socket
+      end
+
+    socket =
       socket
-      |> Phoenix.Component.assign(assigns)
       |> BulmaWidgets.Actions.assign_cached()
       |> BulmaWidgets.Actions.assign_sharing()
 

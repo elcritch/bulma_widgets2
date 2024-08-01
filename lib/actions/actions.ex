@@ -41,6 +41,11 @@ defmodule BulmaWidgets.Actions do
         event_send(socket, unquote(pubsub), opts)
       end
 
+      @doc """
+      Sets up a components mount to use broadcast state and cached state
+      actions. This includes registering for broadcast events and
+      setting any currently cached topics.
+      """
       def mount_shared(socket, opts) do
         topics = opts |> Keyword.fetch!(:topics)
 
@@ -69,6 +74,26 @@ defmodule BulmaWidgets.Actions do
     standard = assigns |> Map.get(:standard_actions, defaults)
     extra = assigns |> Map.get(:extra_actions, [])
     List.flatten(standard ++ extra)
+  end
+
+  @doc """
+  Sets up the given LiveView/LiveComponent to handle default set
+  of widget actions. Includes cached topics (`CacheState`), and
+  broadcast shared topics (`BroadcastState`). It runs update hooks
+  (`UpdateHooks`) action.
+  """
+  def updates(assigns, socket, opts \\ []) do
+    # {assigns, socket} = Action.TriggerUpdates.run_triggers(assigns, socket, module, opts)
+
+    socket =
+      socket
+      |> Phoenix.Component.assign(assigns)
+      |> BulmaWidgets.Actions.assign_cached()
+      |> BulmaWidgets.Actions.assign_sharing()
+
+    {_assigns, socket} = Action.UpdateHooks.run_hooks(assigns, socket, opts)
+
+    socket
   end
 
   defdelegate register_updates(assigns, socket, default \\ []), to: Action.BroadcastState
@@ -129,26 +154,6 @@ defmodule BulmaWidgets.Actions do
   end
 
   @doc """
-  Sets up the given LiveView/LiveComponent to handle default set
-  of widget actions. Includes cached topics (`CacheState`), and
-  broadcast shared topics (`BroadcastState`). It runs update hooks
-  (`UpdateHooks`) action.
-  """
-  def updates(assigns, socket, opts \\ []) do
-    # {assigns, socket} = Action.TriggerUpdates.run_triggers(assigns, socket, module, opts)
-
-    socket =
-      socket
-      |> Phoenix.Component.assign(assigns)
-      |> BulmaWidgets.Actions.assign_cached()
-      |> BulmaWidgets.Actions.assign_sharing()
-
-    {_assigns, socket} = Action.UpdateHooks.run_hooks(assigns, socket, opts)
-
-    socket
-  end
-
-  @doc """
   Creates an action which runs the closures given as a list in `cmds`.
   """
   def event_commands(cmds, modify \\ false) do
@@ -156,7 +161,8 @@ defmodule BulmaWidgets.Actions do
   end
 
   @doc """
-  Creates an action that merges `vals` into the widgets assigns.
+  Creates an action that directly merges `vals` into the
+  widgets assigns after and action.
   """
   def event_set_values(vals) do
     [

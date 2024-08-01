@@ -122,6 +122,43 @@ defmodule BulmaWidgets.Elements do
   end
 
   @doc """
+  The delete element is a stand-alone element that can be used in different contexts.
+
+  ## Examples
+
+      <.delete is-medium></.delete>
+  """
+  attr(:base, :string, default: "fas")
+  attr(:name, :string, required: true)
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  slot(:text, required: false)
+
+  def icon(assigns) do
+    assigns = assigns |> BulmaWidgets.assign_extras()
+
+
+    ~H"""
+    <%= if @text do %>
+      <span class="icon-text">
+        <span class={["icon", BulmaWidgets.classes(@rest)]} {@rest}>
+          <i class={[@base, @name]}></i>
+        </span>
+      </span>
+    <% else %>
+      <span class="icon-text">
+        <span class={["icon", BulmaWidgets.classes(@rest)]} {@rest}>
+          <i class={[@base, @name]}></i>
+        </span>
+        <span>
+          <%= render_slot(@text) %>
+        </span>
+      </span>
+    <% end %>
+    """
+  end
+
+  @doc """
   Renders a modal.
 
   ## Examples

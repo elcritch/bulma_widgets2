@@ -136,7 +136,7 @@ defmodule BulmaWidgets do
   gets css class for common BulmaWidgets attributes -- there's gotta be better way to handle this, but eh
   """
   def classes(attrs, names \\ @global_atoms) do
-    Logger.info("CLASSES: #{inspect names}")
+    # Logger.info("CLASSES: #{inspect names}")
     attrs |> Map.take(names) |> Enum.filter(fn {_,v} -> v end) |> Enum.map(fn {k,_} -> k end)
   end
 
@@ -158,6 +158,13 @@ defmodule BulmaWidgets do
       |> Phoenix.Component.assigns_to_attributes([:socket, :myself, :flash])
 
     assigns |> Phoenix.Component.assign(:extras, extras)
+  end
+
+  def extras(rest) do
+    rest
+    |> Map.drop(@global_atoms)
+    |> Map.reject(fn {_,v} -> is_map(v) end)
+    |> Phoenix.Component.assigns_to_attributes([:socket, :myself, :flash])
   end
 
   def html_helpers do

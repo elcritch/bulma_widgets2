@@ -38,10 +38,9 @@ defmodule BulmaWidgets.Elements do
   slot(:inner_block, required: false)
 
   def block(assigns) do
-    assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div class={["block", classes(@rest)]} {@rest}>
+    <div class={["block", classes(@rest)]} {extras(@rest)}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -54,10 +53,9 @@ defmodule BulmaWidgets.Elements do
   slot(:inner_block, required: false)
 
   def box(assigns) do
-    assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div class={["box", classes(@rest)]} {@rest}>
+    <div class={["box", classes(@rest)]} {extras(@rest)}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -73,10 +71,9 @@ defmodule BulmaWidgets.Elements do
   slot(:inner_block, required: false)
 
   def container(assigns) do
-    assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div class={["container", classes(@rest)]} {@rest} >
+    <div class={["container", classes(@rest)]} {extras(@rest)} >
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -94,10 +91,9 @@ defmodule BulmaWidgets.Elements do
   slot(:inner_block, required: true)
 
   def button(assigns) do
-    assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <button class={["button", classes(@rest)]} {@rest}>
+    <button class={["button", classes(@rest)]} {extras(@rest)}>
       <%= render_slot(@inner_block) %>
     </button>
     """
@@ -113,12 +109,11 @@ defmodule BulmaWidgets.Elements do
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def delete(assigns) do
-    assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
     <button
       class={["delete", classes(@rest)]}
-      {@rest} >
+      {extras(@rest)} >
     </button>
     """
   end
@@ -137,18 +132,17 @@ defmodule BulmaWidgets.Elements do
   slot(:text, required: false)
 
   def icon(assigns) do
-    assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
     <%= if @text do %>
       <span class="icon-text">
-        <span class={["icon", classes(@rest)]} {@rest}>
+        <span class={["icon", classes(@rest)]} {extras(@rest)}>
           <i class={[@base, @name]}></i>
         </span>
       </span>
     <% else %>
       <span class="icon-text">
-        <span class={["icon", classes(@rest)]} {@rest}>
+        <span class={["icon", classes(@rest)]} {extras(@rest)}>
           <i class={[@base, @name]}></i>
         </span>
         <span>
@@ -173,10 +167,9 @@ defmodule BulmaWidgets.Elements do
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def notification(assigns) do
-    assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div class={["notification", classes(@rest)]} {@rest}>
+    <div class={["notification", classes(@rest)]} {extras(@rest)}>
       <button class="delete"></button>
       <%= render_slot(@inner_block) %>
     </div>
@@ -197,10 +190,9 @@ defmodule BulmaWidgets.Elements do
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def progress(assigns) do
-    assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <progress class={["progress", classes(@rest), @min, @max, @value]} {@rest}>
+    <progress class={["progress", classes(@rest), @min, @max, @value]} {extras(@rest)}>
     </progress>
     """
   end
@@ -218,10 +210,9 @@ defmodule BulmaWidgets.Elements do
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def progress_indeterminate(assigns) do
-    assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <progress class={["progress", classes(@rest)]} min={@min} max={@max} {@rest}>
+    <progress class={["progress", classes(@rest)]} min={@min} max={@max} {extras(@rest)}>
       <%= render_slot(@inner_block) %>
     </progress>
     """
@@ -241,10 +232,11 @@ defmodule BulmaWidgets.Elements do
   attr(:delete_size, :string, default: "")
 
   def tag(assigns) do
-    assigns = assigns |> BulmaWidgets.assign_extras()
+    Logger.warning("assigns: #{inspect assigns, pretty: true}")
+    Logger.warning("assigns:extras: #{inspect extras(assigns.rest), pretty: true}")
 
     ~H"""
-    <span class={["tag", classes(@rest)]} {@rest}>
+    <span class={["tag", classes(@rest)]} {extras(@rest)}>
       <%= render_slot(@inner_block) %>
     </span>
     """
@@ -263,7 +255,6 @@ defmodule BulmaWidgets.Elements do
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def tags(assigns) do
-    assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
     <div class={["tags", classes(@rest), assigns |> css_maybe(:"has-addons")]}>
@@ -298,7 +289,6 @@ defmodule BulmaWidgets.Elements do
   slot(:inner_block, required: true)
 
   def modal(assigns) do
-    assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
     <div
@@ -307,7 +297,7 @@ defmodule BulmaWidgets.Elements do
       phx-mounted={@show && show_modal(@id)}
       phx-remove={hide_modal(@id)}
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
-      {@rest}
+      {extras(@rest)}
     >
       <div class="modal-background"></div>
       <div class="modal-content">
@@ -345,7 +335,7 @@ defmodule BulmaWidgets.Elements do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[]}
-      {@rest}
+      {extras(@rest)}
     >
       <div class="width-full py-1 px-3 position-absolute bottom-0 right-0 anim-fade-in fast">
         <%!-- <.alert state={"#{@kind}"}>
@@ -416,7 +406,7 @@ defmodule BulmaWidgets.Elements do
 
   def simple_form(assigns) do
     ~H"""
-    <.form :let={f} for={@for} as={@as} {@rest}>
+    <.form :let={f} for={@for} as={@as} {extras(@rest)}>
       <div class="mt-10 space-y-8 bg-white">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">

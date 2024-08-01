@@ -58,6 +58,15 @@ defmodule BulmaWidgets.Actions do
 
   defdelegate register_updates(assigns, socket, default \\ []), to: Action.BroadcastState
 
+  @doc """
+  Assigns cached items into a give name.
+
+  ## Examples
+
+      iex> BulmaWidgets.Actions(:john)
+      :ok
+
+  """
   def assign_cached(socket_or_assigns) do
     assign_cached(socket_or_assigns, [])
   end
@@ -97,7 +106,13 @@ defmodule BulmaWidgets.Actions do
     end
   end
 
-  def widget_updates(assigns, socket, _module, opts \\ []) do
+  @doc """
+  Sets up the given LiveView/LiveComponent to handle default set
+  of widget actions. Includes cached topics (`CacheState`), and
+  broadcast shared topics (`BroadcastState`). It runs update hooks
+  (`UpdateHooks`) action.
+  """
+  def updates(assigns, socket, _module, opts \\ []) do
 
     # {assigns, socket} = Action.TriggerUpdates.run_triggers(assigns, socket, module, opts)
 

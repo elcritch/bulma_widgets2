@@ -51,7 +51,7 @@ defmodule BulmaWidgets.Actions do
 
         socket
         |> mount_broadcast(opts)
-        |> assign_cached_topics(opts)
+        |> mount_cached(opts)
       end
     end
   end
@@ -131,13 +131,13 @@ defmodule BulmaWidgets.Actions do
       iex> BulmaWidgets.Cache.start_link([])
       iex> BulmaWidgets.Cache.put(BulmaWidgets.Action.CacheState, "test-topic", %{"a" => 1})
       iex> socket = %Phoenix.LiveView.Socket{}
-      iex> BulmaWidgets.Actions.assign_cached_topics(socket,
+      iex> BulmaWidgets.Actions.mount_cached(socket,
       ...>     into: :shared, topics: ["test-topic"]
       ...> ) |> Map.get(:assigns)
       %{shared: %{"a" => 1}, __changed__: %{shared: true}}
 
   """
-  def assign_cached_topics(socket = %Phoenix.LiveView.Socket{}, opts) do
+  def mount_cached(socket = %Phoenix.LiveView.Socket{}, opts) do
     topics = opts |> Keyword.fetch!(:topics)
     name = opts |> Keyword.get(:into, :shared)
     # use single global cache for now to match broadcast

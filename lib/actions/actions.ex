@@ -2,6 +2,9 @@ defmodule BulmaWidgets.Actions do
   require Logger
   alias BulmaWidgets.Action
 
+  @doc """
+  Example usage: `use BulmaWidgets.Actions, pubsub: MyApp.PubSub1`
+  """
   defmacro __using__(opts) do
     pubsub = opts |> Keyword.fetch!(:pubsub)
     IO.puts("ACTIONS:USE: #{inspect(opts)}")
@@ -19,6 +22,10 @@ defmodule BulmaWidgets.Actions do
           event_commands: 1
         ]
 
+      @doc """
+      Use in a component's `mount` to register the component to review
+      updates for a given `topics`.
+      """
       def mount_broadcast(socket, opts) do
         BulmaWidgets.Actions.mount_broadcast(
           socket,
@@ -27,6 +34,9 @@ defmodule BulmaWidgets.Actions do
         )
       end
 
+      @doc """
+      Creates actions which broadcast and then cache the `vals` to the `topic`.
+      """
       def event_send(socket, opts) do
         event_send(socket, unquote(pubsub), opts)
       end
@@ -41,6 +51,11 @@ defmodule BulmaWidgets.Actions do
     end
   end
 
+  @doc """
+  Gets all actions defined in a components `standard_actions` or
+  `extra_actions` attributes.
+  Works with both sockets or assign maps.
+  """
   def all_actions(assigns, defaults \\ []) do
     assigns =
       case assigns do
@@ -104,6 +119,7 @@ defmodule BulmaWidgets.Actions do
     view = Action.CacheState
 
     Logger.debug("action_utils:socket:view: #{inspect(view)}")
+
     for topic <- topics, reduce: socket do
       socket ->
         cached = BulmaWidgets.Cache.get(view, topic, %{})
@@ -118,8 +134,7 @@ defmodule BulmaWidgets.Actions do
   broadcast shared topics (`BroadcastState`). It runs update hooks
   (`UpdateHooks`) action.
   """
-  def updates(assigns, socket, _module, opts \\ []) do
-
+  def updates(assigns, socket, opts \\ []) do
     # {assigns, socket} = Action.TriggerUpdates.run_triggers(assigns, socket, module, opts)
 
     socket =
@@ -133,12 +148,17 @@ defmodule BulmaWidgets.Actions do
     socket
   end
 
-
+  @doc """
+  Creates an action which runs the closures given as a list in `cmds`.
+  """
   def event_commands(cmds, modify \\ false) do
     [{Action.Commands, modify: modify, commands: cmds}]
   end
 
-  def set_values(vals) do
+  @doc """
+  Creates an action that merges `vals` into the widgets assigns.
+  """
+  def event_set_values(vals) do
     [
       {Action.Commands,
        modify: true,
@@ -148,6 +168,10 @@ defmodule BulmaWidgets.Actions do
     ]
   end
 
+  @doc """
+  Creates actions which broadcast and then cache the `vals` to the `topic`.
+  Must pass `pubsub` module to use.
+  """
   def event_send(topic, pubsub, vals) do
     [
       {Action.BroadcastState, topic: topic, values: vals, pubsub: pubsub},
@@ -155,12 +179,20 @@ defmodule BulmaWidgets.Actions do
     ]
   end
 
+  @doc """
+  Creates an action which broadcasts state for the given `topic` to
+  an widgets listening (views or components).
+  """
   def event_broadcast_state(topic, pubsub, vals) do
     [
       {Action.BroadcastState, topic: topic, values: vals, pubsub: pubsub}
     ]
   end
 
+  @doc """
+  Use in a component's `mount` to register the component to review
+  updates for a given `topics`. Must provide `module` of the component.
+  """
   def mount_broadcast(socket, module, opts) do
     Logger.debug("mount_broadcast:socket: #{inspect(socket)}")
     topics = opts |> Keyword.fetch!(:topics)
@@ -177,6 +209,10 @@ defmodule BulmaWidgets.Actions do
     socket
   end
 
+  @doc """
+  Use in a component's `mount` to register the component to review
+  updates for a given `topics`. Must provide `module` of the component.
+  """
   def assign_sharing(socket, opts \\ []) do
     name = opts |> Keyword.get(:into, :shared)
     socket = socket |> Phoenix.Component.assign_new(name, fn -> %{} end)

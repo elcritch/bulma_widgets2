@@ -1,4 +1,5 @@
 defmodule BulmaWidgets do
+  require Logger
 
   @colors ~w(
     is-primary
@@ -115,7 +116,9 @@ defmodule BulmaWidgets do
   @spacing_atoms Enum.map(@spacing, &String.to_atom/1)
   @text_colors_atoms Enum.map(@text_colors, &String.to_atom/1)
 
-  @global_atoms @colors_atoms ++ @attrs_atoms
+  @global_atoms (@colors_atoms ++ @attrs_atoms ++
+                @sizes_atoms ++ @spacing_atoms ++
+                @text_colors_atoms)
 
   def colors(), do: @colors
   def text_colors(), do: @text_colors
@@ -133,6 +136,7 @@ defmodule BulmaWidgets do
   gets css class for common BulmaWidgets attributes -- there's gotta be better way to handle this, but eh
   """
   def classes(attrs, names \\ @global_atoms) do
+    Logger.info("CLASSES: #{inspect names}")
     attrs |> Map.take(names) |> Enum.filter(fn {_,v} -> v end) |> Enum.map(fn {k,_} -> k end)
   end
 

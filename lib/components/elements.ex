@@ -39,10 +39,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div
-      class={["block", BulmaWidgets.classes(@rest)]}
-      {@rest}
-    >
+    <div class={["block", BulmaWidgets.classes(@rest)]} {@rest}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -58,10 +55,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div
-      class={["box", BulmaWidgets.classes(@rest)]}
-      {@rest}
-    >
+    <div class={["box", BulmaWidgets.classes(@rest)]} {@rest}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -80,10 +74,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div
-      class={["container", BulmaWidgets.classes(@rest)]}
-      {@rest}
-    >
+    <div class={["container", BulmaWidgets.classes(@rest)]} {@rest} >
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -104,11 +95,28 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <button
-      class={["button", BulmaWidgets.classes(@rest)]}
-      {@rest}
-    >
+    <button class={["button", BulmaWidgets.classes(@rest)]} {@rest}>
       <%= render_slot(@inner_block) %>
+    </button>
+    """
+  end
+
+  @doc """
+  The delete element is a stand-alone element that can be used in different contexts.
+
+  ## Examples
+
+      <.delete is-medium></.delete>
+  """
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  def delete(assigns) do
+    assigns = assigns |> BulmaWidgets.assign_extras()
+
+    ~H"""
+    <button
+      class={["delete", BulmaWidgets.classes(@rest)]}
+      {@rest} >
     </button>
     """
   end

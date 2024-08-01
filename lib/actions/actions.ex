@@ -89,10 +89,12 @@ defmodule BulmaWidgets.Actions do
   ## Examples
 
       iex> BulmaWidgets.Cache.start_link([])
+      iex> BulmaWidgets.Cache.put(BulmaWidgets.Action.CacheState, "test-topic", %{"a" => 1})
       iex> socket = %Phoenix.LiveView.Socket{}
-      iex> BulmaWidgets.Actions.assign_cached_topics(socket, into: :shared, topics: ["topic"])
-      ...> |> Map.get(:assigns)
-      %{shared: %{}, __changed__: %{shared: true}}
+      iex> BulmaWidgets.Actions.assign_cached_topics(socket,
+      ...>     into: :shared, topics: ["test-topic"]
+      ...> ) |> Map.get(:assigns)
+      %{shared: %{"a" => 1}, __changed__: %{shared: true}}
 
   """
   def assign_cached_topics(socket = %Phoenix.LiveView.Socket{}, opts) do
@@ -101,6 +103,7 @@ defmodule BulmaWidgets.Actions do
     # use single global cache for now to match broadcast
     view = Action.CacheState
 
+    Logger.debug("action_utils:socket:view: #{inspect(view)}")
     for topic <- topics, reduce: socket do
       socket ->
         cached = BulmaWidgets.Cache.get(view, topic, %{})

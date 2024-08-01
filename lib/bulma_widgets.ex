@@ -6,11 +6,15 @@ defmodule BulmaWidgets do
     "is-info",
     "is-warning",
     "is-danger",
+    "is-success",
   ]
 
   @attrs [
     "is-fullwidth",
     "is-loading",
+    "is-small",
+    "is-medium",
+    "is-large",
   ]
 
   @colors_atoms Enum.map(@colors, &String.to_atom/1)

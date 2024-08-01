@@ -58,32 +58,8 @@ defmodule BulmaWidgets.Actions do
 
   defdelegate register_updates(assigns, socket, default \\ []), to: Action.BroadcastState
 
-  @doc """
-  Assigns cached items into a give name.
-
-  ## Examples
-
-      iex> socket = %Phoenix.LiveView.Socket{}
-      iex> IO.puts("SOCKS!")
-      socket
-
-  """
   def assign_cached(socket_or_assigns) do
     assign_cached(socket_or_assigns, [])
-  end
-
-  def assign_cached_topics(socket = %Phoenix.LiveView.Socket{}, opts) do
-    topics = opts |> Keyword.fetch!(:topics)
-    name = opts |> Keyword.get(:into, :shared)
-    # use single global cache for now to match broadcast
-    view = Action.CacheState
-
-    for topic <- topics, reduce: socket do
-      socket ->
-        cached = BulmaWidgets.Cache.get(view, topic, %{})
-        Logger.debug("action_utils:socket:cached: #{inspect(cached)}")
-        socket |> Phoenix.Component.assign(name, cached)
-    end
   end
 
   def assign_cached(assigns, _opts) do
@@ -104,6 +80,32 @@ defmodule BulmaWidgets.Actions do
         )
 
         assigns |> Phoenix.Component.assign(name, cached)
+    end
+  end
+
+  @doc """
+  Assigns cached items into a give name.
+
+  ## Examples
+
+      iex> BulmaWidgets.Cache.start_link([])
+      iex> socket = %Phoenix.LiveView.Socket{}
+      iex> BulmaWidgets.Actions.assign_cached_topics(socket, into: :shared, topics: ["topic"])
+      ...> |> Map.get(:assigns)
+      %{shared: %{}, __changed__: %{shared: true}}
+
+  """
+  def assign_cached_topics(socket = %Phoenix.LiveView.Socket{}, opts) do
+    topics = opts |> Keyword.fetch!(:topics)
+    name = opts |> Keyword.get(:into, :shared)
+    # use single global cache for now to match broadcast
+    view = Action.CacheState
+
+    for topic <- topics, reduce: socket do
+      socket ->
+        cached = BulmaWidgets.Cache.get(view, topic, %{})
+        Logger.debug("action_utils:socket:cached: #{inspect(cached)}")
+        socket |> Phoenix.Component.assign(name, cached)
     end
   end
 

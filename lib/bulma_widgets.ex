@@ -10,13 +10,17 @@ defmodule BulmaWidgets do
     is-light
   )
 
-  @attrs ~w(
-    is-fullwidth
-    is-loading
-    is-outlined
+  @sizes ~w(
     is-small
     is-medium
     is-large
+  )
+
+  @attrs ~w(
+    is-fullwidth
+    is-hoverable
+    is-loading
+    is-outlined
 
     is-rounded
     is-delete
@@ -107,6 +111,7 @@ defmodule BulmaWidgets do
 
   @colors_atoms Enum.map(@colors, &String.to_atom/1)
   @attrs_atoms Enum.map(@attrs, &String.to_atom/1)
+  @sizes_atoms Enum.map(@sizes, &String.to_atom/1)
   @spacing_atoms Enum.map(@spacing, &String.to_atom/1)
   @text_colors_atoms Enum.map(@text_colors, &String.to_atom/1)
 
@@ -115,10 +120,12 @@ defmodule BulmaWidgets do
   def colors(), do: @colors
   def text_colors(), do: @text_colors
   def spacing(), do: @spacing
-  def attrs(), do: @attrs
+  def attrs(), do: @attrs ++ @sizes
+  def sizes(), do: @sizes
 
   def colors_atoms(), do: @colors_atoms
-  def attrs_atoms(), do: @attrs_atoms
+  def attrs_atoms(), do: @attrs_atoms ++ @sizes_atoms
+  def sizes_atoms(), do: @sizes_atoms
   def spacing_atoms(), do: @spacing_atoms
   def text_colors_atoms(), do: @text_colors_atoms
 

@@ -235,6 +235,7 @@ defmodule BulmaWidgets.Elements do
       <.tag is-success></.tag>
   """
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  attr(:delete_size, :string, default: "")
 
   def tag(assigns) do
     assigns = assigns |> BulmaWidgets.assign_extras()
@@ -242,7 +243,30 @@ defmodule BulmaWidgets.Elements do
     ~H"""
     <span class={["tag", BulmaWidgets.classes(@rest)]} {@rest}>
       <%= render_slot(@inner_block) %>
+      <button :if={@delete_size in []} class={["delete", @delete_size]}></button>
     </span>
+    """
+  end
+
+  @doc """
+  Small tag labels to insert anywhere
+
+  The Bulma tag is a small but versatile element. It's very useful as a way to attach information to a block or other component. Its size makes it also easy to display in numbers, making it appropriate for long lists of items.
+
+  ## Examples
+
+      <.tag is-success></.tag>
+  """
+  attr(:"has-addons", :boolean, default: false)
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  def tags(assigns) do
+    assigns = assigns |> BulmaWidgets.assign_extras()
+
+    ~H"""
+    <div class="tags has-addons">
+      <%= render_slot(@inner_block) %>
+    </div>
     """
   end
 

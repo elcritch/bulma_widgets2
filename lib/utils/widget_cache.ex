@@ -1,5 +1,6 @@
 defmodule BulmaWidgets.Cache do
 
+  # BulmaWidgets.Cache.get_all!
   require Logger
   use GenServer
 
@@ -88,6 +89,7 @@ defmodule BulmaWidgets.Cache do
   def handle_call({:get_key, mod, key, _opts}, _from, state) do
     {state, ets} = state |> table(mod)
     res = ets |> ets_get_key(key)
+    Logger.debug("BulmaWidgets.Cache:get: #{inspect res}")
     {:reply, res, state}
   end
 

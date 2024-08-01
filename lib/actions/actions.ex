@@ -151,14 +151,14 @@ defmodule BulmaWidgets.Actions do
     topics = opts |> Keyword.fetch!(:topics)
     name = opts |> Keyword.get(:into, :shared)
     # use single global cache for now to match broadcast
-    view = Action.CacheState
+    view = BulmaWidgets.Action.CacheState
 
-    Logger.debug("action_utils:socket:view: #{inspect(view)}")
+    Logger.debug("actions:mount_cached:socket:view: #{inspect(view)}")
 
     for topic <- topics, reduce: socket do
       socket ->
         cached = BulmaWidgets.Cache.get(view, topic, %{})
-        Logger.debug("action_utils:socket:cached: #{inspect(cached)}")
+        Logger.debug("actions:mount_cached:cached: #{inspect(cached)}")
         socket |> Phoenix.Component.assign(name, cached)
     end
   end

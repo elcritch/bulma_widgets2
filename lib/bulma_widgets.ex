@@ -136,6 +136,17 @@ defmodule BulmaWidgets do
     attrs |> Map.take(names) |> Enum.filter(fn {_,v} -> v end) |> Enum.map(fn {k,_} -> k end)
   end
 
+  @doc """
+  gets css class for common BulmaWidgets attributes -- there's gotta be better way to handle this, but eh
+  """
+  defmacro css_maybe(assigns, class) do
+    # IO.puts("class: #{inspect(class)}")
+    name = Atom.to_string(class)
+    quote do
+      unquote(assigns)[unquote(class)] && unquote(name) || []
+    end
+  end
+
   def assign_extras(assigns) do
     extras =
       assigns.rest
@@ -162,6 +173,12 @@ defmodule BulmaWidgets do
     end
   end
 
+  def css_utilities do
+    quote do
+      require BulmaWidgets
+      import BulmaWidgets
+    end
+  end
   @doc """
   When used, dispatch to the appropriate controller/live_view/etc.
   """

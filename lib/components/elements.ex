@@ -1,4 +1,6 @@
 defmodule BulmaWidgets.Elements do
+  use BulmaWidgets, :css_utilities
+
   @moduledoc """
   Provides core UI components.
 
@@ -39,7 +41,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div class={["block", BulmaWidgets.classes(@rest)]} {@rest}>
+    <div class={["block", classes(@rest)]} {@rest}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -55,7 +57,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div class={["box", BulmaWidgets.classes(@rest)]} {@rest}>
+    <div class={["box", classes(@rest)]} {@rest}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -74,7 +76,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div class={["container", BulmaWidgets.classes(@rest)]} {@rest} >
+    <div class={["container", classes(@rest)]} {@rest} >
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -95,7 +97,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <button class={["button", BulmaWidgets.classes(@rest)]} {@rest}>
+    <button class={["button", classes(@rest)]} {@rest}>
       <%= render_slot(@inner_block) %>
     </button>
     """
@@ -115,7 +117,7 @@ defmodule BulmaWidgets.Elements do
 
     ~H"""
     <button
-      class={["delete", BulmaWidgets.classes(@rest)]}
+      class={["delete", classes(@rest)]}
       {@rest} >
     </button>
     """
@@ -140,13 +142,13 @@ defmodule BulmaWidgets.Elements do
     ~H"""
     <%= if @text do %>
       <span class="icon-text">
-        <span class={["icon", BulmaWidgets.classes(@rest)]} {@rest}>
+        <span class={["icon", classes(@rest)]} {@rest}>
           <i class={[@base, @name]}></i>
         </span>
       </span>
     <% else %>
       <span class="icon-text">
-        <span class={["icon", BulmaWidgets.classes(@rest)]} {@rest}>
+        <span class={["icon", classes(@rest)]} {@rest}>
           <i class={[@base, @name]}></i>
         </span>
         <span>
@@ -174,7 +176,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div class={["notification", BulmaWidgets.classes(@rest)]} {@rest}>
+    <div class={["notification", classes(@rest)]} {@rest}>
       <button class="delete"></button>
       <%= render_slot(@inner_block) %>
     </div>
@@ -198,7 +200,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <progress class={["progress", BulmaWidgets.classes(@rest), @min, @max, @value]} {@rest}>
+    <progress class={["progress", classes(@rest), @min, @max, @value]} {@rest}>
     </progress>
     """
   end
@@ -219,7 +221,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <progress class={["progress", BulmaWidgets.classes(@rest)]} min={@min} max={@max} {@rest}>
+    <progress class={["progress", classes(@rest)]} min={@min} max={@max} {@rest}>
       <%= render_slot(@inner_block) %>
     </progress>
     """
@@ -242,7 +244,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <span class={["tag", BulmaWidgets.classes(@rest)]} {@rest}>
+    <span class={["tag", classes(@rest)]} {@rest}>
       <%= render_slot(@inner_block) %>
     </span>
     """
@@ -264,7 +266,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div class={["tags", BulmaWidgets.classes(@rest), BulmaWidgets.classes(:"has-addons")]}>
+    <div class={["tags", classes(@rest), assigns |> css_maybe(:"has-addons")]}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -301,7 +303,7 @@ defmodule BulmaWidgets.Elements do
     ~H"""
     <div
       id={@id}
-      class={["modal", @classes, BulmaWidgets.classes(@rest)]}
+      class={["modal", @classes, classes(@rest)]}
       phx-mounted={@show && show_modal(@id)}
       phx-remove={hide_modal(@id)}
       data-cancel={JS.exec(@on_cancel, "phx-remove")}

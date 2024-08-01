@@ -1,4 +1,4 @@
-defmodule BulmaWidgets.CoreComponents do
+defmodule BulmaWidgets.Elements do
   @moduledoc """
   Provides core UI components.
 
@@ -50,12 +50,6 @@ defmodule BulmaWidgets.CoreComponents do
 
   @doc """
   The box element is a simple container with a white background, some padding, and a box shadow.
-
-  ## Examples
-
-      <.block>
-        This text is within a Bulma block
-      </.block>
   """
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
   slot(:inner_block, required: false)
@@ -66,6 +60,28 @@ defmodule BulmaWidgets.CoreComponents do
     ~H"""
     <div
       class={["box", BulmaWidgets.classes(@rest)]}
+      {@rest}
+    >
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  @doc """
+  A single class to handle WYSIWYG generated content, where only HTML tags are available.
+
+  When you can't use the CSS classes you want, or when you just want to directly use HTML tags, use content as container. It can handle almost any HTML tag.
+
+  """
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  slot(:inner_block, required: false)
+
+  def container(assigns) do
+    assigns = assigns |> BulmaWidgets.assign_extras()
+
+    ~H"""
+    <div
+      class={["container", BulmaWidgets.classes(@rest)]}
       {@rest}
     >
       <%= render_slot(@inner_block) %>

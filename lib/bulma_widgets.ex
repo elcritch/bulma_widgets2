@@ -44,7 +44,7 @@ defmodule BulmaWidgets do
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components and translation
-      import BulmaWidgets.CoreComponents
+      import BulmaWidgets.Elements
       alias BulmaWidgets.Bulma
       alias BulmaWidgets.Actions
       alias BulmaWidgets.Action

@@ -83,7 +83,7 @@ defmodule BulmaWidgets.Actions do
   broadcast shared topics (`BroadcastState`). It runs update hooks
   (`UpdateHooks`) action.
   """
-  def updates(assigns, socket, opts \\ []) do
+  def update(assigns, socket, opts \\ []) do
     # {assigns, socket} = Action.TriggerUpdates.run_triggers(assigns, socket, module, opts)
 
     socket =

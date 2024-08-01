@@ -25,7 +25,7 @@ defmodule BulmaWidgets.Action.TriggerUpdates do
   end
 
 
-  def run_triggers(%{__trigger_update__: {trigger, vals}} = assigns, socket, module, opts) do
+  def run_triggers(%{__trigger_update__: {trigger, vals}} = assigns, socket, module, _opts) do
     assigns = assigns |> Map.delete(:__trigger_update__)
 
     socket = module.handle_triggers(trigger, vals, assigns, socket)

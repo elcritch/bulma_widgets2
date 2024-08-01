@@ -19,16 +19,12 @@ defmodule BulmaWidgets.Actions do
           event_commands: 1
         ]
 
-      def register_broadcast(socket, opts) do
-        BulmaWidgets.Actions.register_broadcast(
+      def mount_broadcast(socket, opts) do
+        BulmaWidgets.Actions.mount_broadcast(
           socket,
           __MODULE__,
           opts ++ [pubsub: unquote(pubsub)]
         )
-      end
-
-      def widget_updates(assigns, socket, opts \\ []) do
-        BulmaWidgets.Actions.widget_updates(assigns, socket, __MODULE__, opts)
       end
 
       def event_send(socket, opts) do
@@ -39,7 +35,7 @@ defmodule BulmaWidgets.Actions do
         topics = opts |> Keyword.fetch!(:topics)
 
         socket
-        |> register_broadcast(opts)
+        |> mount_broadcast(opts)
         |> assign_cached_topics(opts)
       end
     end
@@ -138,14 +134,14 @@ defmodule BulmaWidgets.Actions do
     ]
   end
 
-  def update_shared(topic, pubsub, vals) do
+  def event_broadcast_state(topic, pubsub, vals) do
     [
       {Action.BroadcastState, topic: topic, values: vals, pubsub: pubsub}
     ]
   end
 
-  def register_broadcast(socket, module, opts) do
-    Logger.debug("register_broadcast:socket: #{inspect(socket)}")
+  def mount_broadcast(socket, module, opts) do
+    Logger.debug("mount_broadcast:socket: #{inspect(socket)}")
     topics = opts |> Keyword.fetch!(:topics)
     pubsub = opts |> Keyword.fetch!(:pubsub)
 

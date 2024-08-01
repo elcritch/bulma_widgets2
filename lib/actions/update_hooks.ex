@@ -25,7 +25,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
   end
 
 
-  def run_hooks(%{__trigger_hooks__: %{hooks: hooks, values: _vals}} = assigns, socket, opts) do
+  def run_hooks(%{__trigger_hooks__: %{hooks: hooks, values: _vals}} = assigns, socket, _opts) do
     assigns = assigns |> Map.delete(:__trigger_hooks__)
 
     # socket = module.handle_triggers(hooks, vals, assigns, socket)

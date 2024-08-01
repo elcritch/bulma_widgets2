@@ -33,6 +33,7 @@ defmodule BulmaWidgets do
   def assign_extras(assigns) do
     extras =
       assigns.rest
+      |> Map.reject(fn {k,v} -> is_map(v) end)
       |> Phoenix.Component.assigns_to_attributes([:socket, :myself, :flash, :cached])
 
     assigns |> Phoenix.Component.assign(:extras, extras)

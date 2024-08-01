@@ -64,7 +64,7 @@ defmodule BulmaWidgets.Actions do
   ## Examples
 
       iex> socket = %Phoenix.LiveView.Socket{}
-      iex> BulmaWidgets.Actions.assign_cached(socket, into: :shared, topics: ["some-topic])
+      iex> IO.puts("SOCKS!")
       socket
 
   """

@@ -36,7 +36,7 @@ defmodule BulmaWidgets.MixProject do
       # {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
 
-      {:dart_sass, "~> 0.6"},
+      {:dart_sass, "~> 0.6", only: [:test, :dev]},
 
       {:ex_cldr_dates_times, "~> 2.4", optional: true},
       {:ex_cldr, "~> 2.16", optional: true},

@@ -17,6 +17,9 @@ defmodule BulmaWidgets do
     is-small
     is-medium
     is-large
+
+    is-rounded
+    is-delete
   )
 
   @spacing ~w(

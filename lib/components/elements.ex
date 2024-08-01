@@ -226,6 +226,27 @@ defmodule BulmaWidgets.Elements do
   end
 
   @doc """
+  Small tag labels to insert anywhere
+
+  The Bulma tag is a small but versatile element. It's very useful as a way to attach information to a block or other component. Its size makes it also easy to display in numbers, making it appropriate for long lists of items.
+
+  ## Examples
+
+      <.tag is-success></.tag>
+  """
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  def tag(assigns) do
+    assigns = assigns |> BulmaWidgets.assign_extras()
+
+    ~H"""
+    <span class={["tag", BulmaWidgets.classes(@rest)]} {@rest}>
+      <%= render_slot(@inner_block) %>
+    </span>
+    """
+  end
+
+  @doc """
   Renders a modal.
 
   ## Examples

@@ -264,7 +264,7 @@ defmodule BulmaWidgets.Elements do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
     ~H"""
-    <div class="tags has-addons">
+    <div class={["tags", BulmaWidgets.classes(@rest), BulmaWidgets.classes(:"has-addons")]}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -290,6 +290,9 @@ defmodule BulmaWidgets.Elements do
   attr(:id, :string, required: true)
   attr(:show, :boolean, default: false)
   attr(:on_cancel, JS, default: %JS{})
+  attr(:classes, :list, default: [])
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
   slot(:inner_block, required: true)
 
   def modal(assigns) do
@@ -298,12 +301,19 @@ defmodule BulmaWidgets.Elements do
     ~H"""
     <div
       id={@id}
+      class={["modal", @classes, BulmaWidgets.classes(@rest)]}
       phx-mounted={@show && show_modal(@id)}
       phx-remove={hide_modal(@id)}
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
-      class="relative z-50 hidden"
+      {@rest}
     >
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <%= render_slot(@inner_block) %>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
     </div>
+
     """
   end
 

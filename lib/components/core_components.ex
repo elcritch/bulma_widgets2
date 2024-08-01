@@ -35,7 +35,6 @@ defmodule BulmaWidgets.CoreComponents do
   """
   attr :rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs()
   slot :inner_block, required: false
-
   def block(assigns) do
     assigns = assigns |> BulmaWidgets.assign_extras()
     ~H"""
@@ -59,7 +58,6 @@ defmodule BulmaWidgets.CoreComponents do
   """
   attr :rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs()
   slot :inner_block, required: false
-
   def box(assigns) do
     assigns = assigns |> BulmaWidgets.assign_extras()
     ~H"""

@@ -158,6 +158,28 @@ defmodule BulmaWidgets.Elements do
   end
 
   @doc """
+  Bold notification blocks, to alert your users of something
+
+  The notification is a simple colored block meant to draw the attention to the user about something. As such, it can be used as a pinned notification in the corner of the viewport. That's why it supports the use of the delete element.
+
+  ## Examples
+
+      <.notification is-medium></.notification>
+  """
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  def notification(assigns) do
+    assigns = assigns |> BulmaWidgets.assign_extras()
+
+    ~H"""
+    <div class={["notification", BulmaWidgets.classes(@rest)]} {@rest}>
+      <button class="delete"></button>
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+  @doc """
   Renders a modal.
 
   ## Examples

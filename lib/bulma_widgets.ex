@@ -7,6 +7,7 @@ defmodule BulmaWidgets do
     is-warning
     is-danger
     is-success
+    is-light
   )
 
   @attrs ~w(

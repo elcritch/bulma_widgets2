@@ -164,7 +164,9 @@ defmodule BulmaWidgets.Elements do
 
   ## Examples
 
-      <.notification is-medium></.notification>
+      <.notification is-danger>
+        Example notification!
+      </.notification>
   """
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
@@ -176,6 +178,50 @@ defmodule BulmaWidgets.Elements do
       <button class="delete"></button>
       <%= render_slot(@inner_block) %>
     </div>
+    """
+  end
+
+  @doc """
+  The Bulma progress bar is a simple CSS class that styles the native <progress> HTML element.
+
+  ## Examples
+
+      <.progress is-medium value="15" max="100"></.progress>
+  """
+  attr(:min, :float, default: nil)
+  attr(:max, :float, default: nil)
+  attr(:value, :float, required: true)
+
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  def progress(assigns) do
+    assigns = assigns |> BulmaWidgets.assign_extras()
+
+    ~H"""
+    <progress class={["progress", BulmaWidgets.classes(@rest), @min, @max, @value]} {@rest}>
+    </progress>
+    """
+  end
+
+  @doc """
+  The Bulma progress bar is a simple CSS class that styles the native <progress> HTML element.
+
+  ## Examples
+
+      <.progress is-medium value="15" max="100"></.progress>
+  """
+  attr(:min, :float, default: nil)
+  attr(:max, :float, default: nil)
+
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  def progress_indeterminate(assigns) do
+    assigns = assigns |> BulmaWidgets.assign_extras()
+
+    ~H"""
+    <progress class={["progress", BulmaWidgets.classes(@rest)]} min={@min} max={@max} {@rest}>
+      <%= render_slot(@inner_block) %>
+    </progress>
     """
   end
 

@@ -137,7 +137,6 @@ defmodule BulmaWidgets.Elements do
   def icon(assigns) do
     assigns = assigns |> BulmaWidgets.assign_extras()
 
-
     ~H"""
     <%= if @text do %>
       <span class="icon-text">

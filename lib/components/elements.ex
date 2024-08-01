@@ -233,6 +233,7 @@ defmodule BulmaWidgets.Elements do
   ## Examples
 
       <.tag is-success></.tag>
+      <.tag is-success><.button delete></.button></.tag>
   """
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
   attr(:delete_size, :string, default: "")
@@ -243,7 +244,6 @@ defmodule BulmaWidgets.Elements do
     ~H"""
     <span class={["tag", BulmaWidgets.classes(@rest)]} {@rest}>
       <%= render_slot(@inner_block) %>
-      <button :if={@delete_size in []} class={["delete", @delete_size]}></button>
     </span>
     """
   end

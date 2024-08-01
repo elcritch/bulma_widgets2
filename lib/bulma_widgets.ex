@@ -23,7 +23,7 @@ defmodule BulmaWidgets do
     is-outlined
 
     is-rounded
-    is-delete
+    delete
   )
 
   @spacing ~w(

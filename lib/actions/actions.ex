@@ -15,7 +15,7 @@ defmodule BulmaWidgets.Actions do
 
       import BulmaWidgets.Actions,
         only: [
-          assign_cached_topics: 2,
+          mount_cached: 2,
           assign_cached: 2,
           assign_sharing: 1,
           event_send: 3,

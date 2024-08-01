@@ -23,6 +23,32 @@ defmodule BulmaWidgets.CoreComponents do
     text
   end
 
+
+  @doc """
+  Block div
+
+  ## Examples
+
+      <.block>
+        This text is within a Bulma block
+      </.block>
+  """
+  attr :rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs()
+  slot :inner_block, required: true
+
+  def block(assigns) do
+    assigns = assigns |> BulmaWidgets.assign_extras()
+    ~H"""
+    <div
+      class={["block", BulmaWidgets.classes(@rest)]}
+      {@rest}
+    >
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
+
   @doc """
   Renders a button.
 
@@ -35,6 +61,7 @@ defmodule BulmaWidgets.CoreComponents do
   slot :inner_block, required: true
 
   def button(assigns) do
+    assigns = assigns |> BulmaWidgets.assign_extras()
     ~H"""
     <button
       class={["button", BulmaWidgets.classes(@rest)]}
@@ -68,6 +95,7 @@ defmodule BulmaWidgets.CoreComponents do
   slot :inner_block, required: true
 
   def modal(assigns) do
+    assigns = assigns |> BulmaWidgets.assign_extras()
     ~H"""
     <div
       id={@id}

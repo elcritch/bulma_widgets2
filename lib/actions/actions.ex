@@ -2,9 +2,10 @@ defmodule BulmaWidgets.Actions do
   require Logger
   alias BulmaWidgets.Action
 
-  @doc """
+  @moduledoc """
   Example usage: `use BulmaWidgets.Actions, pubsub: MyApp.PubSub1`
   """
+
   defmacro __using__(opts) do
     pubsub = opts |> Keyword.fetch!(:pubsub)
     IO.puts("ACTIONS:USE: #{inspect(opts)}")

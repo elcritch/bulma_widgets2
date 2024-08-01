@@ -1,0 +1,6 @@
+/*!
+ * Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ * Copyright 2024 Fonticons, Inc.
+ */
+:host,:root{--fa-style-family-classic:"Font Awesome 6 Free";--fa-font-solid:normal 900 1em/1 "Font Awesome 6 Free"}@font-face{font-family:"Font Awesome 6 Free";font-style:normal;font-weight:900;font-display:block;src:url(../webfonts/fa-solid-900-237f4a0afbdb652fb2330ee7e1567dd3.woff2?vsn=d) format("woff2"),url(../webfonts/fa-solid-900-adec7d6f310bc577f05e8fe06a5daccf.ttf?vsn=d) format("truetype")}.fa-solid,.fas{font-weight:900}

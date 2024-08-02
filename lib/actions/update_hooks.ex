@@ -25,20 +25,26 @@ defmodule BulmaWidgets.Action.UpdateHooks do
               end}]}
       ]}
   """
-  def call(%Action{data: {_key, values}, socket: socket} = evt, opts \\ []) do
+  def call(%Action{id: id, data: {key, values}, socket: socket} = evt, opts \\ []) do
     Logger.debug("UpdateHooks:call:opts: #{inspect(opts, pretty: false)}")
+    Logger.debug("UpdateHooks:call:values: #{inspect(values, pretty: false)}")
 
     target = opts |> Keyword.get(:to, socket.assigns.id)
     hooks = [opts |> Keyword.fetch!(:hooks)] |> List.flatten()
-    values = opts |> Keyword.get(:values, values) # |> Map.take(set_fields)
+    # |> Map.take(set_fields)
+    values = opts |> Keyword.get(:values, values)
+    id = opts |> Keyword.get(:id, id)
 
     Logger.debug("UpdateHooks:call:target: #{inspect(target, pretty: false)}")
-    msg = %{hooks: hooks, values: values}
+    msg = %{hooks: hooks, id: id, data: {key, values}}
+
     case target do
       %Phoenix.LiveComponent.CID{} = cid ->
         send_update(cid, %{__trigger_hooks__: msg})
+
       {module, target} ->
         send_update(module, %{id: target, __trigger_hooks__: msg})
+
       pid when is_pid(pid) ->
         Logger.warning("TODO PID!")
         send(pid, {:update_state, %{__trigger_hooks__: msg}})
@@ -47,36 +53,49 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     %{evt | socket: socket}
   end
 
-  def exec_hooks(hooks, _values, assigns, socket, _opts) do
-    socket =
-      for hook <- hooks, reduce: socket do
-        socket ->
+  def exec_hooks(hooks, id, data, assigns, socket, _opts) do
+    {key, values} = data
+
+    evt = %Action{
+      id: id,
+      data: {key, values},
+      state: assigns,
+      socket: socket
+    }
+
+    evt! =
+      for hook <- hooks, reduce: evt do
+        evt ->
           case hook do
             fun when is_function(fun, 2) ->
-              %Phoenix.LiveView.Socket{} = socket = fun.(assigns, socket)
-              socket
+              %Action{} = evt = fun.(evt)
+              evt
+
             fun when is_function(fun, 0) ->
               fun.()
+              evt
+
+            {:start_async, name, _args, cb} when is_function(cb, 1) ->
               socket
-            {:start_async, name, args, cb} when is_function(cb, 1) ->
-              socket |> Phoenix.LiveView.start_async(name, fn ->
-                cb.(args)
+              |> Phoenix.LiveView.start_async(name, fn ->
+                cb.(evt)
               end)
+
             hook ->
               Logger.error("invalid update hook: #{inspect(hook)}")
-              socket
+              evt
           end
       end
 
-    socket
+    evt!
   end
 
   def run_hooks(%{__trigger_hooks__: msg} = assigns, socket, opts) do
-    %{hooks: hooks, values: values} = msg
+    %{id: id, hooks: hooks, data: data} = msg
     assigns = assigns |> Map.delete(:__trigger_hooks__)
-    socket = exec_hooks(hooks, values, assigns, socket, opts)
+    evt = exec_hooks(hooks, id, data, assigns, socket, opts)
 
-    {assigns, socket}
+    {assigns, evt.socket}
   end
 
   def run_hooks(assigns, socket, _opts) do
@@ -86,20 +105,19 @@ defmodule BulmaWidgets.Action.UpdateHooks do
 
   def on_mount(_name, _params, _session, socket) do
     {:cont,
-      socket |> attach_hook(:widget_state_update_hooks, :handle_info, &maybe_receive_update/2)}
+     socket |> attach_hook(:widget_state_update_hooks, :handle_info, &maybe_receive_update/2)}
   end
 
-  defp maybe_receive_update( {:update_state, %{__trigger_hooks__: msg}}, socket) do
-    %{hooks: hooks, values: values} = msg
+  defp maybe_receive_update({:update_state, %{__trigger_hooks__: msg}}, socket) do
+    %{id: _id, hooks: hooks, data: data} = msg
     Logger.debug("UpdateHooks:update_state:update: #{inspect(msg, pretty: true)} ")
 
-    socket = exec_hooks(hooks, values, socket.assigns, socket, [])
+    evt = exec_hooks(hooks, id, data, socket.assigns, socket, [])
 
-    {:halt, socket}
+    {:halt, evt.socket}
   end
 
   defp maybe_receive_update(_, socket) do
     {:cont, socket}
   end
-
 end

@@ -96,9 +96,10 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
         socket
       ) do
     value = socket.assigns.values |> Map.new() |> Map.get(key)
-    socket = socket |> Actions.handle_event(menu_name, {key, value}, @standard_actions)
 
-    {:noreply, socket |> assign(%{test: true, other: false})}
+    {:noreply,
+     socket
+     |> Actions.handle_event(menu_name, {key, value}, @standard_actions)}
   end
 
   def key({k, _v}), do: k

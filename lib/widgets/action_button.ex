@@ -17,10 +17,10 @@ defmodule BulmaWidgets.Widgets.ActionButton do
     {:ok, Actions.update(assigns, socket)}
   end
 
-  attr :id, :string, required: true
-  attr :loading, :boolean, default: false
-  attr :extra_actions, :list, default: []
-  attr :rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs()
+  attr(:id, :string, required: true)
+  attr(:loading, :boolean, default: false)
+  attr(:extra_actions, :list, default: [])
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def render(assigns) do
     # Logger.debug("#{__MODULE__}:render: assigns:rest: #{inspect(assigns.rest |> Map.keys(), pretty: true)}")
@@ -31,17 +31,30 @@ defmodule BulmaWidgets.Widgets.ActionButton do
 
     actions = assigns |> Actions.all_actions()
 
-    Logger.warning("#{__MODULE__}:ACTION_BUTTON: assigns: #{inspect(assigns |> Map.delete(:rest) |> Map.keys(), pretty: true, limit: :infinity)}")
+    Logger.warning(
+      "#{__MODULE__}:ACTION_BUTTON: assigns: #{inspect(assigns |> Map.delete(:rest) |> Map.keys(), pretty: true, limit: :infinity)}"
+    )
+
     # Logger.warning("#{__MODULE__}:ACTION_BUTTON: loading: #{inspect(assigns |> Map.take(["loading", :loading]), pretty: true, limit: :infinity)}")
-    Logger.warning("#{__MODULE__}:ACTION_BUTTON: rest: #{inspect(assigns.rest |> Map.delete(:socket) |> Map.delete(:extra_actions), pretty: true, limit: :infinity)}")
-    Logger.warning("#{__MODULE__}:ACTION_BUTTON: actions: #{inspect(actions, pretty: true, limit: :infinity)}")
+    Logger.warning(
+      "#{__MODULE__}:ACTION_BUTTON: rest: #{inspect(assigns.rest |> Map.delete(:socket) |> Map.delete(:extra_actions), pretty: true, limit: :infinity)}"
+    )
+
+    Logger.warning(
+      "#{__MODULE__}:ACTION_BUTTON: actions: #{inspect(actions, pretty: true, limit: :infinity)}"
+    )
 
     extras =
       assigns.rest
       |> Phoenix.Component.assigns_to_attributes([:socket, :myself, :flash, :cached])
 
-    Logger.warning("#{__MODULE__}:ACTION_BUTTON: extras: #{inspect(extras, pretty: true, limit: :infinity)}")
-    Logger.warning("#{__MODULE__}:ACTION_BUTTON: BulmaWidgets.classes(@rest): #{inspect(BulmaWidgets.classes(assigns.rest), pretty: true, limit: :infinity)}")
+    Logger.warning(
+      "#{__MODULE__}:ACTION_BUTTON: extras: #{inspect(extras, pretty: true, limit: :infinity)}"
+    )
+
+    Logger.warning(
+      "#{__MODULE__}:ACTION_BUTTON: BulmaWidgets.classes(@rest): #{inspect(BulmaWidgets.classes(assigns.rest), pretty: true, limit: :infinity)}"
+    )
 
     ~H"""
     <button
@@ -62,19 +75,11 @@ defmodule BulmaWidgets.Widgets.ActionButton do
         %{"name" => name} = values,
         socket
       ) do
-    Logger.info("button-action:click!: target: #{name} values: #{inspect values}")
-    actions = socket.assigns |> Actions.all_actions()
+    Logger.info("button-action:click!: target: #{name} values: #{inspect(values)}")
+    values = values |> Map.delete("name")
 
-    event_action =
-      %Action{
-        id: name,
-        data: {name, values |> Map.delete("name")},
-        state: socket.assigns,
-        socket: socket
-      }
-      |> Action.apply(actions)
-
-    {:noreply, event_action.socket}
+    {:noreply, socket
+    |> Actions.handle_event(name, {name, values}, @standard_actions)}
   end
 
   def key({k, _v}), do: k

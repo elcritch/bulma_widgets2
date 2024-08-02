@@ -18,10 +18,10 @@ defmodule BulmaWidgets.Action.UpdateHooks do
               Logger.warning("UpdateHooks:func:args: ")
               sock
             end,
-            {:start_async, :check_run, @device,
+            {:start_async, :check_run,
               fn args ->
                 Logger.warning("UpdateHooks:func: ")
-                check_sensor(args)
+                fn -> check_sensor(args) end
               end}]}
       ]}
   """
@@ -75,12 +75,12 @@ defmodule BulmaWidgets.Action.UpdateHooks do
               fun.()
               evt
 
-            {:start_async, name, _args, cb} when is_function(cb, 1) ->
-              socket
-              |> Phoenix.LiveView.start_async(name, fn ->
-                cb.(evt)
-              end)
+            {:start_async, name, cb} when is_function(cb, 1) ->
+              fun = cb.(evt)
 
+              socket |> Phoenix.LiveView.start_async(name, fun)
+
+              evt
             hook ->
               Logger.error("invalid update hook: #{inspect(hook)}")
               evt

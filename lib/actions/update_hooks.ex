@@ -4,6 +4,22 @@ defmodule BulmaWidgets.Action.UpdateHooks do
   require Logger
 
   @moduledoc """
+
+  ## Examples
+
+      extra_actions={[
+        {BulmaWidgets.Action.UpdateHooks,
+          to: @myself,
+          hooks: [
+            fn ->
+              Logger.warning("UpdateHooks:func: #{}")
+            end,
+            {:start_async, :check_run, @device,
+            fn args ->
+              Logger.warning("UpdateHooks:func: ")
+              check_sensor(args)
+            end}]}
+      ]}
   """
   def call(%Action{data: {_key, values}, socket: socket} = evt, opts \\ []) do
     Logger.debug("UpdateHooks:call:opts: #{inspect(opts, pretty: false)}")
@@ -28,7 +44,6 @@ defmodule BulmaWidgets.Action.UpdateHooks do
   def run_hooks(%{__trigger_hooks__: %{hooks: hooks, values: _vals}} = assigns, socket, _opts) do
     assigns = assigns |> Map.delete(:__trigger_hooks__)
 
-    # socket = module.handle_triggers(hooks, vals, assigns, socket)
     socket =
       for hook <- hooks, reduce: socket do
         socket ->

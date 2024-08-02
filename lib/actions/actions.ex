@@ -87,7 +87,7 @@ defmodule BulmaWidgets.Actions do
   but pass `no_merge: true` to skip this.
   """
   def update(assigns, socket, opts \\ []) do
-    # {assigns, socket} = Action.TriggerUpdates.run_triggers(assigns, socket, module, opts)
+    # {assigns, socket} = Action.UpdateFields.run(assigns, socket, opts)
 
     socket =
       unless true == opts |> Keyword.get(:no_merge) do

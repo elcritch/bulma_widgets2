@@ -240,4 +240,17 @@ defmodule BulmaWidgets.Layouts do
     """
   end
 
+  @doc """
+  Footer item
+  """
+  slot(:inner_block, required: true)
+
+  def footer(assigns) do
+    ~H"""
+    <footer class="footer" >
+      <%= render_slot(@inner_block) %>
+    </footer>
+    """
+  end
+
 end

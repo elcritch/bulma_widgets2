@@ -109,7 +109,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
   end
 
   defp maybe_receive_update({:update_state, %{__trigger_hooks__: msg}}, socket) do
-    %{id: _id, hooks: hooks, data: data} = msg
+    %{id: id, hooks: hooks, data: data} = msg
     Logger.debug("UpdateHooks:update_state:update: #{inspect(msg, pretty: true)} ")
 
     evt = exec_hooks(hooks, id, data, socket.assigns, socket, [])

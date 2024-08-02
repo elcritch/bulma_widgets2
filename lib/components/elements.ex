@@ -52,7 +52,7 @@ defmodule BulmaWidgets.Elements do
   def title(assigns) do
     ~H"""
     <%= if @notification do %>
-      <.notification delete={false}>
+      <.notification delete={false} has-text-centered>
         <h3 class={["title", "is-#{@size}", classes(@rest)]} {extras(@rest)}>
           <%= render_slot(@inner_block) %>
         </h3>

@@ -198,4 +198,46 @@ defmodule BulmaWidgets.Layouts do
     """
   end
 
+  @doc """
+  The famous media object prevalent in social media interfaces, but useful in any context
+
+  The media object is a UI element perfect for repeatable and nestable content.
+
+  ## Examples
+
+      <.media>
+        <:left>
+          <img src="https://bulma.io/assets/images/placeholders/128x128.png" />
+        </:left>
+        <:content>
+          <div class="content">
+            <p> Lorem ipsum dolor sit amet, consectetur </p>
+          </div>
+        </:content>
+        <:right>
+          <.BulmaWidgets.Elements.delete />
+        </:right>
+      </.media>
+  """
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  slot(:left, doc: "media figure")
+  slot(:content, doc: "media content")
+  slot(:right, doc: "media right")
+
+  def media(assigns) do
+    ~H"""
+    <article class={["media", classes(@rest)]} {extras(@rest)}>
+      <figure class="media-left">
+        <%= render_slot(@left) %>
+      </figure>
+      <div class="media-content">
+        <%= render_slot(@content) %>
+      </div>
+      <div class="media-right">
+        <%= render_slot(@right) %>
+      </div>
+    </article>
+    """
+  end
+
 end

@@ -36,7 +36,7 @@ defmodule BulmaWidgets.Actions do
       end
 
       @doc """
-      Creates actions which broadcast and then cache the `vals` to the `topic`.
+      Creates actions which broadcasts and then caches the `vals` to the `topic`.
       """
       def event_send(socket, opts) do
         event_send(socket, unquote(pubsub), opts)

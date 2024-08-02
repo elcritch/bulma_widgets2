@@ -46,6 +46,26 @@ defmodule BulmaWidgets.Elements do
   end
 
   @doc """
+
+  ## Examples
+
+      <.tagged label="Test:" value={@value}/>
+  """
+  attr(:label, :string, required: true)
+  attr(:value, :string, required: true)
+  def tagged(assigns) do
+
+    ~H"""
+    <BulmaWidgets.Layouts.level>
+        <:left>
+          <.tag><%= @label %></.tag>
+          <%= @value %>
+        </:left>
+    </BulmaWidgets.Layouts.level>
+    """
+  end
+
+  @doc """
   Wrapper for header object of size 1-6 using Bulma CSS.
   Pass `notification={true}` to create a simple centered title type.
   Has an extra CSS class `notification-title` for styling.
@@ -301,6 +321,7 @@ defmodule BulmaWidgets.Elements do
   """
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
   attr(:delete_size, :string, default: "")
+  slot(:inner_block, required: false)
 
   def tag(assigns) do
     ~H"""

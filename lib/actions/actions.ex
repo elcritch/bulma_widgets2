@@ -12,13 +12,13 @@ defmodule BulmaWidgets.Actions do
 
     quote do
       alias BulmaWidgets.Actions
+      alias BulmaWidgets.Actions.Widgets
 
       import BulmaWidgets.Actions,
         only: [
           mount_cached: 2,
           assign_cached: 2,
           assign_sharing: 1,
-          event_send: 3,
           event_commands: 2,
           event_commands: 1
         ]
@@ -33,13 +33,6 @@ defmodule BulmaWidgets.Actions do
           __MODULE__,
           opts ++ [pubsub: unquote(pubsub)]
         )
-      end
-
-      @doc """
-      Creates actions which broadcasts and then caches the `vals` to the `topic`.
-      """
-      def event_send(socket, opts) do
-        event_send(socket, unquote(pubsub), opts)
       end
 
       @doc """
@@ -112,6 +105,7 @@ defmodule BulmaWidgets.Actions do
     assign_cached(socket_or_assigns, [])
   end
 
+  @spec assign_cached(map(), any()) :: any()
   def assign_cached(assigns, _opts) do
     # Logger.debug("action_utils:cached:assigns: #{inspect(assigns)}")
     # Logger.debug(":action_utils:cached:opts: #{inspect(opts)}")
@@ -184,16 +178,6 @@ defmodule BulmaWidgets.Actions do
     ]
   end
 
-  @doc """
-  Creates actions which broadcast and then cache the `vals` to the `topic`.
-  Must pass `pubsub` module to use.
-  """
-  def event_send(topic, pubsub, vals) do
-    [
-      {Action.BroadcastState, topic: topic, values: vals, pubsub: pubsub},
-      {Action.CacheUpdate, topic: topic, values: vals}
-    ]
-  end
 
   @doc """
   Creates an action which broadcasts state for the given `topic` to

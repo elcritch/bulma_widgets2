@@ -45,6 +45,15 @@ defmodule BulmaWidgets.Elements do
     """
   end
 
+  attr(:size, :integer, required: true)
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  slot(:inner_block, required: false)
+  def title(assigns) do
+    ~H"""
+    <h1 class={["title", "is-#{@size}", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h1>
+    """
+  end
+
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
   slot(:inner_block, required: false)
   def h1(assigns) do

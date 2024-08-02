@@ -18,7 +18,6 @@ defmodule BulmaWidgets.Elements do
   """
   use Phoenix.Component
 
-  alias Phoenix.LiveView.JS
   require Logger
 
   def gettext(text) do
@@ -252,14 +251,20 @@ defmodule BulmaWidgets.Elements do
   attr(:"has-addons", :boolean, default: false)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
-  slot(:tag, doc: "inner tags")
+  slot :tag, doc: "tags" do
+    attr :other, :any, doc: "class"
+  end
+
 
   def tags(assigns) do
+    IO.puts("tags:assigns: #{inspect(assigns, pretty: true)}")
 
     ~H"""
     <div class={["tags", classes(@rest), assigns |> css_maybe(:"has-addons")]}
       {extras(@rest)} >
-      <%= render_slot(@tag) %>
+      <span class={["tag", classes(t)]} :for={t <- @tag} >
+        <%= render_slot(t) %>
+      </span>
     </div>
     """
   end

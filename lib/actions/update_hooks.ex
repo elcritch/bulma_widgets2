@@ -14,11 +14,15 @@ defmodule BulmaWidgets.Action.UpdateHooks do
             fn ->
               Logger.warning("UpdateHooks:func: #{}")
             end,
+            fn asg, sock ->
+              Logger.warning("UpdateHooks:func: #{}")
+              sock
+            end,
             {:start_async, :check_run, @device,
-            fn args ->
-              Logger.warning("UpdateHooks:func: ")
-              check_sensor(args)
-            end}]}
+              fn args ->
+                Logger.warning("UpdateHooks:func: ")
+                check_sensor(args)
+              end}]}
       ]}
   """
   def call(%Action{data: {_key, values}, socket: socket} = evt, opts \\ []) do

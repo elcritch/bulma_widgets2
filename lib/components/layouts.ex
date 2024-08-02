@@ -156,20 +156,26 @@ defmodule BulmaWidgets.Layouts do
 
       <.level>
         <:left>
-          <:level_item>
+          <.level_item>
             <p>Hello</p>
-          </:level_item>
+          </.level_item>
         </:left>
         <:right>
-          <:level_item>
+          <.level_item>
             Some longer text here
-          </:level_item>
+          </.level_item>
         </:right>
+        <:center>
+          <.level_item>
+          </.level_item>
+        </:center>
       </.level>
   """
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
-  slot(:title, doc: "hero title")
-  slot(:subtitle, doc: "hero subtitle")
+
+  slot(:left, doc: "left items")
+  slot(:right, doc: "right items")
+  slot(:center, doc: "centered items")
 
   def level(assigns) do
     ~H"""
@@ -177,7 +183,8 @@ defmodule BulmaWidgets.Layouts do
       <div class="level-left" >
         <%= render_slot(@left) %>
       </div>
-      <div class="subtitle" >
+      <%= render_slot(@center) %>
+      <div class="level-right" >
         <%= render_slot(@right) %>
       </div>
     </nav>

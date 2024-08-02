@@ -45,6 +45,54 @@ defmodule BulmaWidgets.Elements do
     """
   end
 
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  slot(:inner_block, required: false)
+  def h1(assigns) do
+    ~H"""
+    <h1 class={["title is-1", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h1>
+    """
+  end
+
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  slot(:inner_block, required: false)
+  def h2(assigns) do
+    ~H"""
+    <h2 class={["title is-2", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h2>
+    """
+  end
+
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  slot(:inner_block, required: false)
+  def h3(assigns) do
+    ~H"""
+    <h3 class={["title is-3", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h3>
+    """
+  end
+
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  slot(:inner_block, required: false)
+  def h4(assigns) do
+    ~H"""
+    <h4 class={["title is-4", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h4>
+    """
+  end
+
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  slot(:inner_block, required: false)
+  def h5(assigns) do
+    ~H"""
+    <h5 class={["title is-5", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h5>
+    """
+  end
+
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  slot(:inner_block, required: false)
+  def h6(assigns) do
+    ~H"""
+    <h6 class={["title is-6", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h6>
+    """
+  end
+
   @doc """
   The box element is a simple container with a white background, some padding, and a box shadow.
   """

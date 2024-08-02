@@ -264,32 +264,6 @@ defmodule BulmaWidgets.Elements do
   end
 
   @doc """
-
-  ## Examples
-
-      <.tag is-success></.tag>
-  """
-  attr(:"is-widescreen", :boolean, default: false)
-  attr(:"is-fullhd", :boolean, default: false)
-  attr(:"is-max-desktop", :boolean, default: false)
-  attr(:"is-max-widescreen", :boolean, default: false)
-  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
-
-  def container(assigns) do
-
-    ~H"""
-    <div class={["container", classes(@rest),
-                assigns |> css_maybe(:"is-widescreen"),
-                assigns |> css_maybe(:"is-fullhd"),
-                assigns |> css_maybe(:"is-max-desktop"),
-                assigns |> css_maybe(:"is-max-widescreen"),
-                ]}>
-      <%= render_slot(@inner_block) %>
-    </div>
-    """
-  end
-
-  @doc """
   Renders a modal.
 
   ## Examples

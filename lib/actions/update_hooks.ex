@@ -29,7 +29,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     Logger.debug("UpdateHooks:call:opts: #{inspect(opts, pretty: false)}")
 
     target = opts |> Keyword.get(:to, socket.assigns.id)
-    hooks = opts |> Keyword.fetch!(:hooks) |> List.flatten()
+    hooks = [opts |> Keyword.fetch!(:hooks)] |> List.flatten()
     values = opts |> Keyword.get(:values, values) # |> Map.take(set_fields)
 
     Logger.debug("UpdateHooks:call:target: #{inspect(target, pretty: false)}")
@@ -39,6 +39,9 @@ defmodule BulmaWidgets.Action.UpdateHooks do
         send_update(cid, %{__trigger_hooks__: msg})
       {module, target} ->
         send_update(module, %{id: target, __trigger_hooks__: msg})
+      pid when is_pid(pid) ->
+        Logger.warning("TODO PID!")
+        send(pid, {:update_state, %{__trigger_hooks__: msg}})
     end
 
     %{evt | socket: socket}
@@ -68,7 +71,8 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     socket
   end
 
-  def run_hooks(%{__trigger_hooks__: %{hooks: hooks, values: values}} = assigns, socket, opts) do
+  def run_hooks(%{__trigger_hooks__: msg} = assigns, socket, opts) do
+    %{hooks: hooks, values: values} = msg
     assigns = assigns |> Map.delete(:__trigger_hooks__)
     socket = exec_hooks(hooks, values, assigns, socket, opts)
 
@@ -78,6 +82,24 @@ defmodule BulmaWidgets.Action.UpdateHooks do
   def run_hooks(assigns, socket, _opts) do
     # no __trigger_hooks, nothing to do
     {assigns, socket}
+  end
+
+  def on_mount(_name, _params, _session, socket) do
+    {:cont,
+      socket |> attach_hook(:widget_state_update_hooks, :handle_info, &maybe_receive_update/2)}
+  end
+
+  defp maybe_receive_update( {:update_state, %{__trigger_hooks__: msg}}, socket) do
+    %{hooks: hooks, values: values} = msg
+    Logger.debug("UpdateHooks:update_state:update: #{inspect(msg, pretty: true)} ")
+
+    socket = exec_hooks(hooks, values, socket.assigns, socket, [])
+
+    {:halt, socket}
+  end
+
+  defp maybe_receive_update(_, socket) do
+    {:cont, socket}
   end
 
 end

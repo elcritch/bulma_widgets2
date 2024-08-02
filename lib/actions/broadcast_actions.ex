@@ -61,7 +61,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
     Phoenix.PubSub.subscribe(name, @broadcast_topic)
 
     {:cont,
-      socket |> attach_hook(:broadcast_widget_state, :handle_info, &maybe_receive_broadcast/2)}
+      socket |> attach_hook(:widget_state_broadcast, :handle_info, &maybe_receive_broadcast/2)}
   end
 
   defp maybe_receive_broadcast({:broadcast_register, args}, socket) do

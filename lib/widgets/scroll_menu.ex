@@ -4,6 +4,26 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
 
   require Logger
 
+  @moduledoc """
+
+  ## Examples
+
+      <.live_component
+        module={ScrollMenu}
+        id="wiper_mode"
+        is-fullwidth
+        is-info
+        values={[
+          {"Regular", 1},
+          {"Inverted", -1}
+        ]}
+      >
+        <:label :let={{k, _}}>
+          Test: <%= k %>
+        </:label>
+      </.live_component>
+  """
+
   @standard_actions [
     {Action.AssignField, field: :data}
   ]
@@ -15,7 +35,7 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
     {:ok, Actions.update(assigns, socket)}
   end
 
-  attr :id, :atom, required: true
+  attr :id, :string, required: true
   attr :values, :list, required: true
   attr :data, :any, default: {nil, nil}
   attr :extra_actions, :list, default: []
@@ -69,14 +89,12 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
     """
   end
 
-  @spec handle_event(<<_::144>>, map(), any()) :: {:noreply, any()}
   def handle_event(
         "menu-select-action",
         %{"id" => menu_name, "key" => key, "value" => _value},
         socket
       ) do
     actions = socket.assigns |> Actions.all_actions(@standard_actions)
-
     value = socket.assigns.values |> Map.new() |> Map.get(key)
 
     event_action =

@@ -265,6 +265,7 @@ defmodule BulmaWidgets.Layouts do
   """
   attr(:columns, :integer, required: true)
   slot(:cells, required: false, doc: "grid cell items")
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def fixed_grid(assigns) do
     ~H"""

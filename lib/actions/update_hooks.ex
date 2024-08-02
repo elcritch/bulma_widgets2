@@ -10,7 +10,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
       extra_actions={[
         {BulmaWidgets.Action.UpdateHooks,
           to: @myself,
-          post: [
+          hooks: [
             fn ->
               Logger.warning("UpdateHooks:func: ")
             end,
@@ -29,11 +29,11 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     Logger.debug("UpdateHooks:call:opts: #{inspect(opts, pretty: false)}")
 
     target = opts |> Keyword.get(:to, socket.assigns.id)
-    post = opts |> Keyword.fetch!(:post) |> List.flatten()
+    hooks = opts |> Keyword.fetch!(:hooks) |> List.flatten()
     values = opts |> Keyword.get(:values, values) # |> Map.take(set_fields)
 
     Logger.debug("UpdateHooks:call:target: #{inspect(target, pretty: false)}")
-    msg = %{hooks: post, values: values}
+    msg = %{hooks: hooks, values: values}
     case target do
       %Phoenix.LiveComponent.CID{} = cid ->
         send_update(cid, %{__trigger_hooks__: msg})
@@ -59,7 +59,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
                 cb.(args)
               end)
             hook ->
-              Logger.error("invalid trigger hook callback: #{inspect(hook)}")
+              Logger.error("invalid update hook: #{inspect(hook)}")
               socket
           end
       end
@@ -67,14 +67,14 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     socket
   end
 
-  def run_post_hooks(%{__trigger_hooks__: %{hooks: hooks, values: values}} = assigns, socket, opts) do
+  def run_hooks(%{__trigger_hooks__: %{hooks: hooks, values: values}} = assigns, socket, opts) do
     assigns = assigns |> Map.delete(:__trigger_hooks__)
     socket = exec_hooks(hooks, values, assigns, socket, opts)
 
     {assigns, socket}
   end
 
-  def run_post_hooks(assigns, socket, _opts) do
+  def run_hooks(assigns, socket, _opts) do
     # no __trigger_hooks, nothing to do
     {assigns, socket}
   end

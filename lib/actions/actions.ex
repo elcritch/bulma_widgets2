@@ -101,7 +101,7 @@ defmodule BulmaWidgets.Actions do
       |> BulmaWidgets.Actions.assign_cached()
       |> BulmaWidgets.Actions.assign_sharing()
 
-    {_assigns, socket} = Action.UpdateHooks.run_post_hooks(assigns, socket, opts)
+    {_assigns, socket} = Action.UpdateHooks.run_hooks(assigns, socket, opts)
 
     socket
   end

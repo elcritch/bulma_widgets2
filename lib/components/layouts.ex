@@ -264,14 +264,14 @@ defmodule BulmaWidgets.Layouts do
   Fixed Grid
   """
   attr(:columns, :integer, required: true)
-  slot(:cells, required: false, doc: "grid cell items")
+  slot(:cell, required: false, doc: "grid cell items")
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def fixed_grid(assigns) do
     ~H"""
     <div class={["fixed-grid", "has-#{@columns}-cols"]} >
       <div class="grid">
-        <div class={["cell", classes(t)]} :for={t <- @cells} >
+        <div class={["cell", classes(t)]} :for={t <- @cell} >
           <%= render_slot(t) %>
         </div>
       </div>

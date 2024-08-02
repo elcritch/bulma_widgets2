@@ -174,10 +174,10 @@ defmodule BulmaWidgets.Layouts do
   def level(assigns) do
     ~H"""
     <nav class={["level", classes(@rest)]} {extras(@rest)}>
-      <div class="level-left" :if={@left} >
+      <div class="level-left" >
         <%= render_slot(@left) %>
       </div>
-      <div class="subtitle" :if={@right}>
+      <div class="subtitle" >
         <%= render_slot(@right) %>
       </div>
     </nav>

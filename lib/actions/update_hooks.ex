@@ -12,15 +12,16 @@ defmodule BulmaWidgets.Action.UpdateHooks do
           to: @myself,
           hooks: [
             fn ->
-              Logger.warning("UpdateHooks:func: ")
+              Logger.warning("UpdateHooks:run! ")
             end,
-            fn asg, sock ->
-              Logger.warning("UpdateHooks:func:args: ")
-              sock
+            fn evt ->
+              Logger.warning("UpdateHooks:update: ")
+              %{evt | socket: evt.socket |> assign(:wiper_mode, evt.data)}
             end,
             {:start_async, :check_run,
               fn args ->
-                Logger.warning("UpdateHooks:func: ")
+                Logger.warning("UpdateHooks:start_async: ")
+                # must return a closure that takes no args
                 fn -> check_sensor(args) end
               end}]}
       ]}

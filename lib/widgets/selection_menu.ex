@@ -55,7 +55,7 @@ defmodule BulmaWidgets.Widgets.SelectionMenu do
       <ul class="menu-list">
         <li :for={{key, value} <- @values}>
           <a href="#"
-            class={[key == key(@data) && "is-active" || ""]}
+            class={[value == value(@data) && "is-active" || ""]}
             phx-click={
               JS.push("menu-select-action", target: @rest.myself)
               |> JS.remove_class("is-active", to: "##{@id}")

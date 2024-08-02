@@ -67,7 +67,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
       for hook <- hooks, reduce: evt do
         evt ->
           case hook do
-            fun when is_function(fun, 2) ->
+            fun when is_function(fun, 1) ->
               %Action{} = evt = fun.(evt)
               evt
 

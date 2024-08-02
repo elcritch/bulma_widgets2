@@ -46,11 +46,22 @@ defmodule BulmaWidgets.Elements do
   end
 
   attr(:size, :integer, required: true)
+  attr(:notification, :boolean, default: false)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
   slot(:inner_block, required: false)
   def title(assigns) do
     ~H"""
-    <h1 class={["title", "is-#{@size}", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h1>
+    <%= if @notification do %>
+      <.notification delete={false}>
+        <h3 class={["title", "is-#{@size}", classes(@rest)]} {extras(@rest)}>
+          <%= render_slot(@inner_block) %>
+        </h3>
+      </.notification>
+    <% else %>
+      <h3 class={["title", "is-#{@size}", classes(@rest)]} {extras(@rest)}>
+        <%= render_slot(@inner_block) %>
+      </h3>
+    <% end %>
     """
   end
 

@@ -78,8 +78,9 @@ defmodule BulmaWidgets.Widgets.ActionButton do
     Logger.info("button-action:click!: target: #{name} values: #{inspect(values)}")
     values = values |> Map.delete("name")
 
-    {:noreply, socket
-    |> Actions.handle_event(name, {name, values}, @standard_actions)}
+    {:noreply,
+     socket
+     |> Actions.handle_event(name, {name, values}, [])}
   end
 
   def key({k, _v}), do: k

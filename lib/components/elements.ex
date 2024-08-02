@@ -218,13 +218,14 @@ defmodule BulmaWidgets.Elements do
         Example notification!
       </.notification>
   """
+  attr(:delete, :boolean, default: true)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def notification(assigns) do
 
     ~H"""
     <div class={["notification", classes(@rest)]} {extras(@rest)}>
-      <button class="delete"></button>
+      <button class="delete" :if={@delete}></button>
       <%= render_slot(@inner_block) %>
     </div>
     """

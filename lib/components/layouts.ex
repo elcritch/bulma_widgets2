@@ -149,4 +149,53 @@ defmodule BulmaWidgets.Layouts do
     """
   end
 
+  @doc """
+  A multi-purpose horizontal level, which can contain almost any other element
+
+  ## Examples
+
+      <.level>
+        <:left>
+          <:level_item>
+            <p>Hello</p>
+          </:level_item>
+        </:left>
+        <:right>
+          <:level_item>
+            Some longer text here
+          </:level_item>
+        </:right>
+      </.level>
+  """
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  slot(:title, doc: "hero title")
+  slot(:subtitle, doc: "hero subtitle")
+
+  def level(assigns) do
+    ~H"""
+    <nav class={["level", classes(@rest)]} {extras(@rest)}>
+      <div class="level-left" :if={@left} >
+        <%= render_slot(@left) %>
+      </div>
+      <div class="subtitle" :if={@right}>
+        <%= render_slot(@right) %>
+      </div>
+    </nav>
+    """
+  end
+
+  @doc """
+  An item for level layout.
+
+  """
+  slot(:inner_block, required: true)
+
+  def level_item(assigns) do
+    ~H"""
+    <div class="level-item" >
+      <%= render_slot(@inner_block) %>
+    </div>
+    """
+  end
+
 end

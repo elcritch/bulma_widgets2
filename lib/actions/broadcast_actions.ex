@@ -58,6 +58,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
   end
 
   def on_mount(name, _params, _session, socket) do
+    Logger.debug("BroadcastState:on_mount: #{inspect(name)} socket: #{inspect({socket.id, socket.view})}")
     Phoenix.PubSub.subscribe(name, @broadcast_topic)
 
     {:cont,
@@ -89,7 +90,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
         when evt_view != view do
     Logger.debug("BroadcastState:skip: #{inspect({evt_view, view}, pretty: false)}")
 
-    {:cont, socket}
+    {:halt, socket}
   end
 
   defp maybe_receive_broadcast(
@@ -122,7 +123,8 @@ defmodule BulmaWidgets.Action.BroadcastState do
     {:halt, socket}
   end
 
-  defp maybe_receive_broadcast(_, socket) do
+  defp maybe_receive_broadcast(other, socket) do
+    Logger.debug("BroadcastState:broadcast_state:skip: other#{inspect(other)} socket:#{socket.id} view:#{socket.view}")
     {:cont, socket}
   end
 end

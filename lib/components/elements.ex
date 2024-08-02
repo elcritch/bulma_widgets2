@@ -223,16 +223,13 @@ defmodule BulmaWidgets.Elements do
 
   ## Examples
 
-      <.tag is-success></.tag>
-      <.tag is-success><.button delete></.button></.tag>
+      <.tag is-success>Example</.tag>
+      <.tag is-success>Remove <.button delete></.button></.tag>
   """
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
   attr(:delete_size, :string, default: "")
 
   def tag(assigns) do
-    Logger.warning("assigns: #{inspect assigns, pretty: true}")
-    Logger.warning("assigns:extras: #{inspect extras(assigns.rest), pretty: true}")
-
     ~H"""
     <span class={["tag", classes(@rest)]} {extras(@rest)}>
       <%= render_slot(@inner_block) %>
@@ -247,179 +244,26 @@ defmodule BulmaWidgets.Elements do
 
   ## Examples
 
-      <.tag is-success></.tag>
+      <.tags is-info>
+        <:tag>
+        </:tag>
+      </.tags>
   """
   attr(:"has-addons", :boolean, default: false)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  slot(:tag, doc: "inner tags")
 
   def tags(assigns) do
 
     ~H"""
     <div class={["tags", classes(@rest), assigns |> css_maybe(:"has-addons")]}
       {extras(@rest)} >
-      <%= render_slot(@inner_block) %>
+      <%= render_slot(@tag) %>
     </div>
     """
   end
 
-  @doc """
-  Renders a modal.
-
-  ## Examples
-
-      <.modal id="confirm-modal">
-        This is a modal.
-      </.modal>
-
-  JS commands may be passed to the `:on_cancel` to configure
-  the closing/cancel event, for example:
-
-      <.modal id="confirm" on_cancel={JS.navigate(~p"/posts")}>
-        This is another modal.
-      </.modal>
-
-  """
-  attr(:id, :string, required: true)
-  attr(:show, :boolean, default: false)
-  attr(:on_cancel, JS, default: %JS{})
-  attr(:classes, :list, default: [])
-  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
-
-  slot(:inner_block, required: true)
-
-  def modal(assigns) do
-
-    ~H"""
-    <div
-      id={@id}
-      class={["modal", @classes, classes(@rest)]}
-      phx-mounted={@show && show_modal(@id)}
-      phx-remove={hide_modal(@id)}
-      data-cancel={JS.exec(@on_cancel, "phx-remove")}
-      {extras(@rest)}
-    >
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <%= render_slot(@inner_block) %>
-      </div>
-      <button class="modal-close is-large" aria-label="close"></button>
-    </div>
-
-    """
-  end
-
-  @doc """
-  Renders flash notices.
-
-  ## Examples
-
-      <.flash kind={:info} flash={@flash} />
-      <.flash kind={:info} phx-mounted={show("#flash")}>Welcome Back!</.flash>
-  """
-  attr(:id, :string, doc: "the optional id of flash container")
-  attr(:flash, :map, default: %{}, doc: "the map of flash messages to display")
-  attr(:title, :string, default: nil)
-  attr(:kind, :atom, values: [:info, :error], doc: "used for styling and flash lookup")
-  attr(:rest, :global, doc: "the arbitrary HTML attributes to add to the flash container")
-
-  slot(:inner_block, doc: "the optional inner block that renders the flash message")
-
-  def flash(assigns) do
-    assigns = assign_new(assigns, :id, fn -> "flash-#{assigns.kind}" end)
-
-    ~H"""
-    <div
-      :if={_msg = Phoenix.Flash.get(@flash, @kind)}
-      id={@id}
-      phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
-      role="alert"
-      class={[]}
-      {extras(@rest)}
-    >
-      <div class="width-full py-1 px-3 position-absolute bottom-0 right-0 anim-fade-in fast">
-        <%!-- <.alert state={"#{@kind}"}>
-          <%= msg %>
-          <.button class="flash-close">
-            <.octicon name="x-16" />
-          </.button>
-        </.alert> --%>
-      </div>
-    </div>
-    """
-  end
-
-  @doc """
-  Shows the flash group with standard titles and content.
-
-  ## Examples
-
-      <.flash_group flash={@flash} />
-  """
-  attr(:flash, :map, required: true, doc: "the map of flash messages")
-  attr(:id, :string, default: "flash-group", doc: "the optional id of flash container")
-
-  def flash_group(assigns) do
-    ~H"""
-    <div class="box" id={@id}>
-      <.flash kind={:info} title={gettext("Info!")} flash={@flash} />
-      <%!-- <.flash kind={:success} title={gettext("Success!")} flash={@flash} /> --%>
-      <%!-- <.flash kind={:error} title={gettext("Error!")} flash={@flash} /> --%>
-
-      <.flash
-        id="server-error"
-        kind={:error}
-        title={gettext("Something went wrong!")}
-        phx-disconnected={show(".phx-server-error #server-error")}
-        phx-connected={hide("#server-error")}
-        hidden
-      >
-        <%= gettext("Hang in there while we get back on track") %>
-      </.flash>
-    </div>
-    """
-  end
-
-  @doc """
-  Renders a simple form.
-
-  ## Examples
-
-      <.simple_form for={@form} phx-change="validate" phx-submit="save">
-        <.input field={@form[:email]} label="Email"/>
-        <.input field={@form[:username]} label="Username" />
-        <:actions>
-          <.button>Save</.button>
-        </:actions>
-      </.simple_form>
-  """
-  attr(:for, :any, required: true, doc: "the data structure for the form")
-  attr(:as, :any, default: nil, doc: "the server side parameter to collect all input under")
-
-  attr(:rest, :global,
-    include: ~w(autocomplete name rel action enctype method novalidate target multipart),
-    doc: "the arbitrary HTML attributes to apply to the form tag"
-  )
-
-  slot(:inner_block, required: true)
-  slot(:actions, doc: "the slot for form actions, such as a submit button")
-
-  def simple_form(assigns) do
-    ~H"""
-    <.form :let={f} for={@for} as={@as} {extras(@rest)}>
-      <div class="mt-10 space-y-8 bg-white">
-        <%= render_slot(@inner_block, f) %>
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
-          <%= render_slot(action, f) %>
-        </div>
-      </div>
-    </.form>
-    """
-  end
-
-  @doc """
-  Generates a generic error message.
-  """
-  slot(:inner_block, required: true)
 
   def error(assigns) do
     ~H"""
@@ -431,52 +275,6 @@ defmodule BulmaWidgets.Elements do
 
   ## JS Commands
 
-  def show(js \\ %JS{}, selector) do
-    JS.show(js,
-      to: selector,
-      time: 300,
-      transition:
-        {"transition-all transform ease-out duration-300",
-         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95",
-         "opacity-100 translate-y-0 sm:scale-100"}
-    )
-  end
-
-  def hide(js \\ %JS{}, selector) do
-    JS.hide(js,
-      to: selector,
-      time: 200,
-      transition:
-        {"transition-all transform ease-in duration-200",
-         "opacity-100 translate-y-0 sm:scale-100",
-         "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"}
-    )
-  end
-
-  def show_modal(js \\ %JS{}, id) when is_binary(id) do
-    js
-    |> JS.show(to: "##{id}")
-    |> JS.show(
-      to: "##{id}-bg",
-      time: 300,
-      transition: {"transition-all transform ease-out duration-300", "opacity-0", "opacity-100"}
-    )
-    |> show("##{id}-container")
-    |> JS.add_class("overflow-hidden", to: "body")
-    |> JS.focus_first(to: "##{id}-content")
-  end
-
-  def hide_modal(js \\ %JS{}, id) do
-    js
-    |> JS.hide(
-      to: "##{id}-bg",
-      transition: {"transition-all transform ease-in duration-200", "opacity-100", "opacity-0"}
-    )
-    |> hide("##{id}-container")
-    |> JS.hide(to: "##{id}", transition: {"block", "block", "hidden"})
-    |> JS.remove_class("overflow-hidden", to: "body")
-    |> JS.pop_focus()
-  end
 
   @doc """
   Translates an error message using gettext.

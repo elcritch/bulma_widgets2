@@ -1,5 +1,5 @@
 
-defmodule BulmaWidget.Action.DefaultNumberParse do
+defmodule BulmaWidgets.Action.DefaultNumberParse do
   require Logger
   alias BulmaWidgets.Action
 
@@ -12,7 +12,7 @@ defmodule BulmaWidget.Action.DefaultNumberParse do
   end
 end
 
-defmodule BulmaWidget.Action.DefaultAtomParse do
+defmodule BulmaWidgets.Action.DefaultAtomParse do
   require Logger
   alias BulmaWidgets.Action
 
@@ -25,7 +25,7 @@ defmodule BulmaWidget.Action.DefaultAtomParse do
   end
 end
 
-defmodule BulmaWidget.Action.FloatNumberParse do
+defmodule BulmaWidgets.Action.FloatNumberParse do
   require Logger
   alias BulmaWidgets.Action
 
@@ -38,7 +38,7 @@ defmodule BulmaWidget.Action.FloatNumberParse do
   end
 end
 
-defmodule BulmaWidget.Action.DefaultTimeParse do
+defmodule BulmaWidgets.Action.DefaultTimeParse do
   require Logger
   alias BulmaWidgets.Action
 

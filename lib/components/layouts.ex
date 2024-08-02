@@ -40,7 +40,7 @@ defmodule BulmaWidgets.Layouts do
                 assigns |> css_maybe(:"is-max-desktop"),
                 assigns |> css_maybe(:"is-max-widescreen"),
                 ]}
-          {extra(@rest)} >
+          {extras(@rest)} >
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -57,7 +57,7 @@ defmodule BulmaWidgets.Layouts do
   def hero(assigns) do
 
     ~H"""
-    <section class={["hero", classes(@rest)]} {extra(@rest)}>
+    <section class={["hero", classes(@rest)]} {extras(@rest)}>
       <div class="hero-body">
         <p class="title" :if={@title} >
           <%= render_slot(@title) %>

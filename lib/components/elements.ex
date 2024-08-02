@@ -111,9 +111,7 @@ defmodule BulmaWidgets.Elements do
   def delete(assigns) do
 
     ~H"""
-    <button
-      class={["delete", classes(@rest)]}
-      {extras(@rest)} >
+    <button class={["delete", classes(@rest)]} {extras(@rest)} >
     </button>
     """
   end
@@ -257,7 +255,8 @@ defmodule BulmaWidgets.Elements do
   def tags(assigns) do
 
     ~H"""
-    <div class={["tags", classes(@rest), assigns |> css_maybe(:"has-addons")]}>
+    <div class={["tags", classes(@rest), assigns |> css_maybe(:"has-addons")]}
+      {extras(@rest)} >
       <%= render_slot(@inner_block) %>
     </div>
     """

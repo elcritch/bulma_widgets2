@@ -12,10 +12,10 @@ defmodule BulmaWidgets.Action.UpdateHooks do
           to: @myself,
           post: [
             fn ->
-              Logger.warning("UpdateHooks:func: #{}")
+              Logger.warning("UpdateHooks:func: ")
             end,
             fn asg, sock ->
-              Logger.warning("UpdateHooks:func: #{}")
+              Logger.warning("UpdateHooks:func:args: ")
               sock
             end,
             {:start_async, :check_run, @device,

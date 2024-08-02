@@ -29,7 +29,6 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     Logger.debug("UpdateHooks:call:opts: #{inspect(opts, pretty: false)}")
 
     target = opts |> Keyword.get(:to, socket.assigns.id)
-    pre = opts |> Keyword.fetch!(:pre) |> List.flatten()
     post = opts |> Keyword.fetch!(:post) |> List.flatten()
     values = opts |> Keyword.get(:values, values) # |> Map.take(set_fields)
 

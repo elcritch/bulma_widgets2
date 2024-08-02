@@ -45,8 +45,8 @@ defmodule BulmaWidgets.Action.AssignField do
   alias BulmaWidgets.Action
 
   @moduledoc """
-    Updates the widgets state,
-    note: circumvents the normal event pattern. Still turns out pretty handy.
+    Assigns the `phx-data-*` values directly using the name
+    given by the argument `field`.
 
     ## Examples
 

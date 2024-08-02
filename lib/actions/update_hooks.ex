@@ -59,7 +59,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     evt = %Action{
       id: id,
       data: {key, values},
-      state: assigns,
+      assigns: assigns,
       socket: socket
     }
 

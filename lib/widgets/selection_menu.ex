@@ -78,19 +78,11 @@ defmodule BulmaWidgets.Widgets.SelectionMenu do
         %{"id" => menu_name, "key" => key, "value" => _value},
         socket
       ) do
-    actions = socket.assigns |> Actions.all_actions(@standard_actions)
     value = socket.assigns.values |> Map.new() |> Map.get(key)
 
-    event_action =
-      %Action{
-        id: menu_name,
-        data: {key, value},
-        state: socket.assigns,
-        socket: socket
-      }
-      |> Action.apply(actions)
-
-    {:noreply, event_action.socket |> assign(%{test: true, other: false})}
+    {:noreply,
+     socket
+     |> Actions.handle_event(menu_name, {key, value}, [])}
   end
 
   def key({k, _v}), do: k

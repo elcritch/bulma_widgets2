@@ -254,7 +254,7 @@ defmodule BulmaWidgets.Actions do
       %Action{
         id: name,
         data: {key, value},
-        state: socket.assigns,
+        assigns: socket.assigns,
         socket: socket
       }
       |> Action.apply(actions)

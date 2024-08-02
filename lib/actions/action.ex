@@ -6,13 +6,13 @@ defmodule BulmaWidgets.Action do
 
   defstruct id: :name,
             data: {nil, nil},
-            state: nil,
+            assigns: nil,
             socket: nil
 
   @type t :: %__MODULE__{
           id: binary(),
           data: {binary(), binary()},
-          state: map(),
+          assigns: map(),
           socket: Phoenix.LiveView.Socket.t()
         }
 

@@ -44,8 +44,8 @@ defmodule BulmaWidgets.Widgets.SelectionMenu do
 
   slot :default_label
   def render(assigns) do
-    Logger.info("selection_menu:render: assigns: #{inspect(assigns, pretty: true)}")
-    Logger.info("selection_menu:render: assigns:data: #{inspect(assigns.data)}")
+    # Logger.info("selection_menu:render: assigns: #{inspect(assigns, pretty: true)}")
+    # Logger.info("selection_menu:render: assigns:data: #{inspect(assigns.data)}")
 
     ~H"""
     <aside class="menu">

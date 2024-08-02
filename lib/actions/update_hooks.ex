@@ -10,7 +10,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
       extra_actions={[
         {BulmaWidgets.Action.UpdateHooks,
           to: @myself,
-          hooks: [
+          post: [
             fn ->
               Logger.warning("UpdateHooks:func: #{}")
             end,
@@ -25,11 +25,11 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     Logger.debug("UpdateHooks:call:opts: #{inspect(opts, pretty: false)}")
 
     target = opts |> Keyword.get(:to, socket.assigns.id)
-    hooks = opts |> Keyword.fetch!(:hooks) |> List.flatten()
+    post = opts |> Keyword.fetch!(:post) |> List.flatten()
     # values = opts |> Keyword.get(:values, values) # |> Map.take(set_fields)
 
     Logger.debug("UpdateHooks:call:target: #{inspect(target, pretty: false)}")
-    msg = %{hooks: hooks, values: values}
+    msg = %{hooks: post, values: values}
     case target do
       %Phoenix.LiveComponent.CID{} = cid ->
         send_update(cid, %{__trigger_hooks__: msg})

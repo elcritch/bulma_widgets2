@@ -124,7 +124,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
   end
 
   defp maybe_receive_broadcast(other, socket) do
-    Logger.debug("BroadcastState:broadcast_state:skip: other#{inspect(other)} socket:#{socket.id} view:#{socket.view}")
+    # Logger.debug("BroadcastState:broadcast_state:skip: other#{inspect(other)} socket:#{socket.id} view:#{socket.view}")
     {:cont, socket}
   end
 end

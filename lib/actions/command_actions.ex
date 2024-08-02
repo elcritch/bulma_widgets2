@@ -1,4 +1,3 @@
-
 defmodule BulmaWidgets.Action.Commands do
   require Logger
   alias BulmaWidgets.Action
@@ -36,6 +35,7 @@ defmodule BulmaWidgets.Action.Commands do
             evt
           end
       end
+
     evt!
   end
 end
@@ -47,6 +47,10 @@ defmodule BulmaWidgets.Action.AssignField do
   @moduledoc """
     Updates the widgets state,
     note: circumvents the normal event pattern. Still turns out pretty handy.
+
+    ## Examples
+
+        {Action.AssignField, field: :data}
   """
   def call(%Action{data: data, socket: socket} = evt, opts) do
     field = opts |> Keyword.fetch!(:field)

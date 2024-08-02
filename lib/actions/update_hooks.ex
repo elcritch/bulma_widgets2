@@ -29,6 +29,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     Logger.debug("UpdateHooks:call:opts: #{inspect(opts, pretty: false)}")
 
     target = opts |> Keyword.get(:to, socket.assigns.id)
+    pre = opts |> Keyword.fetch!(:pre) |> List.flatten()
     post = opts |> Keyword.fetch!(:post) |> List.flatten()
     values = opts |> Keyword.get(:values, values) # |> Map.take(set_fields)
 
@@ -44,9 +45,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     %{evt | socket: socket}
   end
 
-  def run_post_hooks(%{__trigger_hooks__: %{hooks: hooks, values: _vals}} = assigns, socket, _opts) do
-    assigns = assigns |> Map.delete(:__trigger_hooks__)
-
+  def exec_hooks(hooks, _values, assigns, socket, _opts) do
     socket =
       for hook <- hooks, reduce: socket do
         socket ->
@@ -66,10 +65,18 @@ defmodule BulmaWidgets.Action.UpdateHooks do
           end
       end
 
+    socket
+  end
+
+  def run_post_hooks(%{__trigger_hooks__: %{hooks: hooks, values: values}} = assigns, socket, opts) do
+    assigns = assigns |> Map.delete(:__trigger_hooks__)
+    socket = exec_hooks(hooks, values, assigns, socket, opts)
+
     {assigns, socket}
   end
 
   def run_post_hooks(assigns, socket, _opts) do
+    # no __trigger_hooks, nothing to do
     {assigns, socket}
   end
 

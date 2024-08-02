@@ -6,14 +6,18 @@ defmodule BulmaWidgets.Action.Commands do
     Apply a function with event data, or a list of functions:
 
         extra_actions={[
-          {Action.Commands, commands: fn x ->
-              Logger.info("HI: \#{inspect x}!!!")
+          {Action.Commands, commands: fn evt ->
+              Logger.info("HI: \#{inspect evt}!!!")
+              evt
             end}
         ]}
         extra_actions={[
           {Action.Commands, commands: [
-            fn x -> Logger.info("HI: \#{inspect x}!!!") end]},
-            fn x -> Logger.info("HI AGAIN: \#{inspect x}!!!") end]}
+            fn -> Logger.info("HI!!!") end]},
+            fn evt ->
+              Logger.info("HI AGAIN: \#{inspect evt}!!!")
+              evt
+            end]}
         ]}
   """
   def call(%Action{} = evt, opts) do
@@ -34,9 +38,11 @@ defmodule BulmaWidgets.Action.Commands do
           evt! =
             case cmd do
               fun when is_function(fun, 1) ->
-                fun.(evt)
+                %Action{} = evt = fun.(evt)
+                evt
               fun when is_function(fun, 0) ->
-                fun.(evt)
+                fun.()
+                evt
               hook ->
                 Logger.error("invalid command hook: #{inspect(hook)}")
                 evt

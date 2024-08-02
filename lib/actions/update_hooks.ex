@@ -50,7 +50,8 @@ defmodule BulmaWidgets.Action.UpdateHooks do
         socket ->
           case hook do
             fun when is_function(fun, 2) ->
-              fun.(assigns, socket)
+              %Phoenix.LiveView.Socket{} = socket = fun.(assigns, socket)
+              socket
             fun when is_function(fun, 0) ->
               fun.()
               socket

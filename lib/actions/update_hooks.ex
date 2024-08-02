@@ -40,8 +40,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     %{evt | socket: socket}
   end
 
-
-  def run_hooks(%{__trigger_hooks__: %{hooks: hooks, values: _vals}} = assigns, socket, _opts) do
+  def run_post_hooks(%{__trigger_hooks__: %{hooks: hooks, values: _vals}} = assigns, socket, _opts) do
     assigns = assigns |> Map.delete(:__trigger_hooks__)
 
     socket =
@@ -66,7 +65,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
     {assigns, socket}
   end
 
-  def run_hooks(assigns, socket, _opts) do
+  def run_post_hooks(assigns, socket, _opts) do
     {assigns, socket}
   end
 

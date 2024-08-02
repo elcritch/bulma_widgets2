@@ -86,37 +86,32 @@ defmodule BulmaWidgets.Action.BroadcastState do
       |> Phoenix.Component.assign(:__event_action_listeners__, event_action_listeners)}
   end
 
-  defp maybe_receive_broadcast({:broadcast_state, %{view: evt_view}}, %{view: view} = socket)
-        when evt_view != view do
-    Logger.debug("BroadcastState:skip: #{inspect({evt_view, view}, pretty: false)}")
-
-    {:halt, socket}
-  end
-
   defp maybe_receive_broadcast(
           {:broadcast_state, vals},
           socket
         ) do
-    %{id: id, topic: topic, fields: fields} = vals
-    Logger.debug("BroadcastState:broadcast_state:update: id:#{id} socket:#{socket.id} vals:#{inspect(vals, pretty: false)}")
-    fields = fields |> Action.fields_to_assigns()
+    %{id: id, topic: topic, fields: fields, view: event_view} = vals
+    unless event_view != socket.view do
+      Logger.debug("BroadcastState:broadcast_state:update: id:#{id} socket:#{socket.id} vals:#{inspect(vals, pretty: false)}")
+      fields = fields |> Action.fields_to_assigns()
 
-    target_list =
-      socket.assigns[:__event_action_listeners__]
-      |> Map.get(topic, %{})
+      target_list =
+        socket.assigns[:__event_action_listeners__]
+        |> Map.get(topic, %{})
 
-    # send updated values to all "listening" id's
-    # Logger.debug("BroadcastState:broadcast_state:target_list: #{inspect(target_list, pretty: false)}")
-    for {target, args} <- target_list do
-      # Logger.debug("BroadcastState:broadcast_state:target: #{inspect([target: target, mod: args.module, fields: fields |> Map.put(:id, target)], pretty: false)}")
+      # send updated values to all "listening" id's
+      # Logger.debug("BroadcastState:broadcast_state:target_list: #{inspect(target_list, pretty: false)}")
+      for {target, args} <- target_list do
+        # Logger.debug("BroadcastState:broadcast_state:target: #{inspect([target: target, mod: args.module, fields: fields |> Map.put(:id, target)], pretty: false)}")
 
-      case target do
-        %Phoenix.LiveComponent.CID{} = cid ->
-          send_update(cid, %{__shared_update__: {topic, fields} })
-        target ->
-          send_update(args.module, %{id: target, __shared_update__: {topic, fields} })
+        case target do
+          %Phoenix.LiveComponent.CID{} = cid ->
+            send_update(cid, %{__shared_update__: {topic, fields} })
+          target ->
+            send_update(args.module, %{id: target, __shared_update__: {topic, fields} })
+        end
+        # send_update(args.module, fields |> Map.put(:id, "check_sensor"))
       end
-      # send_update(args.module, fields |> Map.put(:id, "check_sensor"))
     end
 
     # send_update(module, fields |> Map.put(:id, id))

@@ -45,6 +45,11 @@ defmodule BulmaWidgets.Elements do
     """
   end
 
+  @doc """
+  Wrapper for header object of size 1-6 using Bulma CSS.
+  Pass `notification={true}` to create a simple centered title type.
+  Has an extra CSS class `notification-title` for styling.
+  """
   attr(:size, :integer, required: true)
   attr(:notification, :boolean, default: false)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())

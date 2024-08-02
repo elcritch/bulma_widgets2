@@ -101,7 +101,7 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
       socket
       |> Actions.handle_event(menu_name, {key, value}, @standard_actions)
 
-    Logger.warning("scroll_menu:socket: #{inspect(socket, pretty: true)}")
+    # Logger.debug("scroll_menu:socket: #{inspect(socket, pretty: true)}")
     {:noreply, socket}
   end
 

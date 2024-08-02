@@ -30,7 +30,7 @@ defmodule BulmaWidgets.Action.UpdateHooks do
 
     target = opts |> Keyword.get(:to, socket.assigns.id)
     post = opts |> Keyword.fetch!(:post) |> List.flatten()
-    # values = opts |> Keyword.get(:values, values) # |> Map.take(set_fields)
+    values = opts |> Keyword.get(:values, values) # |> Map.take(set_fields)
 
     Logger.debug("UpdateHooks:call:target: #{inspect(target, pretty: false)}")
     msg = %{hooks: post, values: values}

@@ -62,7 +62,7 @@ defmodule BulmaWidgets.Widgets.ActionButton do
         %{"name" => name} = values,
         socket
       ) do
-    # Logger.info("button-action:click!: target: #{name} values: #{inspect values}")
+    Logger.info("button-action:click!: target: #{name} values: #{inspect values}")
     actions = socket.assigns |> Actions.all_actions()
 
     event_action =

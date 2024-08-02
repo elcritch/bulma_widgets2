@@ -23,6 +23,14 @@ defmodule BulmaWidgets.Layouts do
 
 
   @doc """
+  A simple container to center your content horizontally
+
+  The container is a simple utility element that allows you to center content on larger viewports. It can be used in any context, but mostly as a direct child of one of the following:
+
+    navbar
+    hero
+    section
+    footer
 
   ## Examples
 

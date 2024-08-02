@@ -81,10 +81,12 @@ defmodule BulmaWidgets.Layouts do
 
       <.hero_fullheight is-success>
         <:head>
+          ...
         </:head>
         <:title>Hero Title</:title>
         <:subtitle>Hero Title</:subtitle>
         <:foot>
+          ...
         </:foot>
 
       </.hero_fullheight>
@@ -112,6 +114,37 @@ defmodule BulmaWidgets.Layouts do
       <div class="hero-foot">
         <%= render_slot(@foot) %>
       </div>
+    </section>
+    """
+  end
+
+  @doc """
+  A simple container to divide your page into sections, like the one you’re currently reading
+
+  The section components are simple layout elements with responsive padding. They are best used as direct children of body.
+
+  ## Examples
+
+      <.section>
+        <:title>Section</:title>
+        <:subtitle>
+          Some longer text here
+        </:subtitle>
+      </.section>
+  """
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  slot(:title, doc: "hero title")
+  slot(:subtitle, doc: "hero subtitle")
+
+  def section(assigns) do
+    ~H"""
+    <section class={["section", classes(@rest)]} {extras(@rest)}>
+      <h1 class="title" :if={@title} >
+        <%= render_slot(@title) %>
+      </h1>
+      <h2 class="subtitle" :if={@subtitle}>
+        <%= render_slot(@subtitle) %>
+      </h2>
     </section>
     """
   end

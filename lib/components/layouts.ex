@@ -6,7 +6,6 @@ defmodule BulmaWidgets.Layouts do
   """
   use Phoenix.Component
 
-  alias Phoenix.LiveView.JS
   require Logger
 
 

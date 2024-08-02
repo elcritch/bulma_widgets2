@@ -6,10 +6,14 @@ defmodule BulmaWidgets.Action.Commands do
     Apply a function with event data, or a list of functions:
 
         extra_actions={[
-          {Action.Commands, commands: fn x -> Logger.info("HI: \#{inspect x}!!!") end}
+          {Action.Commands, commands: fn x
+              -> Logger.info("HI: \#{inspect x}!!!")
+            end}
         ]}
         extra_actions={[
-          {Action.Commands, commands: [fn x -> Logger.info("HI: \#{inspect x}!!!") end]}
+          {Action.Commands, commands: [
+            fn x ->Logger.info("HI: \#{inspect x}!!!") end]},
+            fn x ->Logger.info("HI AGAIN: \#{inspect x}!!!") end]}
         ]}
   """
   def call(%Action{} = evt, opts) do

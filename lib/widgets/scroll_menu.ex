@@ -35,15 +35,16 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
     {:ok, Actions.update(assigns, socket)}
   end
 
-  attr :id, :string, required: true
-  attr :values, :list, required: true
-  attr :data, :any, default: {nil, nil}
-  attr :extra_actions, :list, default: []
-  attr :standard_actions, :list, default: @standard_actions
-  attr :rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs()
+  attr(:id, :string, required: true)
+  attr(:values, :list, required: true)
+  attr(:data, :any, default: {nil, nil})
+  attr(:extra_actions, :list, default: [])
+  attr(:standard_actions, :list, default: @standard_actions)
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
-  slot :label
-  slot :default_label
+  slot(:label)
+  slot(:default_label)
+
   def render(assigns) do
     # Logger.info("scroll_menu:render: assigns: #{inspect(assigns, pretty: true)}")
     # Logger.info("scroll_menu:render: assigns:data: #{inspect(assigns.data)}")
@@ -94,19 +95,10 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
         %{"id" => menu_name, "key" => key, "value" => _value},
         socket
       ) do
-    actions = socket.assigns |> Actions.all_actions(@standard_actions)
     value = socket.assigns.values |> Map.new() |> Map.get(key)
+    socket = socket |> Actions.handle_event(menu_name, {key, value}, @standard_actions)
 
-    event_action =
-      %Action{
-        id: menu_name,
-        data: {key, value},
-        state: socket.assigns,
-        socket: socket
-      }
-      |> Action.apply(actions)
-
-    {:noreply, event_action.socket |> assign(%{test: true, other: false})}
+    {:noreply, socket |> assign(%{test: true, other: false})}
   end
 
   def key({k, _v}), do: k

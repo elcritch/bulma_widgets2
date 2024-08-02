@@ -247,6 +247,21 @@ defmodule BulmaWidgets.Actions do
     socket
   end
 
+  def handle_event(socket, name, {key, value}, default_actions) do
+    actions = socket.assigns |> Actions.all_actions(default_actions)
+
+    event_action =
+      %Action{
+        id: name,
+        data: {key, value},
+        state: socket.assigns,
+        socket: socket
+      }
+      |> Action.apply(actions)
+
+    event_action.socket
+  end
+
   defp get_assigned(item, name) do
     case item do
       %Phoenix.LiveView.Socket{} = socket ->

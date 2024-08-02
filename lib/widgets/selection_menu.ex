@@ -49,9 +49,6 @@ defmodule BulmaWidgets.Widgets.SelectionMenu do
 
     ~H"""
     <aside class="menu">
-      <p class="menu-label" >
-        DATA: <%= @data |> inspect() %>
-      </p>
       <p class="menu-label" :if={@label != ""}>
         <%= @label %>
       </p>

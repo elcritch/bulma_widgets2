@@ -248,7 +248,7 @@ defmodule BulmaWidgets.Actions do
   end
 
   def handle_event(socket, name, {key, value}, default_actions) do
-    actions = socket.assigns |> Actions.all_actions(default_actions)
+    actions = socket.assigns |> all_actions(default_actions)
 
     event_action =
       %Action{

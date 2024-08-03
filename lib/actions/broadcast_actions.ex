@@ -137,9 +137,8 @@ defmodule BulmaWidgets.Action.BroadcastState do
                   "BroadcastState:broadcast_state: set: pid_target: #{inspect(pid)} self: #{inspect(self())}"
                 )
 
-                # socket |> Phoenix.Component.assign(:__shared_update__, {topic, fields})
+                # send a message `handle_info` to update liveview, to better match components setup
                 send(pid, {:updates, %{__shared_update__: {topic, fields}}})
-                # socket |> BulmaWidgets.Actions.assign_sharing()
                 socket
 
               other ->

@@ -37,8 +37,7 @@ defmodule BulmaWidgets.MixProject do
 
       {:floki, ">= 0.30.0", only: :test},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:telemetry_metrics, "~> 1.0", only: [:test, :dev]},
-      {:telemetry_poller, "~> 1.0", only: [:test, :dev]},
+      {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1", only: [:test, :dev]},
       {:bandit, "~> 1.5", only: [:test, :dev]},

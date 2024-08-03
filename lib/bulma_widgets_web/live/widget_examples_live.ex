@@ -1,5 +1,5 @@
 defmodule BulmaWidgetsWeb.WidgetExamplesLive do
-  use LwDisplayWeb, :live_view
+  use BulmaWidgetsWeb, :live_view
 
   use BulmaWidgets.Actions, pubsub: LwDisplay.PubSub
   alias BulmaWidgets.Widgets.ScrollMenu
@@ -78,7 +78,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
     {:ok,
      socket
      |> assign(:page_title, "Widget Examples")
-     |> assign(:menu_items, LwDisplayWeb.MenuUtils.menu_items())
+     |> assign(:menu_items, BulmaWidgetsWeb.MenuUtils.menu_items())
      |> mount_broadcast(topics: ["check-sensor-state"])}
   end
 

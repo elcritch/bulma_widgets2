@@ -137,7 +137,8 @@ defmodule BulmaWidgets.Action.BroadcastState do
                   "BroadcastState:broadcast_state: set: pid_target: #{inspect(pid)} self: #{inspect(self())}"
                 )
 
-                socket |> Phoenix.Component.assign(:__shared_update__, {topic, fields})
+                socket = socket |> Phoenix.Component.assign(:__shared_update__, {topic, fields})
+                socket |> BulmaWidgets.Actions.assign_sharing()
 
               other ->
                 Logger.error("BroadcastState:broadcast_state: unhandle target: #{inspect(other)}")

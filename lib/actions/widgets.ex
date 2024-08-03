@@ -1,6 +1,5 @@
 defmodule BulmaWidgets.Actions.Widgets do
   require Logger
-  alias BulmaWidgets.Event
   alias BulmaWidgets.Action.BroadcastState
   alias BulmaWidgets.Action.CacheUpdate
 
@@ -54,9 +53,9 @@ defmodule BulmaWidgets.Actions.Widgets do
       end
 
     [
-      Commands, modify: true, commands: cmd},
-      BroadcastState, topic: topic, pubsub: pubsub},
-      CacheUpdate, topic: topic}
+      {Commands, modify: true, commands: cmd},
+      {BroadcastState, topic: topic, pubsub: pubsub},
+      {CacheUpdate, topic: topic}
     ]
   end
 
@@ -88,7 +87,7 @@ defmodule BulmaWidgets.Actions.Widgets do
     target = opts |> Keyword.fetch!(:to)
 
     [
-      UpdateHooks,
+      {UpdateHooks,
        to: target,
        hooks: fn evt ->
          socket = evt.socket |> Phoenix.Component.assign(name, evt.data)
@@ -108,7 +107,7 @@ defmodule BulmaWidgets.Actions.Widgets do
 
   def broadcast_state(topic, pubsub, vals) do
     [
-      BroadcastState, topic: topic, values: vals, pubsub: pubsub}
+      {BroadcastState, topic: topic, values: vals, pubsub: pubsub}
     ]
   end
 end

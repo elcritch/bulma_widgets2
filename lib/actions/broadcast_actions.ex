@@ -20,7 +20,6 @@ defmodule BulmaWidgets.Action.BroadcastState do
   import Phoenix.LiveView
   require Logger
 
-  alias BulmaWidgets.Action
   alias BulmaWidgets.Event
   alias BulmaWidgets.Actions
 

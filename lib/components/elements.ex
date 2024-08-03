@@ -24,9 +24,9 @@ defmodule BulmaWidgets.Elements do
     text
   end
 
-  def prettify(value, prettify \\ true) do
+  def prettify(value, default \\ "", prettify \\ true) do
     if value == nil do
-      ""
+      default
     else
       value |> inspect(pretty: prettify)
     end

@@ -24,7 +24,7 @@ defmodule BulmaWidgets.Elements do
     text
   end
 
-  def pretty(value, prettify \\ true) do
+  def prettify(value, prettify \\ true) do
     if value == nil do
       ""
     else

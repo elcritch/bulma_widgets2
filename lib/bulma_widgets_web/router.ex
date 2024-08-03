@@ -20,6 +20,7 @@ defmodule BulmaWidgetsWeb.Router do
     get "/", PageController, :home
 
     live "/widgets.html", WidgetExamplesLive
+    live "/examples/selection_menu", ExampleSelectionMenuLive
   end
 
   # Other scopes may use custom stacks.

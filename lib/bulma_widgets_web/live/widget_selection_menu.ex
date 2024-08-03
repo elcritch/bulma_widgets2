@@ -1,4 +1,4 @@
-defmodule BulmaWidgetsWeb.WidgetExamplesLive do
+defmodule BulmaWidgetsWeb.ExampleSelectionMenuLive do
   use BulmaWidgetsWeb, :live_view
 
   use BulmaWidgets.Actions, pubsub: BulmaWidgetsWeb.PubSub

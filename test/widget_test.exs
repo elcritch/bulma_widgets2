@@ -9,7 +9,7 @@ defmodule BulmaWidgetsTest.Widgets do
 
 
   test "disconnected and connected mount", %{conn: conn} do
-    {:ok, view, html} = live(conn, "/widgets.html")
+    {:ok, view, html} = live(conn, "/examples/selection_menu")
 
     # IO.puts("view: #{inspect(view, pretty: true)}")
     IO.puts("html: #{inspect(html, pretty: true)}")

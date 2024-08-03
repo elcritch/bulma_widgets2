@@ -54,8 +54,8 @@ defmodule BulmaWidgetsWeb do
         layout: {BulmaWidgetsWeb.Layouts, :app}
 
       on_mount BulmaWidgets.Flash
-      on_mount {BulmaWidgets.Action.BroadcastState, LwDisplay.PubSub}
-      on_mount {BulmaWidgets.Action.UpdateHooks, LwControl.PubSub}
+      on_mount {BulmaWidgets.Action.BroadcastState, BulmaWidgetsWeb.PubSub}
+      on_mount {BulmaWidgets.Action.UpdateHooks, BulmaWidgetsWeb.PubSub}
 
       import BulmaWidgets.Flash, only: [put_flash!: 3, put_flash!: 4]
 

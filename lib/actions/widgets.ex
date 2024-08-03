@@ -19,12 +19,31 @@ defmodule BulmaWidgets.Actions.Widgets do
     ]
   end
 
-  def send_action_data(topic) do
+  def send_action_data(topic, opts \\ []) do
     pubsub = Application.get_all_env(:bulma_widgets) |> Keyword.fetch!(:pubsub)
-    send_action_data(topic, pubsub)
+    send_action_data(topic, pubsub, opts)
   end
-  def send_action_data(topic, pubsub) do
+
+  def send_action_data(topic, pubsub, opts) do
+    preaction =
+      case opts |> Keyword.get(:into, nil) do
+        name when is_atom(name) ->
+          {Action.Commands,
+           modify: true,
+           commands: fn evt ->
+             Logger.info("PRE: #{inspect(evt, pretty: true)}!!!")
+             {k, v} = evt.data
+             evt = %{evt | data: {k, %{name => v}}}
+             Logger.info("POST: #{inspect(evt.data, pretty: true)}!!!")
+             evt
+           end}
+
+        _other ->
+          []
+      end
+
     [
+      preaction,
       {Action.BroadcastState, topic: topic, pubsub: pubsub},
       {Action.CacheUpdate, topic: topic}
     ]
@@ -56,13 +75,14 @@ defmodule BulmaWidgets.Actions.Widgets do
   def set_action_data(opts) do
     name = opts |> Keyword.fetch!(:into)
     target = opts |> Keyword.fetch!(:to)
+
     [
       {Action.UpdateHooks,
-        to: target,
-        hooks: fn evt ->
-          socket = evt.socket |> Phoenix.Component.assign(name, evt.data)
-          %{evt | socket: socket }
-        end}
+       to: target,
+       hooks: fn evt ->
+         socket = evt.socket |> Phoenix.Component.assign(name, evt.data)
+         %{evt | socket: socket}
+       end}
     ]
   end
 

@@ -34,7 +34,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
     id = socket.assigns.id
     topic = opts |> Keyword.fetch!(:topic)
     pubsub = opts |> Keyword.fetch!(:pubsub)
-    data = opts |> Keyword.get(:values, %{key => values})
+    data = opts |> Keyword.get(:values, values)
 
     Phoenix.PubSub.broadcast(
       pubsub,

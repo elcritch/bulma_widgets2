@@ -5,7 +5,7 @@ defmodule BulmaWidgets.Action.CacheState do
 
   def call(%Action{data: {key, values}, socket: socket} = evt, opts \\ []) do
     topic = opts |> Keyword.get(:topic, [])
-    values = opts |> Keyword.get(:values, %{key => values}) |> Action.fields_to_assigns()
+    values = opts |> Keyword.get(:values, values) |> Action.fields_to_assigns()
 
     # view = socket.view
     view = BulmaWidgets.Action.CacheState # use single global cache for now to match broadcast

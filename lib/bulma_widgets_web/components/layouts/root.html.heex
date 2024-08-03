@@ -1,26 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" class="[scrollbar-gutter:stable]">
+<html lang="en" class="has-navbar-fixed-top theme-dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title suffix=" · Phoenix Framework">
-      <%= assigns[:page_title] || "BulmaWidgets" %>
+    <.live_title suffix=" · Bulma Widgets">
+      <%= assigns[:page_title] %>
     </.live_title>
-
-    <!-- -->
     <link phx-track-static rel="stylesheet" href={~p"/bulma/assets/bulma_widgets.css"} />
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
 
     <!-- font awesome -->
     <link phx-track-static rel="stylesheet" href={~p"/bulma/fonts/fontawesome6/css/fontawesome.min.css"} />
     <link phx-track-static rel="stylesheet" href={~p"/bulma/fonts/fontawesome6/css/solid.min.css"} />
 
-    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
-
     </script>
   </head>
-  <body class="bg-white">
-    <%= @inner_content %>
+  <body>
+    <BulmaWidgets.MainComponents.topbard page_title={@page_title} menu_items={@menu_items}>
+      <:logo>
+        <%= unless TroFirmware.UiStore.ui_state(:hide_logo) do %>
+          <img width="132" height="32" src={~p"/images/color_logo-tight-lighter-no_background.svg"} />
+        <% end %>
+      </:logo>
+    </BulmaWidgets.MainComponents.topbard>
+
+    <section class="hero is-dark is-fullheight-with-navbar">
+        <%= @inner_content %>
+    </section>
   </body>
 </html>

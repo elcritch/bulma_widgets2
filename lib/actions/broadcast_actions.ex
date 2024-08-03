@@ -112,7 +112,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
         data = data |> Event.fields_to_assigns()
 
         target_list =
-          socket.assigns[:__event_action_listeners__]
+          (socket.assigns[:__event_action_listeners__] || %{})
           |> Map.get(topic, %{})
 
         # send updated values to all "listening" id's

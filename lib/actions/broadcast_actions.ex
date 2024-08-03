@@ -129,14 +129,6 @@ defmodule BulmaWidgets.Action.BroadcastState do
                 socket
 
               pid when is_pid(pid) ->
-                # send_update(args.module, %{id: target, __shared_update__: {topic, fields} })
-
-                ## TODO: note that LiveView's don't call `update` ...
-
-                Logger.debug(
-                  "BroadcastState:broadcast_state: set: pid_target: #{inspect(pid)} self: #{inspect(self())}"
-                )
-
                 # send a message `handle_info` to update liveview, to better match components setup
                 send(pid, {:updates, %{__shared_update__: {topic, fields}}})
                 socket

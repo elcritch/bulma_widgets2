@@ -56,24 +56,20 @@ defmodule BulmaWidgets.Elements do
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def tagged(assigns) do
+    size = classes(assigns.rest, [:'is-small', :'is-medium', :'is-large'])
     assigns =
       assigns
-      |> assign(:sizes, classes(assigns.rest, [:'is-small']))
+      |> assign(:size, (size == [] && :'is-medium' || size))
 
     ~H"""
     <div class={["tags has-addons"]} >
-      <span class={["tag", "is-#{@size}", @sizes, classes(@rest)]} >
+      <span class={["tag", @size, classes(@rest)]} >
         <%= @label %>
       </span>
-      <span class={["tag", "is-#{@size}"]}>
+      <span class={["tag", @size]}>
         <%= @value %>
       </span>
     </div>
-    <BulmaWidgets.Layouts.level>
-        <:left>
-          <%= @value %>
-        </:left>
-    </BulmaWidgets.Layouts.level>
     """
   end
 

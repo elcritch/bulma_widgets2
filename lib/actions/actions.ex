@@ -4,6 +4,49 @@ defmodule BulmaWidgets.Actions do
 
   @moduledoc """
   Example usage: `use BulmaWidgets.Actions, pubsub: MyApp.PubSub1`
+
+
+  ## Examples
+
+  ### Using with LiveViews
+
+  #### Listening to BroadcastState updates
+
+      defmodule LwControlWeb.WidgetExamplesLive do
+        use LwControlWeb, :live_view
+
+        def mount(_params, _session, socket) do
+          {:ok,
+            socket
+            |> mount_broadcast(topics: ["test-value-set"])
+        end
+
+        ...
+
+        def handle_info({:updates, assigns}, socket) do
+          {:noreply, Actions.update(assigns, socket)}
+        end
+      end
+
+  #### Listening to BroadcastState updates
+
+      defmodule LwControlWeb.WidgetExamplesLive do
+        use LwControlWeb, :live_view
+
+        def mount(_params, _session, socket) do
+          {:ok,
+            socket
+            |> mount_shared(topics: ["test-value-set"])
+        end
+
+        ...
+
+        def handle_info({:updates, assigns}, socket) do
+          {:noreply, Actions.update(assigns, socket)}
+        end
+      end
+
+
   """
 
   defmacro __using__(opts) do

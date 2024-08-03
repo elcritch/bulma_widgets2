@@ -19,6 +19,29 @@ defmodule BulmaWidgets.Actions.Widgets do
     ]
   end
 
+  @doc """
+  Assigns data from a `BulmaWidgets.Action` event into the
+  given field for the target. The target can be a component
+  or liveview.
+
+  By default BulmaWidgets use a `{key, value}` common data
+  on menu or widget actions.
+
+  ## Examples
+
+      <.live_component module={ScrollMenu}
+        id="wiper_speed"
+        values={[{"Slow", 1}, {"Fast", 2}]}
+        extra_actions={[
+          Widgets.set_action_data(into: :motor_mode, to: self())
+        ]}
+      >
+        <:label :let={{k, _}}>
+          Test: <%= k %>
+        </:label>
+      </.live_component>
+
+  """
   def set_action_data(opts) do
     name = opts |> Keyword.fetch!(:into)
     target = opts |> Keyword.fetch!(:to)

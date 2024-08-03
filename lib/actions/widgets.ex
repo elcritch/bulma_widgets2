@@ -19,6 +19,17 @@ defmodule BulmaWidgets.Actions.Widgets do
     ]
   end
 
+  def send_action_data(topic) do
+    pubsub = Application.get_all_env(:bulma_widgets) |> Keyword.fetch!(:pubsub)
+    send_action_data(topic, pubsub)
+  end
+  def send_action_data(topic, pubsub) do
+    [
+      {Action.BroadcastState, topic: topic, pubsub: pubsub},
+      {Action.CacheUpdate, topic: topic}
+    ]
+  end
+
   @doc """
   Assigns data from a `BulmaWidgets.Action` event into the
   given field for the target. The target can be a component

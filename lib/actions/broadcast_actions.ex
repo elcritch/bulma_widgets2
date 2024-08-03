@@ -35,12 +35,12 @@ defmodule BulmaWidgets.Action.BroadcastState do
     topic = opts |> Keyword.fetch!(:topic)
     pubsub = opts |> Keyword.fetch!(:pubsub)
     # |> Map.take(set_fields)
-    fields = opts |> Keyword.get(:values, values)
+    data = opts |> Keyword.get(:values, values)
 
     Phoenix.PubSub.broadcast(
       pubsub,
       @broadcast_topic,
-      {:broadcast_state, %{id: id, topic: topic, view: socket.view, fields: fields}}
+      {:broadcast_state, %{id: id, topic: topic, view: socket.view, data: data}}
     )
 
     %{evt | socket: socket}
@@ -97,7 +97,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
          {:broadcast_state, vals},
          socket
        ) do
-    %{id: id, topic: topic, fields: fields, view: event_view} = vals
+    %{id: id, topic: topic, data: data, view: event_view} = vals
 
     socket =
       unless event_view != socket.view do
@@ -105,7 +105,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
           "BroadcastState:broadcast_state:update: id:#{id} socket:#{socket.id} vals:#{inspect(vals, pretty: false)}"
         )
 
-        fields = fields |> Action.fields_to_assigns()
+        data = data |> Action.fields_to_assigns()
 
         target_list =
           socket.assigns[:__event_action_listeners__]
@@ -116,21 +116,21 @@ defmodule BulmaWidgets.Action.BroadcastState do
         for {target, args} <- target_list, reduce: socket do
           socket ->
             Logger.debug(
-              "BroadcastState:broadcast_state:target: #{inspect([target: target, mod: args.module, fields: fields |> Map.put(:id, target)], pretty: false)}"
+              "BroadcastState:broadcast_state:target: #{inspect([target: target, mod: args.module, data: data |> Map.put(:id, target)], pretty: false)}"
             )
 
             case target do
               %Phoenix.LiveComponent.CID{} = cid ->
-                send_update(cid, %{__shared_update__: {topic, fields}})
+                send_update(cid, %{__shared_update__: {topic, data}})
                 socket
 
               target when is_binary(target) or is_atom(target) ->
-                send_update(args.module, %{id: target, __shared_update__: {topic, fields}})
+                send_update(args.module, %{id: target, __shared_update__: {topic, data}})
                 socket
 
               pid when is_pid(pid) ->
                 # send a message `handle_info` to update liveview, to better match components setup
-                send(pid, {:updates, %{__shared_update__: {topic, fields}}})
+                send(pid, {:updates, %{__shared_update__: {topic, data}}})
                 socket
 
               other ->
@@ -138,7 +138,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
                 socket
             end
 
-            # send_update(args.module, fields |> Map.put(:id, "check_sensor"))
+            # send_update(args.module, data |> Map.put(:id, "check_sensor"))
         end
       else
         socket

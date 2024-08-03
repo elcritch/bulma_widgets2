@@ -11,7 +11,7 @@ config :bulma_widgets,
   generators: [timestamp_type: :utc_datetime]
 
 config :bulma_widgets,
-  pubsub: BulmaWidgets.PubSub
+  pubsub: BulmaWidgetsWeb.PubSub
 
 # Configures the endpoint
 config :bulma_widgets, BulmaWidgetsWeb.Endpoint,
@@ -21,7 +21,7 @@ config :bulma_widgets, BulmaWidgetsWeb.Endpoint,
     formats: [html: BulmaWidgetsWeb.ErrorHTML, json: BulmaWidgetsWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: BulmaWidgets.PubSub,
+  pubsub_server: BulmaWidgetsWeb.PubSub,
   live_view: [signing_salt: "TVdX5YE0"]
 
 # Configure esbuild (the version is required)

@@ -42,22 +42,28 @@ defmodule BulmaWidgets.Actions.Widgets do
 
   """
   def send_action_data(topic, pubsub, opts) do
+    broadcast? = opts |> Keyword.get(:broadcast, true)
+    cached? = opts |> Keyword.get(:cached, true)
+
     cmd =
       if opts |> Keyword.get(:command, false) do
+        Logger.info("send_action_data: command: #{inspect(opts |> Keyword.get(:command, false))} ")
         opts |> Keyword.fetch!(:command)
       else
         name = opts |> Keyword.fetch!(:into)
+        Logger.info("send_action_data: into: #{inspect name} ")
 
         fn evt ->
           {k, v} = evt.data
+          Logger.info("send_action_data: run: name: #{inspect(name)} data:#{inspect({k,v})}")
           %{evt | data: {k, %{name => {k,v}}}}
         end
       end
 
     [
       {Commands, modify: true, commands: cmd},
-      {BroadcastState, topic: topic, pubsub: pubsub},
-      {CacheUpdate, topic: topic}
+      broadcast? && {BroadcastState, topic: topic, pubsub: pubsub} || [],
+      cached? && {CacheUpdate, topic: topic} || []
     ]
   end
 

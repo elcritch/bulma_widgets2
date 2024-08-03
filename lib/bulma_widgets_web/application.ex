@@ -11,6 +11,7 @@ defmodule BulmaWidgets.Application do
       BulmaWidgetsWeb.Telemetry,
       {DNSCluster, query: Application.get_env(:bulma_widgets, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: BulmaWidgetsWeb.PubSub},
+      BulmaWidgets.Cache,
       # Start a worker by calling: BulmaWidgets.Worker.start_link(arg)
       # {BulmaWidgets.Worker, arg},
       # Start to serve requests, typically the last entry

@@ -53,12 +53,26 @@ defmodule BulmaWidgets.Elements do
   """
   attr(:label, :string, required: true)
   attr(:value, :string, required: true)
+  attr(:size, :string, default: "medium")
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
   def tagged(assigns) do
 
     ~H"""
+    <div class={["tags has-addons"]} >
+      <span class={["tag", "is-#{@size}", classes(@rest)]}, {extras(@rest)}]}>
+        <%= @label %>
+      </span>
+      <span class={["tag", "is-#{@size}"]}>
+        <%= if Phoenix.HTML.Safe.impl_for(@value) do %>
+          <%= @value %>
+        <% else %>
+          <%= @value |> inspect() %>
+        <% end %>
+      </span>
+    </div>
     <BulmaWidgets.Layouts.level>
         <:left>
-          <.tag><%= @label %></.tag>
           <%= @value %>
         </:left>
     </BulmaWidgets.Layouts.level>

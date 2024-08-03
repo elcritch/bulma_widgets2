@@ -12,7 +12,7 @@ defmodule BulmaWidgetsTest.Widgets do
     {:ok, view, html} = live(conn, "/examples/selection_menu")
 
     # IO.puts("view: #{inspect(view, pretty: true)}")
-    IO.puts("html: #{inspect(html, pretty: true)}")
+    IO.puts(html)
 
   end
 

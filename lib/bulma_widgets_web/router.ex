@@ -10,6 +10,12 @@ defmodule BulmaWidgetsWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :testing do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_live_flash
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -20,7 +26,12 @@ defmodule BulmaWidgetsWeb.Router do
     get "/", PageController, :home
 
     live "/widgets.html", WidgetExamplesLive
-    live "/examples/selection_menu", ExampleSelectionMenuLive
+  end
+
+  scope "/examples", BulmaWidgetsWeb do
+    pipe_through :testing
+
+    live "/selection_menu", ExampleSelectionMenuLive
   end
 
   # Other scopes may use custom stacks.

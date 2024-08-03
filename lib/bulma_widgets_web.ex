@@ -92,8 +92,11 @@ defmodule BulmaWidgetsWeb do
 
       # Core UI components and translation
       import BulmaWidgets.Elements
-      alias BulmaWidgets.Action
-      alias BulmaWidgets.Actions
+      import BulmaWidgets.Layouts
+
+      alias BulmaWidgets.Event
+      alias BulmaWidgets.Events
+
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

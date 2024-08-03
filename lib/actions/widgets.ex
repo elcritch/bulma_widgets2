@@ -19,6 +19,19 @@ defmodule BulmaWidgets.Actions.Widgets do
     ]
   end
 
+  def set_action_data(opts) do
+    name = opts |> Keyword.fetch!(:into)
+    target = opts |> Keyword.fetch!(:to)
+    [
+      {Action.UpdateHooks,
+        to: target,
+        hooks: fn evt ->
+          socket = evt.socket |> Phoenix.Component.assign(name, evt.data)
+          %{evt | socket: socket }
+        end}
+    ]
+  end
+
   @doc """
   Creates an action which broadcasts state for the given `topic` to
   an widgets listening (views or components).

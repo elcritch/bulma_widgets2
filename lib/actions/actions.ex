@@ -18,7 +18,7 @@ defmodule BulmaWidgets.Actions do
         def mount(_params, _session, socket) do
           {:ok,
             socket
-            |> mount_broadcast(topics: ["test-value-set"])
+            |> mount_broadcast(topics: ["test-value-set"], into: shared)
         end
 
         ...
@@ -28,7 +28,7 @@ defmodule BulmaWidgets.Actions do
         end
       end
 
-  #### Listening to BroadcastState updates
+  #### Listening to Broadcast and Cached Values
 
       defmodule LwControlWeb.WidgetExamplesLive do
         use LwControlWeb, :live_view
@@ -46,6 +46,26 @@ defmodule BulmaWidgets.Actions do
         end
       end
 
+  ### Using with LiveComponents
+
+  #### Listening to Broadcast and Cached Values
+
+      defmodule LwControlWeb.WidgetExamplesLive do
+        use LwControlWeb, :live_view
+
+        def mount(_params, _session, socket) do
+          {:ok,
+            socket
+            |> mount_shared(topics: ["test-value-set"])
+        end
+
+        def update(assigns, socket) do
+          {:ok, socket |> Actions.update(assigns, socket)}
+        end
+
+        ...
+
+      end
 
   """
 

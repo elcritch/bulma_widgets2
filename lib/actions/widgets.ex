@@ -24,26 +24,35 @@ defmodule BulmaWidgets.Actions.Widgets do
     send_action_data(topic, pubsub, opts)
   end
 
-  def send_action_data(topic, pubsub, opts) do
-    preaction =
-      case opts |> Keyword.get(:into, nil) do
-        name when is_atom(name) ->
-          {Action.Commands,
-           modify: true,
-           commands: fn evt ->
-             Logger.info("PRE: #{inspect(evt, pretty: true)}!!!")
-             {k, v} = evt.data
-             evt = %{evt | data: {k, %{name => v}}}
-             Logger.info("POST: #{inspect(evt.data, pretty: true)}!!!")
-             evt
-           end}
+  @doc """
+  Send actions data using braodcast and cached.
 
-        _other ->
-          []
+  ## Examples
+
+  Set data into field:
+
+      Widgets.send_action_data("test-value-set", into: :value_set),
+
+  Or:
+
+      Widgets.send_action_data("test-value-set", command: fn e -> e end),
+
+  """
+  def send_action_data(topic, pubsub, opts) do
+    cmd =
+      if opts |> Keyword.get(:command, false) do
+        opts |> Keyword.fetch!(:command)
+      else
+        name = opts |> Keyword.fetch!(:into)
+
+        fn evt ->
+          {k, v} = evt.data
+          %{evt | data: {k, %{name => v}}}
+        end
       end
 
     [
-      preaction,
+      {Action.Commands, modify: true, commands: cmd},
       {Action.BroadcastState, topic: topic, pubsub: pubsub},
       {Action.CacheUpdate, topic: topic}
     ]

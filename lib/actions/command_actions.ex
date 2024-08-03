@@ -1,6 +1,6 @@
 defmodule BulmaWidgets.Action.Commands do
   require Logger
-  alias BulmaWidgets.Action
+  alias BulmaWidgets.Event
 
   @moduledoc """
     Apply a function with event data, or a list of functions:
@@ -58,7 +58,7 @@ end
 
 defmodule BulmaWidgets.Action.AssignField do
   require Logger
-  alias BulmaWidgets.Action
+  alias BulmaWidgets.Event
 
   @moduledoc """
     Assigns the `phx-data-*` values directly using the name
@@ -76,7 +76,7 @@ end
 
 defmodule BulmaWidgets.Action.CastMenuEvent do
   require Logger
-  alias BulmaWidgets.Action
+  alias BulmaWidgets.Event
 
   @moduledoc """
   """

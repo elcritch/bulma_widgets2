@@ -1,6 +1,6 @@
 defmodule BulmaWidgets.Actions.Widgets do
   require Logger
-  alias BulmaWidgets.Action
+  alias BulmaWidgets.Event
 
   @doc """
   Creates actions which broadcast and then cache the `vals` to the `topic`.

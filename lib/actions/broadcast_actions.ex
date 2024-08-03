@@ -1,6 +1,6 @@
 defmodule BulmaWidgets.Action.BroadcastEvent do
   require Logger
-  alias BulmaWidgets.Action
+  alias BulmaWidgets.Event
 
   @moduledoc """
   Broadcasts an :info event to all listeners
@@ -17,7 +17,7 @@ defmodule BulmaWidgets.Action.BroadcastEvent do
 end
 
 defmodule BulmaWidgets.Action.BroadcastState do
-  alias BulmaWidgets.Action
+  alias BulmaWidgets.Event
   alias BulmaWidgets.Actions
   require Logger
   import Phoenix.LiveView

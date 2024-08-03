@@ -1,6 +1,6 @@
 defmodule BulmaWidgets.Actions do
   require Logger
-  alias BulmaWidgets.Action
+  alias BulmaWidgets.Event
 
   @moduledoc """
   Example usage: `use BulmaWidgets.Actions, pubsub: MyApp.PubSub1`

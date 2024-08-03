@@ -1,6 +1,6 @@
 
 defmodule BulmaWidgets.Action.CacheState do
-  alias BulmaWidgets.Action
+  alias BulmaWidgets.Event
   require Logger
 
   def call(%Event{data: {key, values}, socket: socket} = evt, opts \\ []) do
@@ -17,7 +17,7 @@ defmodule BulmaWidgets.Action.CacheState do
 end
 
 defmodule BulmaWidgets.Action.CacheUpdate do
-  alias BulmaWidgets.Action
+  alias BulmaWidgets.Event
   require Logger
 
   def call(%Event{data: {key, values}, socket: socket} = evt, opts \\ []) do

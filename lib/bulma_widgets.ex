@@ -176,7 +176,7 @@ defmodule BulmaWidgets do
       import BulmaWidgets.Elements
       alias BulmaWidgets.Bulma
       alias BulmaWidgets.Actions
-      alias BulmaWidgets.Action
+      alias BulmaWidgets.Event
 
       import BulmaWidgets.Gettext
 

@@ -4,7 +4,7 @@ defmodule BulmaWidgets.MixProject do
   def project do
     [
       app: :bulma_widgets,
-      version: "0.4.0",
+      version: "0.4.1",
       elixir: "~> 1.16",
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),

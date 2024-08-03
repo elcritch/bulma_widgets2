@@ -179,15 +179,6 @@ defmodule BulmaWidgets.Actions do
   end
 
 
-  @doc """
-  Creates an action which broadcasts state for the given `topic` to
-  an widgets listening (views or components).
-  """
-  def event_broadcast_state(topic, pubsub, vals) do
-    [
-      {Action.BroadcastState, topic: topic, values: vals, pubsub: pubsub}
-    ]
-  end
 
   @doc """
   Use in a component's `mount` to register the component to review

@@ -19,4 +19,18 @@ defmodule BulmaWidgets.Actions.Widgets do
     ]
   end
 
+  @doc """
+  Creates an action which broadcasts state for the given `topic` to
+  an widgets listening (views or components).
+  """
+  def broadcast_state(topic, vals) do
+    pubsub = Application.get_all_env(:bulma_widgets) |> Keyword.fetch!(:pubsub)
+    broadcast_state(topic, pubsub, vals)
+  end
+
+  def broadcast_state(topic, pubsub, vals) do
+    [
+      {Action.BroadcastState, topic: topic, values: vals, pubsub: pubsub}
+    ]
+  end
 end

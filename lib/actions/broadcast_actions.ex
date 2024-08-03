@@ -17,10 +17,12 @@ defmodule BulmaWidgets.Action.BroadcastEvent do
 end
 
 defmodule BulmaWidgets.Action.BroadcastState do
+  import Phoenix.LiveView
+  require Logger
+
+  alias BulmaWidgets.Action
   alias BulmaWidgets.Event
   alias BulmaWidgets.Actions
-  require Logger
-  import Phoenix.LiveView
 
   @broadcast_topic "widget_state"
 
@@ -28,7 +30,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
   Broadcasts state to listeners. Provides hooks for LiveView's
   to handle setting the updated state.
   """
-  def call(%Event{data: {key, values}, socket: socket} = evt, opts \\ []) do
+  def call(%Event{data: {_key, values}, socket: socket} = evt, opts \\ []) do
     Logger.debug("BroadcastState:call:opts: #{inspect(opts, pretty: false)}")
 
     id = socket.assigns.id
@@ -104,7 +106,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
           "BroadcastState:broadcast_state:update: id:#{id} socket:#{socket.id} data:#{inspect(data, pretty: false)}"
         )
 
-        data = data |> Action.fields_to_assigns()
+        data = data |> Event.fields_to_assigns()
 
         target_list =
           socket.assigns[:__event_action_listeners__]
@@ -146,7 +148,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
     {:halt, socket}
   end
 
-  defp maybe_receive_broadcast(other, socket) do
+  defp maybe_receive_broadcast(_other, socket) do
     # Logger.debug("BroadcastState:broadcast_state:skip: other#{inspect(other)} socket:#{socket.id} view:#{socket.view}")
     {:cont, socket}
   end

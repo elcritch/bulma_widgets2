@@ -1,6 +1,7 @@
 defmodule BulmaWidgets.Actions do
   require Logger
   alias BulmaWidgets.Event
+  alias BulmaWidgets.Action
 
   @moduledoc """
   Example usage: `use BulmaWidgets.Actions, pubsub: MyApp.PubSub1`
@@ -295,7 +296,7 @@ defmodule BulmaWidgets.Actions do
         assigns: socket.assigns,
         socket: socket
       }
-      |> Action.apply(actions)
+      |> Event.apply(actions)
 
     event_action.socket
   end

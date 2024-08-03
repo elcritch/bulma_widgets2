@@ -2,6 +2,7 @@ defmodule BulmaWidgets.Widgets.SelectionMenu do
   use Phoenix.LiveComponent
   use BulmaWidgets, :html_helpers
   use BulmaWidgets, :css_utilities
+  alias BulmaWidgets.Action.AssignField
 
   require Logger
 
@@ -24,7 +25,7 @@ defmodule BulmaWidgets.Widgets.SelectionMenu do
   """
 
   @standard_actions [
-    {Action.AssignField, field: :data}
+    {AssignField, field: :data}
   ]
 
   def update(assigns, socket) do

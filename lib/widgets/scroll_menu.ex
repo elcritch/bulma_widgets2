@@ -1,6 +1,7 @@
 defmodule BulmaWidgets.Widgets.ScrollMenu do
   use Phoenix.LiveComponent
   use BulmaWidgets, :html_helpers
+  alias BulmaWidgets.Action.AssignField
 
   require Logger
 
@@ -25,7 +26,7 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
   """
 
   @standard_actions [
-    {Action.AssignField, field: :data}
+    {AssignField, field: :data}
   ]
 
   def update(assigns, socket) do

@@ -67,6 +67,7 @@ defmodule BulmaWidgets.Actions.Widgets do
     ]
   end
 
+  @spec set_action_data(keyword()) :: [{BulmaWidgets.Action.UpdateHooks, [...]}, ...]
   @doc """
   Assigns data from a `BulmaWidgets.Action` event into the
   given field for the target. The target can be a component

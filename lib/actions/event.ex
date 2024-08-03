@@ -46,4 +46,10 @@ defmodule BulmaWidgets.Event do
           end
         end
   end
+
+  def key({k, _v}), do: k
+  def key(k, default \\ ""), do: k || default
+  def value({_k, v}), do: v
+  def value(k, default \\ ""), do: k || default
+
 end

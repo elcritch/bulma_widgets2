@@ -144,7 +144,6 @@ defmodule BulmaWidgets.Action.BroadcastState do
         socket
       end
 
-    # send_update(module, fields |> Map.put(:id, id))
     {:halt, socket}
   end
 

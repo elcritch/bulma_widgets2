@@ -24,6 +24,14 @@ defmodule BulmaWidgets.Elements do
     text
   end
 
+  def pretty(value, prettify \\ true) do
+    if value == nil do
+      ""
+    else
+      value |> inspect(pretty: prettify)
+    end
+  end
+
   @doc """
   The block element is a simple spacer tool. It allows sibling HTML elements to have a consistent margin between them.
 

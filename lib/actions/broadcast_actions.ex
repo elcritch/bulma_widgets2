@@ -28,14 +28,13 @@ defmodule BulmaWidgets.Action.BroadcastState do
   Broadcasts state to listeners. Provides hooks for LiveView's
   to handle setting the updated state.
   """
-  def call(%Action{data: {_key, values}, socket: socket} = evt, opts \\ []) do
+  def call(%Action{data: {key, values}, socket: socket} = evt, opts \\ []) do
     Logger.debug("BroadcastState:call:opts: #{inspect(opts, pretty: false)}")
 
     id = socket.assigns.id
     topic = opts |> Keyword.fetch!(:topic)
     pubsub = opts |> Keyword.fetch!(:pubsub)
-    # |> Map.take(set_fields)
-    data = opts |> Keyword.get(:values, values)
+    data = opts |> Keyword.get(:values, %{key => values})
 
     Phoenix.PubSub.broadcast(
       pubsub,
@@ -102,7 +101,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
     socket =
       unless event_view != socket.view do
         Logger.debug(
-          "BroadcastState:broadcast_state:update: id:#{id} socket:#{socket.id} vals:#{inspect(vals, pretty: false)}"
+          "BroadcastState:broadcast_state:update: id:#{id} socket:#{socket.id} data:#{inspect(data, pretty: false)}"
         )
 
         data = data |> Action.fields_to_assigns()

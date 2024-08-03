@@ -64,11 +64,7 @@ defmodule BulmaWidgets.Elements do
         <%= @label %>
       </span>
       <span class={["tag", "is-#{@size}"]}>
-        <%= if Phoenix.HTML.Safe.impl_for(@value) do %>
-          <%= @value %>
-        <% else %>
-          <%= @value |> inspect() %>
-        <% end %>
+        <%= @value %>
       </span>
     </div>
     <BulmaWidgets.Layouts.level>

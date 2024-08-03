@@ -54,9 +54,9 @@ defmodule BulmaWidgets.Actions.Widgets do
       end
 
     [
-      {Action.Commands, modify: true, commands: cmd},
-      {Action.BroadcastState, topic: topic, pubsub: pubsub},
-      {Action.CacheUpdate, topic: topic}
+      Commands, modify: true, commands: cmd},
+      BroadcastState, topic: topic, pubsub: pubsub},
+      CacheUpdate, topic: topic}
     ]
   end
 
@@ -88,7 +88,7 @@ defmodule BulmaWidgets.Actions.Widgets do
     target = opts |> Keyword.fetch!(:to)
 
     [
-      {Action.UpdateHooks,
+      UpdateHooks,
        to: target,
        hooks: fn evt ->
          socket = evt.socket |> Phoenix.Component.assign(name, evt.data)
@@ -108,7 +108,7 @@ defmodule BulmaWidgets.Actions.Widgets do
 
   def broadcast_state(topic, pubsub, vals) do
     [
-      {Action.BroadcastState, topic: topic, values: vals, pubsub: pubsub}
+      BroadcastState, topic: topic, values: vals, pubsub: pubsub}
     ]
   end
 end

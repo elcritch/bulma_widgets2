@@ -2,6 +2,7 @@ defmodule BulmaWidgets.Actions do
   require Logger
   alias BulmaWidgets.Event
   alias BulmaWidgets.Action
+  alias BulmaWidgets.Action.Commands
 
   @moduledoc """
   Example usage: `use BulmaWidgets.Actions, pubsub: MyApp.PubSub1`
@@ -225,7 +226,7 @@ defmodule BulmaWidgets.Actions do
   Creates an action which runs the closures given as a list in `cmds`.
   """
   def event_commands(cmds, modify \\ false) do
-    [{Action.Commands, modify: modify, commands: cmds}]
+    [{Commands, modify: modify, commands: cmds}]
   end
 
   @doc """
@@ -234,7 +235,7 @@ defmodule BulmaWidgets.Actions do
   """
   def event_set_values(vals) do
     [
-      {Action.Commands,
+      {Commands,
        modify: true,
        commands: fn evt = %Event{data: {key, values}} ->
          %{evt | data: {key, values |> Map.merge(vals |> Map.new())}}

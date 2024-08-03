@@ -49,7 +49,7 @@ defmodule BulmaWidgets.Actions.Widgets do
 
         fn evt ->
           {k, v} = evt.data
-          %{evt | data: {k, %{name => v}}}
+          %{evt | data: {k, %{name => {k,v}}}}
         end
       end
 

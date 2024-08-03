@@ -1,4 +1,4 @@
-defmodule BulmaWidgetsTest do
+defmodule BulmaWidgetsTest.Widgets do
   use ExUnit.Case
 
   import Plug.Conn

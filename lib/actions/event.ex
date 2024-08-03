@@ -1,4 +1,4 @@
-defmodule BulmaWidgets.Action do
+defmodule BulmaWidgets.Event do
   require Logger
 
   @moduledoc """

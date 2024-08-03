@@ -5,7 +5,7 @@ defmodule BulmaWidgets.Action.BroadcastEvent do
   @moduledoc """
   Broadcasts an :info event to all listeners
   """
-  def call(%Action{socket: socket} = evt, opts \\ []) do
+  def call(%Event{socket: socket} = evt, opts \\ []) do
     topic = opts |> Keyword.fetch!(:topic)
     with_id = opts |> Keyword.get(:id, false)
     topic = "#{topic}#{(with_id && socket.assigns.id) || ""}"
@@ -28,7 +28,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
   Broadcasts state to listeners. Provides hooks for LiveView's
   to handle setting the updated state.
   """
-  def call(%Action{data: {key, values}, socket: socket} = evt, opts \\ []) do
+  def call(%Event{data: {key, values}, socket: socket} = evt, opts \\ []) do
     Logger.debug("BroadcastState:call:opts: #{inspect(opts, pretty: false)}")
 
     id = socket.assigns.id

@@ -235,7 +235,7 @@ defmodule BulmaWidgets.Actions do
     [
       {Action.Commands,
        modify: true,
-       commands: fn evt = %Action{data: {key, values}} ->
+       commands: fn evt = %Event{data: {key, values}} ->
          %{evt | data: {key, values |> Map.merge(vals |> Map.new())}}
        end}
     ]
@@ -289,7 +289,7 @@ defmodule BulmaWidgets.Actions do
     actions = socket.assigns |> all_actions(default_actions)
 
     event_action =
-      %Action{
+      %Event{
         id: name,
         data: {key, value},
         assigns: socket.assigns,

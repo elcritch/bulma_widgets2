@@ -17,6 +17,6 @@ defmodule BulmaWidgetsTest do
         <:tag> Success </:tag>
       </.tags>
     """)
-    IO.puts("res: #{res}")
+    assert res |> is_binary()
   end
 end

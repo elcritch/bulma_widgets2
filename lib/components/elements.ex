@@ -368,7 +368,6 @@ defmodule BulmaWidgets.Elements do
 
 
   def tags(assigns) do
-    IO.puts("tags:assigns: #{inspect(assigns, pretty: true)}")
 
     ~H"""
     <div class={["tags", classes(@rest), assigns |> css_maybe(:"has-addons")]}

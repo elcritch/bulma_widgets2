@@ -41,7 +41,7 @@ defmodule BulmaWidgets.MixProject do
       {:telemetry_poller, "~> 1.0", only: [:test, :dev]},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1", only: [:test, :dev]},
-      {:bandit, "~> 1.5", only: [:test, :dev]}
+      {:bandit, "~> 1.5", only: [:test, :dev]},
 
       {:dart_sass, "~> 0.6", only: [:test, :dev]},
 

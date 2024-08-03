@@ -10,7 +10,7 @@ defmodule BulmaWidgets.Application do
     children = [
       BulmaWidgetsWeb.Telemetry,
       {DNSCluster, query: Application.get_env(:bulma_widgets, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: BulmaWidgets.PubSub},
+      {Phoenix.PubSub, name: BulmaWidgetsWeb.PubSub},
       # Start a worker by calling: BulmaWidgets.Worker.start_link(arg)
       # {BulmaWidgets.Worker, arg},
       # Start to serve requests, typically the last entry

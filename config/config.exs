@@ -10,6 +10,9 @@ import Config
 config :bulma_widgets,
   generators: [timestamp_type: :utc_datetime]
 
+config :bulma_widgets,
+  pubsub: BulmaWidgets.PubSub
+
 # Configures the endpoint
 config :bulma_widgets, BulmaWidgetsWeb.Endpoint,
   url: [host: "localhost"],

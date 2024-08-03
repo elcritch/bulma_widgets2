@@ -18,6 +18,8 @@ defmodule BulmaWidgetsWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/widgets.html", WidgetExamplesLive
   end
 
   # Other scopes may use custom stacks.

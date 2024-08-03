@@ -53,6 +53,12 @@ defmodule BulmaWidgetsWeb do
       use Phoenix.LiveView,
         layout: {BulmaWidgetsWeb.Layouts, :app}
 
+      on_mount BulmaWidgets.Flash
+      on_mount {BulmaWidgets.Action.BroadcastState, LwDisplay.PubSub}
+      on_mount {BulmaWidgets.Action.UpdateHooks, LwControl.PubSub}
+
+      import BulmaWidgets.Flash, only: [put_flash!: 3, put_flash!: 4]
+
       unquote(html_helpers())
     end
   end
@@ -83,7 +89,11 @@ defmodule BulmaWidgetsWeb do
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components and translation
-      import BulmaWidgetsWeb.CoreComponents
+
+      # Core UI components and translation
+      import BulmaWidgets.Elements
+      alias BulmaWidgets.Action
+      alias BulmaWidgets.Actions
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

@@ -1,7 +1,7 @@
 defmodule BulmaWidgetsWeb.WidgetExamplesLive do
   use BulmaWidgetsWeb, :live_view
 
-  use BulmaWidgets.Actions, pubsub: LwDisplay.PubSub
+  use BulmaWidgets.Actions, pubsub: BulmaWidgetsWeb.PubSub
   alias BulmaWidgets.Widgets.ScrollMenu
   alias BulmaWidgets.Widgets.ActionButton
 

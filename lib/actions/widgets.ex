@@ -1,5 +1,8 @@
 defmodule BulmaWidgets.Actions.Widgets do
   require Logger
+  alias BulmaWidgets.Event
+  alias BulmaWidgets.Action.BroadcastState
+  alias BulmaWidgets.Action.CacheUpdate
 
   @doc """
   Creates actions which broadcast and then cache the `vals` to the `topic`.
@@ -13,8 +16,8 @@ defmodule BulmaWidgets.Actions.Widgets do
 
   def send_shared(topic, pubsub, values) do
     [
-      {Action.BroadcastState, topic: topic, values: values, pubsub: pubsub},
-      {Action.CacheUpdate, topic: topic, values: values}
+      {BroadcastState, topic: topic, values: values, pubsub: pubsub},
+      {CacheUpdate, topic: topic, values: values}
     ]
   end
 

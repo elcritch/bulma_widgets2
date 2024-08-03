@@ -163,7 +163,7 @@ defmodule BulmaWidgets.Actions do
     socket
   end
 
-  defdelegate register_updates(assigns, socket, default \\ []), to: Action.BroadcastState
+  defdelegate register_updates(assigns, socket, default \\ []), to: BulmaWidgets.Action.BroadcastState
 
   def assign_cached(socket_or_assigns) do
     assign_cached(socket_or_assigns, [])
@@ -255,12 +255,12 @@ defmodule BulmaWidgets.Actions do
 
     standard_actions = [
       {
-        Action.BroadcastState,
+        BulmaWidgets.Action.BroadcastState,
         topics: topics, module: module, pubsub: pubsub
       }
     ]
 
-    Action.BroadcastState.register_updates(socket.assigns, socket, standard_actions)
+    BulmaWidgets.Action.BroadcastState.register_updates(socket.assigns, socket, standard_actions)
     socket
   end
 

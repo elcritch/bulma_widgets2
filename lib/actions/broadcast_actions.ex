@@ -48,7 +48,11 @@ defmodule BulmaWidgets.Action.BroadcastState do
   end
 
   def register_updates(assigns, socket, default \\ []) do
-    opts = assigns |> Actions.all_actions(default) |> Keyword.get(Action.BroadcastState, [])
+    opts =
+      assigns
+      |> Actions.all_actions(default)
+      |> Keyword.get(BulmaWidgets.Action.BroadcastState, [])
+
     id = assigns[:id] || assigns[:myself] || self()
     topics = opts |> Keyword.fetch!(:topics)
     module = opts |> Keyword.fetch!(:module)

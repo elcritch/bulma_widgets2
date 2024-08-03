@@ -53,14 +53,16 @@ defmodule BulmaWidgets.Elements do
   """
   attr(:label, :string, required: true)
   attr(:value, :string, required: true)
-  attr(:size, :string, default: "medium")
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def tagged(assigns) do
+    assigns =
+      assigns
+      |> assign(:sizes, classes(assigns.rest, [:'is-small']))
 
     ~H"""
     <div class={["tags has-addons"]} >
-      <span class={["tag", "is-#{@size}", classes(@rest)]}, {extras(@rest)}]}>
+      <span class={["tag", "is-#{@size}", @sizes, classes(@rest)]} >
         <%= @label %>
       </span>
       <span class={["tag", "is-#{@size}"]}>

@@ -3,6 +3,7 @@ defmodule BulmaWidgets.Actions.Widgets do
   alias BulmaWidgets.Action.BroadcastState
   alias BulmaWidgets.Action.CacheUpdate
   alias BulmaWidgets.Action.Commands
+  alias BulmaWidgets.Action.UpdateHooks
 
   @doc """
   Creates actions which broadcast and then cache the `vals` to the `topic`.

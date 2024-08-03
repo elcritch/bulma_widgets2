@@ -25,6 +25,12 @@ defmodule BulmaWidgetsWeb.Endpoint do
     gzip: false,
     only: BulmaWidgetsWeb.static_paths()
 
+  # BulmaWidget resources
+  plug(Plug.Static,
+    at: "/bulma",
+    from: {:bulma_widgets, "priv/static"}
+  )
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do

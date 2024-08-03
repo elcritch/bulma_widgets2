@@ -7,8 +7,17 @@
     <.live_title suffix=" · Phoenix Framework">
       <%= assigns[:page_title] || "BulmaWidgets" %>
     </.live_title>
+
+    <!-- -->
+    <link phx-track-static rel="stylesheet" href={~p"/bulma/assets/bulma_widgets.css"} />
+
+    <!-- font awesome -->
+    <link phx-track-static rel="stylesheet" href={~p"/bulma/fonts/fontawesome6/css/fontawesome.min.css"} />
+    <link phx-track-static rel="stylesheet" href={~p"/bulma/fonts/fontawesome6/css/solid.min.css"} />
+
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+
     </script>
   </head>
   <body class="bg-white">

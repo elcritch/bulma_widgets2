@@ -10,7 +10,7 @@ defmodule BulmaWidgets.Application do
     children =
       if Application.get_env(:bulma_widgets, :dev_server) == true do
         [
-          BulmaWidgetsWeb.Telemetry,
+          # BulmaWidgetsWeb.Telemetry,
           {DNSCluster, query: Application.get_env(:bulma_widgets, :dns_cluster_query) || :ignore},
           {Phoenix.PubSub, name: BulmaWidgetsWeb.PubSub},
           BulmaWidgets.Cache,

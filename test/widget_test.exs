@@ -17,8 +17,8 @@ defmodule BulmaWidgetsTest.Widgets do
 
 
   test "disconnected and connected mount", %{conn: conn} do
-    {:ok, view, html} = live(conn, "/examples/selection_menu")
-    # {:ok, view, html} = live(conn, "/widgets.html")
+    # {:ok, view, html} = live(conn, "/examples/selection_menu")
+    {:ok, view, html} = live(conn, "/widgets.html")
 
     first_item = "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
     second_item = "#wiper_options > ul:nth-child(2) > li:nth-child(2)"

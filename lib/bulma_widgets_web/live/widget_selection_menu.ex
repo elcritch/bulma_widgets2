@@ -2,15 +2,11 @@ defmodule BulmaWidgetsWeb.ExampleSelectionMenuLive do
   use BulmaWidgetsWeb, :live_view
 
   use BulmaWidgets.Actions, pubsub: BulmaWidgetsWeb.PubSub
-  alias BulmaWidgets.Widgets.ScrollMenu
   alias BulmaWidgets.Widgets.SelectionMenu
-  alias BulmaWidgets.Widgets.ActionButton
-  alias BulmaWidgets.Action.UpdateHooks
 
   require Logger
 
   def mount(_params, _session, socket) do
-    # Logger.debug("tab_check_sensor:comp:mount: #{inspect(socket, pretty: true)}")
     {:ok,
      socket
      |> assign(:shared, %{})
@@ -23,9 +19,6 @@ defmodule BulmaWidgetsWeb.ExampleSelectionMenuLive do
   end
 
   def handle_info({:updates, assigns}, socket) do
-    # Logger.debug("WidgetExamplesLive:comp:update: #{inspect(assigns, pretty: true)}")
-    # send message to listen here!
-
     {:noreply, Actions.update(assigns, socket)}
   end
 
@@ -56,11 +49,4 @@ defmodule BulmaWidgetsWeb.ExampleSelectionMenuLive do
     """
   end
 
-  def handle_event("test", _params, socket) do
-    Logger.info("test!")
-
-    {:noreply,
-     socket
-     |> put_flash!(:info, "It worked!")}
-  end
 end

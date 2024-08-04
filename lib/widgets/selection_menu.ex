@@ -49,7 +49,7 @@ defmodule BulmaWidgets.Widgets.SelectionMenu do
     # Logger.info("selection_menu:render: assigns:data: #{inspect(assigns.data)}")
 
     ~H"""
-    <aside class="menu">
+    <aside class="menu" id={@id}>
       <p class="menu-label" :if={@label != ""}>
         <%= @label %>
       </p>
@@ -76,9 +76,10 @@ defmodule BulmaWidgets.Widgets.SelectionMenu do
 
   def handle_event(
         "menu-select-action",
-        %{"id" => menu_name, "key" => key, "value" => _value},
+        %{"id" => menu_name, "key" => key, "value" => _value} = data,
         socket
       ) do
+    Logger.warning("\nselection_menu:handle_event:: #{inspect(data)}")
     value = socket.assigns.values |> Map.new() |> Map.get(key)
 
     {:noreply,

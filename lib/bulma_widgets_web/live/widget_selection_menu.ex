@@ -19,7 +19,6 @@ defmodule BulmaWidgetsWeb.ExampleSelectionMenuLive do
   end
 
   def handle_info({:updates, assigns}, socket) do
-    Logger.error("UPDATES!!")
     {:noreply, Actions.update(assigns, socket)}
   end
 

@@ -53,6 +53,7 @@ defmodule BulmaWidgets.Widgets.SelectionMenu do
       <p class="menu-label" :if={@label != ""}>
         <%= @label %>
       </p>
+
       <ul class="menu-list">
         <li :for={{key, value} <- @values}>
           <a href="#"

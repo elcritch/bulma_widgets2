@@ -1,5 +1,8 @@
 import Config
 
+config :bulma_widgets,
+  dev_server: true
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

@@ -7,16 +7,21 @@ defmodule BulmaWidgets.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      BulmaWidgetsWeb.Telemetry,
-      {DNSCluster, query: Application.get_env(:bulma_widgets, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: BulmaWidgetsWeb.PubSub},
-      BulmaWidgets.Cache,
-      # Start a worker by calling: BulmaWidgets.Worker.start_link(arg)
-      # {BulmaWidgets.Worker, arg},
-      # Start to serve requests, typically the last entry
-      BulmaWidgetsWeb.Endpoint
-    ]
+    children =
+      if Application.get_env(:bulma_widgets, :dev_server) == true do
+        [
+          BulmaWidgetsWeb.Telemetry,
+          {DNSCluster, query: Application.get_env(:bulma_widgets, :dns_cluster_query) || :ignore},
+          {Phoenix.PubSub, name: BulmaWidgetsWeb.PubSub},
+          BulmaWidgets.Cache,
+          # Start a worker by calling: BulmaWidgets.Worker.start_link(arg)
+          # {BulmaWidgets.Worker, arg},
+          # Start to serve requests, typically the last entry
+          BulmaWidgetsWeb.Endpoint
+        ]
+      else
+        []
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

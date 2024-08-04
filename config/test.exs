@@ -1,5 +1,8 @@
 import Config
 
+config :bulma_widgets,
+  dev_server: true
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :bulma_widgets, BulmaWidgetsWeb.Endpoint,

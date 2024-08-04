@@ -1,7 +1,7 @@
 defmodule BulmaWidgets do
   require Logger
 
-  @colors ~w(
+  @base_colors ~w(
     is-primary
     is-link
     is-info
@@ -72,7 +72,9 @@ defmodule BulmaWidgets do
     has-text-grey-lighter
     has-text-white-ter
     has-text-white-bis
+  )
 
+  @extended_colors ~w(
     has-background-white
     has-background-black
     has-background-light
@@ -111,6 +113,7 @@ defmodule BulmaWidgets do
     has-background-inherit
   )
 
+  @colors @base_colors ++ @extended_colors
   @colors_atoms Enum.map(@colors, &String.to_atom/1)
   @attrs_atoms Enum.map(@attrs, &String.to_atom/1)
   @sizes_atoms Enum.map(@sizes, &String.to_atom/1)

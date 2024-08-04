@@ -16,7 +16,29 @@ defmodule BulmaWidgetsTest.Widgets do
   end
 
 
-  test "disconnected and connected mount", %{conn: conn} do
+  test "basic menu selection", %{conn: conn} do
+    # {:ok, view, html} = live(conn, "/examples/selection_menu")
+    {:ok, view, html} = live(conn, "/widgets.html")
+
+    first_item = "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
+    second_item = "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
+
+    res =
+      view
+        |> element(second_item <> " > a:nth-child(1)")
+        |> render_click()
+
+    IO.puts("\n\nRESULT: ")
+    IO.puts(res)
+
+    refute has_element?(view, "#wiper_options > ul:nth-child(2) > li:nth-child(1) > a[class*=is-active]")
+    assert has_element?(view, second_item <> " > a[class*=is-active]")
+
+    view |> prettyElement("element 2", second_item <> " > a[class*=is-active]")
+
+  end
+
+  test "multi socket test?", %{conn: conn} do
     # {:ok, view, html} = live(conn, "/examples/selection_menu")
     {:ok, view, html} = live(conn, "/widgets.html")
 

@@ -28,8 +28,8 @@ defmodule BulmaWidgetsTest.Widgets do
         |> element(second_item <> " > a:nth-child(1)")
         |> render_click()
 
-    IO.puts("\n\nRESULT: ")
-    IO.puts(res)
+    # IO.puts("\n\nRESULT: ")
+    # IO.puts(res)
 
     refute has_element?(view, "#wiper_options > ul:nth-child(2) > li:nth-child(1) > a[class*=is-active]")
     assert has_element?(view, second_item <> " > a[class*=is-active]")
@@ -50,8 +50,10 @@ defmodule BulmaWidgetsTest.Widgets do
         |> element(second_item <> " > a:nth-child(1)")
         |> render_click()
 
-    IO.puts("\n\nRESULT: ")
-    IO.puts(res)
+    # IO.puts("\n\nRESULT: ")
+    # IO.puts(res)
+
+    IO.puts("children: #{live_children(view)}")
 
     refute has_element?(view, "#wiper_options > ul:nth-child(2) > li:nth-child(1) > a[class*=is-active]")
     assert has_element?(view, second_item <> " > a[class*=is-active]")

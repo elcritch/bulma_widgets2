@@ -14,8 +14,8 @@ defmodule BulmaWidgets.Actions do
 
   #### Listening to BroadcastState updates
 
-      defmodule LwControlWeb.WidgetExamplesLive do
-        use LwControlWeb, :live_view
+      defmodule BulmaWidgetsWeb.WidgetExamplesLive do
+        use BulmaWidgetsWeb, :live_view
 
         def mount(_params, _session, socket) do
           {:ok,
@@ -32,8 +32,8 @@ defmodule BulmaWidgets.Actions do
 
   #### Listening to Broadcast and Cached Values
 
-      defmodule LwControlWeb.WidgetExamplesLive do
-        use LwControlWeb, :live_view
+      defmodule BulmaWidgetsWeb.WidgetExamplesLive do
+        use BulmaWidgetsWeb, :live_view
 
         def mount(_params, _session, socket) do
           {:ok,
@@ -52,8 +52,8 @@ defmodule BulmaWidgets.Actions do
 
   #### Listening to Broadcast and Cached Values
 
-      defmodule LwControlWeb.WidgetExamplesLive do
-        use LwControlWeb, :live_view
+      defmodule BulmaWidgetsWeb.WidgetExamplesLive do
+        use BulmaWidgetsWeb, :live_view
 
         def mount(_params, _session, socket) do
           {:ok,

@@ -19,12 +19,14 @@ defmodule BulmaWidgetsWeb.ExampleSelectionMenuLive do
   end
 
   def handle_info({:updates, assigns}, socket) do
+    Logger.error("UPDATES!!")
     {:noreply, Actions.update(assigns, socket)}
   end
 
   def render(assigns) do
 
     ~H"""
+    <div id="widget">
       <.tagged is-link label="Wiper Options:" value={Event.key(@shared[:wiper_options]) }/>
 
       <.live_component
@@ -45,7 +47,7 @@ defmodule BulmaWidgetsWeb.ExampleSelectionMenuLive do
         ]}
       >
       </.live_component>
-
+    </div>
     """
   end
 

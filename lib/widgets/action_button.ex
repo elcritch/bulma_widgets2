@@ -31,30 +31,16 @@ defmodule BulmaWidgets.Widgets.ActionButton do
 
     actions = assigns |> Actions.all_actions()
 
-    Logger.warning(
-      "#{__MODULE__}:ACTION_BUTTON: assigns: #{inspect(assigns |> Map.delete(:rest) |> Map.keys(), pretty: true, limit: :infinity)}"
-    )
-
-    # Logger.warning("#{__MODULE__}:ACTION_BUTTON: loading: #{inspect(assigns |> Map.take(["loading", :loading]), pretty: true, limit: :infinity)}")
-    Logger.warning(
-      "#{__MODULE__}:ACTION_BUTTON: rest: #{inspect(assigns.rest |> Map.delete(:socket) |> Map.delete(:extra_actions), pretty: true, limit: :infinity)}"
-    )
-
-    Logger.warning(
-      "#{__MODULE__}:ACTION_BUTTON: actions: #{inspect(actions, pretty: true, limit: :infinity)}"
-    )
+    # Logger.debug("ACTION_BUTTON: assigns: #{inspect(assigns |> Map.delete(:rest) |> Map.keys(), pretty: true, limit: :infinity)}")
+    # Logger.debug("ACTION_BUTTON: rest: #{inspect(assigns.rest |> Map.delete(:socket) |> Map.delete(:extra_actions), pretty: true, limit: :infinity)}")
+    # Logger.debug("ACTION_BUTTON: actions: #{inspect(actions, pretty: true, limit: :infinity)}")
 
     extras =
       assigns.rest
       |> Phoenix.Component.assigns_to_attributes([:socket, :myself, :flash, :cached])
 
-    Logger.warning(
-      "#{__MODULE__}:ACTION_BUTTON: extras: #{inspect(extras, pretty: true, limit: :infinity)}"
-    )
-
-    Logger.warning(
-      "#{__MODULE__}:ACTION_BUTTON: BulmaWidgets.classes(@rest): #{inspect(BulmaWidgets.classes(assigns.rest), pretty: true, limit: :infinity)}"
-    )
+    # Logger.debug("ACTION_BUTTON: extras: #{inspect(extras, pretty: true, limit: :infinity)}")
+    # Logger.debug("ACTION_BUTTON: BulmaWidgets.classes(@rest): #{inspect(BulmaWidgets.classes(assigns.rest), pretty: true, limit: :infinity)}")
 
     ~H"""
     <button
@@ -75,7 +61,7 @@ defmodule BulmaWidgets.Widgets.ActionButton do
         %{"name" => name} = values,
         socket
       ) do
-    Logger.info("button-action:click!: target: #{name} values: #{inspect(values)}")
+    # Logger.debug("button-action:click!: target: #{name} values: #{inspect(values)}")
     values = values |> Map.delete("name")
 
     {:noreply,

@@ -168,7 +168,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
           {"Inverted", -1}
         ]}
         extra_actions={[
-          Widgets.send_action_data("test-value-set", into: :wiper_options),
+          Widgets.send_action_data("test-value-set-wrong", into: :wiper_options),
         ]}
       >
       </.live_component>

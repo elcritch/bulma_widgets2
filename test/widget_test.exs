@@ -34,12 +34,13 @@ defmodule BulmaWidgetsTest.Widgets do
     refute has_element?(view, "#wiper_options > ul:nth-child(2) > li:nth-child(1) > a[class*=is-active]")
     assert has_element?(view, @second_item <> " > a[class*=is-active]")
 
-    view |> prettyElement("element 2", @second_item <> " > a[class*=is-active]")
+    # view |> prettyElement("element 2", @second_item <> " > a[class*=is-active]")
 
   end
 
   test "cache test test", %{conn: conn} do
     # set cache value
+    BulmaWidgets.Cache.clear!()
     key = "test-value-set"
     data = %{wiper_options: {"Inverted", -1}}
     BulmaWidgets.Cache.put(BulmaWidgets.Action.CacheState, key, data)
@@ -55,6 +56,7 @@ defmodule BulmaWidgetsTest.Widgets do
 
   test "cache test item 1", %{conn: conn} do
     # set cache value
+    BulmaWidgets.Cache.clear!()
     key = "test-value-set"
     data = %{wiper_options: {"Regular", 1}}
     BulmaWidgets.Cache.put(BulmaWidgets.Action.CacheState, key, data)
@@ -63,8 +65,21 @@ defmodule BulmaWidgetsTest.Widgets do
     {:ok, view, html} = live(conn, "/widgets.html")
 
     view |> prettyElement("wiper_options", "#wiper_options " )
-    refute has_element?(view, "#wiper_options > ul:nth-child(1) > li:nth-child(1) > a[class*=is-active]")
     assert has_element?(view, @first_item <> " > a[class*=is-active]")
+    refute has_element?(view, @second_item <> " > a[class*=is-active]")
+
+  end
+
+  test "cache test loads", %{conn: conn} do
+    # set cache value
+    BulmaWidgets.Cache.clear!()
+
+    # {:ok, view, html} = live(conn, "/examples/selection_menu")
+    {:ok, view, html} = live(conn, "/widgets.html")
+
+    view |> prettyElement("wiper_options", "#wiper_options " )
+    refute has_element?(view, @first_item <> " > a[class*=is-active]")
+    refute has_element?(view, @second_item <> " > a[class*=is-active]")
 
   end
 

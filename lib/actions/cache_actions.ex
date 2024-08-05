@@ -10,7 +10,7 @@ defmodule BulmaWidgets.Action.CacheState do
     # view = socket.view
     view = BulmaWidgets.Action.CacheState # use single global cache for now to match broadcast
 
-    BulmaWidgets.Cache.put_all(view, topic, values)
+    # BulmaWidgets.Cache.put_all(view, topic, values)
 
     %{evt | socket: socket}
   end

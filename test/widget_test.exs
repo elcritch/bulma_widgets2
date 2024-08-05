@@ -20,7 +20,7 @@ defmodule BulmaWidgetsTest.Widgets do
     # {:ok, view, html} = live(conn, "/examples/selection_menu")
     {:ok, view, html} = live(conn, "/widgets.html")
 
-    first_item = "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
+    first_item = "#wiper_options > ul:nth-child(1) > li:nth-child(2)"
     second_item = "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
 
     res =
@@ -38,27 +38,39 @@ defmodule BulmaWidgetsTest.Widgets do
 
   end
 
-  test "multi socket test?", %{conn: conn} do
+  test "cache test test", %{conn: conn} do
+    # set cache value
+    key = "test-value-set"
+    data = %{wiper_options: {"Inverted", -1}}
+    BulmaWidgets.Cache.put(BulmaWidgets.Action.CacheState, key, data)
+
     # {:ok, view, html} = live(conn, "/examples/selection_menu")
     {:ok, view, html} = live(conn, "/widgets.html")
 
-    first_item = "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
+    first_item = "#wiper_options > ul:nth-child(1) > li:nth-child(2)"
     second_item = "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
 
-    res =
-      view
-        |> element(second_item <> " > a:nth-child(1)")
-        |> render_click()
-
-    # IO.puts("\n\nRESULT: ")
-    # IO.puts(res)
-
-    IO.puts("children: #{live_children(view)}")
-
+    # view |> prettyElement("element 2", "#wiper_options " )
     refute has_element?(view, "#wiper_options > ul:nth-child(2) > li:nth-child(1) > a[class*=is-active]")
     assert has_element?(view, second_item <> " > a[class*=is-active]")
 
-    view |> prettyElement("element 2", second_item <> " > a[class*=is-active]")
+  end
+
+  test "cache test item 1", %{conn: conn} do
+    # set cache value
+    key = "test-value-set"
+    data = %{wiper_options: {"Regular", 1}}
+    BulmaWidgets.Cache.put(BulmaWidgets.Action.CacheState, key, data)
+
+    # {:ok, view, html} = live(conn, "/examples/selection_menu")
+    {:ok, view, html} = live(conn, "/widgets.html")
+
+    first_item = "#wiper_options > ul:nth-child(1) > li:nth-child(2)"
+    second_item = "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
+
+    # view |> prettyElement("element 2", "#wiper_options " )
+    refute has_element?(view, "#wiper_options > ul:nth-child(1) > li:nth-child(1) > a[class*=is-active]")
+    assert has_element?(view, first_item <> " > a[class*=is-active]")
 
   end
 

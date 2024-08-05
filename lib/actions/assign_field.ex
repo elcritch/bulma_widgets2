@@ -10,6 +10,7 @@ defmodule BulmaWidgets.Action.AssignField do
     ## Examples
 
         {AssignField, field: :data}
+
   """
   def call(%Event{data: data, socket: socket} = evt, opts) do
     field = opts |> Keyword.fetch!(:field)

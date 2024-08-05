@@ -115,6 +115,14 @@ defmodule BulmaWidgets.Actions do
     end
   end
 
+  defmodule FieldAssigns do
+    @moduledoc """
+    """
+
+    defstruct into: :shared,
+              fields: %{}
+  end
+
   @doc """
   Gets all actions defined in a components `standard_actions` or
   `extra_actions` attributes.
@@ -164,7 +172,8 @@ defmodule BulmaWidgets.Actions do
     socket
   end
 
-  defdelegate register_updates(assigns, socket, default \\ []), to: BulmaWidgets.Action.BroadcastState
+  defdelegate register_updates(assigns, socket, default \\ []),
+    to: BulmaWidgets.Action.BroadcastState
 
   def assign_cached(socket_or_assigns) do
     assign_cached(socket_or_assigns, [])
@@ -243,8 +252,6 @@ defmodule BulmaWidgets.Actions do
     ]
   end
 
-
-
   @doc """
   Use in a component's `mount` to register the component to review
   updates for a given `topics`. Must provide `module` of the component.
@@ -277,7 +284,7 @@ defmodule BulmaWidgets.Actions do
 
     socket =
       case shared_update do
-        {_topic, vals} ->
+        {_topic, %FieldAssigns{fields: vals}} ->
           socket |> Phoenix.Component.assign(name, shared_values |> Map.merge(vals))
 
         _ ->

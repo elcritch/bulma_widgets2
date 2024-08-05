@@ -4,6 +4,7 @@ defmodule BulmaWidgets.Actions.Widgets do
   alias BulmaWidgets.Action.CacheUpdate
   alias BulmaWidgets.Action.Commands
   alias BulmaWidgets.Action.UpdateHooks
+  alias BulmaWidgets.Actions.FieldAssigns
 
   @doc """
   Creates actions which broadcast and then cache the `vals` to the `topic`.
@@ -58,7 +59,7 @@ defmodule BulmaWidgets.Actions.Widgets do
         fn evt ->
           {k, v} = evt.data
           Logger.debug("send_action_data: run: name: #{inspect(name)} data:#{inspect({k,v})}")
-          %{evt | data: %{name => {k,v}}}
+          %{evt | data: %FieldAssigns{into: name, fields: %{name => {k,v}}}}
         end
       end
 

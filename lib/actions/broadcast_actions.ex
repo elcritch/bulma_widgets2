@@ -4,6 +4,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
 
   alias BulmaWidgets.Event
   alias BulmaWidgets.Actions
+  alias BulmaWidgets.Actions.FieldAssigns
 
   @broadcast_topic "widget_state"
 
@@ -20,7 +21,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
     data = opts |> Keyword.get(:values, values)
     Logger.warning("menu-select-action:BroadcastState: #{inspect(values, pretty: true)}")
 
-    if not is_map(data) do
+    if not is_struct(data, FieldAssigns) do
       raise "BroadcastState action expect a map of fields => values to be set! Got: #{inspect(data)}"
     end
 
@@ -96,7 +97,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
           "BroadcastState:broadcast_state:update: id:#{id} socket:#{socket.id} data:#{inspect(data, pretty: false)}"
         )
 
-        data = data |> Event.fields_to_assigns()
+        # data = data |> Event.fields_to_assigns()
 
         target_list =
           (socket.assigns[:__event_action_listeners__] || %{})

@@ -84,8 +84,8 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         values={[{"A", 1}, {"B", 2}]}
         extra_actions={[
           # broadcast value
-          Widgets.send_shared("test-value-set", loading: true),
           Widgets.send_action_data("test-value-set", into: :value_set),
+          #Widgets.send_shared("test-value-set", loading: true),
         ]}
       >
         <:default_label> Example </:default_label>

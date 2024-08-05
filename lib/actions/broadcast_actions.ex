@@ -22,7 +22,7 @@ defmodule BulmaWidgets.Action.BroadcastState do
     Logger.warning("menu-select-action:BroadcastState: #{inspect(values, pretty: true)}")
 
     if not is_struct(data, FieldAssigns) do
-      raise "BroadcastState action expect a map of fields => values to be set! Got: #{inspect(data)}"
+      raise "BroadcastState action expects a FieldAssigns struct, Id:#{inspect(id)} Options: #{inspect(opts)} Data: #{inspect(data)}"
     end
 
     Phoenix.PubSub.broadcast(

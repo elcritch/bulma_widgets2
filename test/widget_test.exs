@@ -38,7 +38,7 @@ defmodule BulmaWidgetsTest.Widgets do
 
   end
 
-  test "cache test test", %{conn: conn} do
+  test "set item 1", %{conn: conn} do
     # set cache value
     BulmaWidgets.Cache.clear!()
     key = "test-value-set"
@@ -54,32 +54,33 @@ defmodule BulmaWidgetsTest.Widgets do
 
   end
 
-  test "cache test item 1", %{conn: conn} do
+  test "cache load on mount", %{conn: conn} do
     # set cache value
     BulmaWidgets.Cache.clear!()
-    key = "test-value-set"
-    data = %{wiper_options: {"Regular", 1}}
-    BulmaWidgets.Cache.put(BulmaWidgets.Action.CacheState, key, data)
 
     # {:ok, view, html} = live(conn, "/examples/selection_menu")
     {:ok, view, html} = live(conn, "/widgets.html")
 
-    view |> prettyElement("wiper_options", "#wiper_options " )
+    # view |> prettyElement("wiper_options", "#wiper_options " )
+    refute has_element?(view, @first_item <> " > a[class*=is-active]")
+    refute has_element?(view, @second_item <> " > a[class*=is-active]")
+
+    # select menu, should update cache
+    res =
+      view
+        |> element(@first_item <> " > a:nth-child(1)")
+        |> render_click()
+
+    # view |> prettyElement("wiper_options", "#wiper_options " )
     assert has_element?(view, @first_item <> " > a[class*=is-active]")
     refute has_element?(view, @second_item <> " > a[class*=is-active]")
 
-  end
+    # Load another view and verify it's updated
+    {:ok, view2, html2} = live(conn, "/widgets.html")
 
-  test "cache test loads", %{conn: conn} do
-    # set cache value
-    BulmaWidgets.Cache.clear!()
-
-    # {:ok, view, html} = live(conn, "/examples/selection_menu")
-    {:ok, view, html} = live(conn, "/widgets.html")
-
-    view |> prettyElement("wiper_options", "#wiper_options " )
-    refute has_element?(view, @first_item <> " > a[class*=is-active]")
-    refute has_element?(view, @second_item <> " > a[class*=is-active]")
+    view2 |> prettyElement("wiper_options", "#wiper_options " )
+    assert has_element?(view2, @first_item <> " > a[class*=is-active]")
+    refute has_element?(view2, @second_item <> " > a[class*=is-active]")
 
   end
 

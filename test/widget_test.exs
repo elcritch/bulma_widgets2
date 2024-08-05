@@ -15,26 +15,26 @@ defmodule BulmaWidgetsTest.Widgets do
     IO.puts(elem |> Floki.parse_fragment!() |> Floki.raw_html(pretty: true))
   end
 
+  @first_item "#wiper_options > ul:nth-child(2) > li:nth-child(1)"
+  @second_item "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
 
   test "basic menu selection", %{conn: conn} do
     # {:ok, view, html} = live(conn, "/examples/selection_menu")
     {:ok, view, html} = live(conn, "/widgets.html")
 
-    first_item = "#wiper_options > ul:nth-child(1) > li:nth-child(2)"
-    second_item = "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
 
     res =
       view
-        |> element(second_item <> " > a:nth-child(1)")
+        |> element(@second_item <> " > a:nth-child(1)")
         |> render_click()
 
     # IO.puts("\n\nRESULT: ")
     # IO.puts(res)
 
     refute has_element?(view, "#wiper_options > ul:nth-child(2) > li:nth-child(1) > a[class*=is-active]")
-    assert has_element?(view, second_item <> " > a[class*=is-active]")
+    assert has_element?(view, @second_item <> " > a[class*=is-active]")
 
-    view |> prettyElement("element 2", second_item <> " > a[class*=is-active]")
+    view |> prettyElement("element 2", @second_item <> " > a[class*=is-active]")
 
   end
 
@@ -47,12 +47,9 @@ defmodule BulmaWidgetsTest.Widgets do
     # {:ok, view, html} = live(conn, "/examples/selection_menu")
     {:ok, view, html} = live(conn, "/widgets.html")
 
-    first_item = "#wiper_options > ul:nth-child(1) > li:nth-child(2)"
-    second_item = "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
-
     # view |> prettyElement("element 2", "#wiper_options " )
     refute has_element?(view, "#wiper_options > ul:nth-child(2) > li:nth-child(1) > a[class*=is-active]")
-    assert has_element?(view, second_item <> " > a[class*=is-active]")
+    assert has_element?(view, @second_item <> " > a[class*=is-active]")
 
   end
 
@@ -65,12 +62,9 @@ defmodule BulmaWidgetsTest.Widgets do
     # {:ok, view, html} = live(conn, "/examples/selection_menu")
     {:ok, view, html} = live(conn, "/widgets.html")
 
-    first_item = "#wiper_options > ul:nth-child(1) > li:nth-child(2)"
-    second_item = "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
-
-    # view |> prettyElement("element 2", "#wiper_options " )
+    view |> prettyElement("wiper_options", "#wiper_options " )
     refute has_element?(view, "#wiper_options > ul:nth-child(1) > li:nth-child(1) > a[class*=is-active]")
-    assert has_element?(view, first_item <> " > a[class*=is-active]")
+    assert has_element?(view, @first_item <> " > a[class*=is-active]")
 
   end
 

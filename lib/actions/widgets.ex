@@ -28,7 +28,9 @@ defmodule BulmaWidgets.Actions.Widgets do
   end
 
   @doc """
-  Send actions data using braodcast and cached.
+  Send data from an events's data using broadcast and cached.
+
+  This first sets up fields from the given event data.
 
   ## Examples
 
@@ -47,16 +49,16 @@ defmodule BulmaWidgets.Actions.Widgets do
 
     cmd =
       if opts |> Keyword.get(:command, false) do
-        Logger.info("send_action_data: command: #{inspect(opts |> Keyword.get(:command, false))} ")
+        Logger.debug("send_action_data: command: #{inspect(opts |> Keyword.get(:command, false))} ")
         opts |> Keyword.fetch!(:command)
       else
         name = opts |> Keyword.fetch!(:into)
-        Logger.info("send_action_data: into: #{inspect name} ")
+        Logger.debug("send_action_data: into: #{inspect name} ")
 
         fn evt ->
           {k, v} = evt.data
-          Logger.info("send_action_data: run: name: #{inspect(name)} data:#{inspect({k,v})}")
-          %{evt | data: {k, %{name => {k,v}}}}
+          Logger.debug("send_action_data: run: name: #{inspect(name)} data:#{inspect({k,v})}")
+          %{evt | data: %{name => {k,v}}}
         end
       end
 

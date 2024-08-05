@@ -20,6 +20,10 @@ defmodule BulmaWidgets.Action.BroadcastState do
     data = opts |> Keyword.get(:values, values)
     Logger.warning("menu-select-action:BroadcastState: #{inspect(values, pretty: true)}")
 
+    if not is_map(data) do
+      raise "BroadcastState action expect a map of fields => values to be set! Got: #{inspect(data)}"
+    end
+
     Phoenix.PubSub.broadcast(
       pubsub,
       @broadcast_topic,

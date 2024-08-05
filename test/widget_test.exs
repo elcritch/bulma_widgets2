@@ -38,7 +38,7 @@ defmodule BulmaWidgetsTest.Widgets do
 
   end
 
-  test "set item 1", %{conn: conn} do
+  test "manually set cache item", %{conn: conn} do
     # set cache value
     BulmaWidgets.Cache.clear!()
     key = "test-value-set"

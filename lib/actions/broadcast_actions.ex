@@ -1,21 +1,3 @@
-defmodule BulmaWidgets.Action.BroadcastEvent do
-  require Logger
-  alias BulmaWidgets.Event
-
-  @moduledoc """
-  Broadcasts an :info event to all listeners
-  """
-  def call(%Event{socket: socket} = evt, opts \\ []) do
-    topic = opts |> Keyword.fetch!(:topic)
-    with_id = opts |> Keyword.get(:id, false)
-    topic = "#{topic}#{(with_id && socket.assigns.id) || ""}"
-    pubsub = opts |> Keyword.fetch!(:pubsub)
-    Phoenix.PubSub.broadcast(pubsub, topic, {topic, %{evt | socket: nil}})
-
-    %{evt | socket: socket}
-  end
-end
-
 defmodule BulmaWidgets.Action.BroadcastState do
   import Phoenix.LiveView
   require Logger

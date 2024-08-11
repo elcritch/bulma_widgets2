@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="has-navbar-fixed-top theme-dark">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,15 +17,5 @@
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <body>
-    <BulmaWidgets.MainComponents.topbard page_title={@page_title} menu_items={@menu_items}>
-      <:logo>
-        Bulma Widgets
-      </:logo>
-    </BulmaWidgets.MainComponents.topbard>
-
-    <section class="hero is-dark is-fullheight-with-navbar">
-        <%= @inner_content %>
-    </section>
-  </body>
+  <%= @inner_content %>
 </html>

@@ -130,7 +130,7 @@ defmodule BulmaWidgets.Main do
       |> assign(:theme_class, assigns.theme && "theme-#{assigns.theme}" || "")
 
     ~H"""
-      <body class={[@navbar_class, @theme_class]} data-theme={@theme}>
+      <body class={[@navbar_class, @theme_class]}>
         <%= render_slot(@menu, %{fixed: @navbar_fixed}) %>
         <%= render_slot(@body) %>
       </body>

@@ -31,6 +31,8 @@
           Bulma Widgets
         </:logo>
         <:navbar_end :let={menu_items}>
+          <BulmaWidgets.Main.toggle_theme dark_text="Light Theme" light_text="Dark Theme" />
+
           <BulmaWidgets.Main.navbar_dropdown is-right title="Menu" items={menu_items}>
             <:menu classes={~w"is-size-5"} />
           </BulmaWidgets.Main.navbar_dropdown>

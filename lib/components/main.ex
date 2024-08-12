@@ -26,6 +26,27 @@ defmodule BulmaWidgets.Main do
     """
   end
 
+  attr(:dark_text, :string, default: "Switch Dark")
+  attr(:light_text, :string, default: "Switch Light")
+  def toggle_theme(assigns) do
+    ~H"""
+    <a class={["navbar-item", "is-unselectable" ]}>
+      <span id="dark-toggle" class="tag is-hidden"
+          phx-click={ JS.toggle_class("theme-dark", to: ["html", "body"]) |>
+           JS.toggle_class("is-hidden", to: ["#dark-toggle", "#light-toggle"]) }
+      >
+        <%= @light_text %>
+      </span>
+      <span id="light-toggle" class="tag"
+          phx-click={ JS.toggle_class("theme-dark", to: ["html", "body"]) |>
+           JS.toggle_class("is-hidden", to: ["#dark-toggle", "#light-toggle"]) }
+      >
+        <%= @dark_text %>
+      </span>
+    </a>
+    """
+  end
+
   def item_span(assigns) do
     ~H"""
       <span class="icon" :if={:item in @item}>

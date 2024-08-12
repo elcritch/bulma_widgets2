@@ -17,5 +17,29 @@
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <%= @inner_content %>
+  <BulmaWidgets.Main.body
+          navbar_fixed="top"
+          theme={assigns[:bulma_theme]} >
+    <:menu :let={opts}>
+      <BulmaWidgets.Main.navbar
+        page_title={@page_title}
+        menu_items={@menu_items}
+        burger={true}
+        {opts}
+      >
+        <:logo classes={~w"is-size-4 has-text-black"}>
+          Bulma Widgets
+        </:logo>
+        <:navbar_end :let={menu_items}>
+          <BulmaWidgets.Main.navbar_dropdown is-right title="Menu" items={menu_items}>
+            <:menu classes={~w"is-size-5"} />
+          </BulmaWidgets.Main.navbar_dropdown>
+        </:navbar_end>
+      </BulmaWidgets.Main.navbar>
+    </:menu>
+    <:body>
+      <%= @inner_content %>
+    </:body>
+  </BulmaWidgets.Main.body>
+
 </html>

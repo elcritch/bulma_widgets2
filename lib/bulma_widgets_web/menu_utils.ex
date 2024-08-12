@@ -3,8 +3,8 @@ defmodule BulmaWidgetsWeb.MenuUtils do
 
   def menu_items() do
     [
-      {"Main", %{href: ~p"/", icon: ["fas", "fa-gauge"]}},
-      {"Widgets", %{href: ~p"/widgets.html", icon: ["fas", "fa-gear"]}}
+      %{name: "Main", href: ~p"/", icon: ["fas", "fa-gauge"]},
+      %{name: "Widgets", href: ~p"/widgets.html", icon: ["fas", "fa-gear"]}
     ]
   end
 end

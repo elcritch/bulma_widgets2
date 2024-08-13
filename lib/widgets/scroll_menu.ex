@@ -78,7 +78,7 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
               }
               phx-value-id={@id}
               phx-value-key={key}
-              phx-value-value={value}
+              phx-value-value-hash={value |> :erlang.phash2()}
               phx-target={@rest.myself}
             >
               <%= key %>
@@ -91,19 +91,21 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
     """
   end
 
-  def handle_event(
-        "menu-select-action",
-        %{"id" => menu_name, "key" => key, "value" => _value},
-        socket
-      ) do
-    value = socket.assigns.values |> Map.new() |> Map.get(key)
+  def handle_event( "menu-select-action", data, socket) do
+    %{"id" => menu_name, "value-hash" => hash} = data
 
-    socket =
-      socket
-      |> Actions.handle_event(menu_name, {key, value}, @standard_actions)
+    # lookup menu item based on selected value hash
+    {hash_key, ""} = hash |> Integer.parse()
+    {key, value} =
+      socket.assigns.values
+      |> Map.new(fn {k,v} -> {v |> :erlang.phash2(), {k,v}} end)
+      |> Map.get(hash_key)
 
+    Logger.debug("menu-select-action: #{inspect({key, value}, pretty: true)}")
     # Logger.debug("scroll_menu:socket: #{inspect(socket, pretty: true)}")
-    {:noreply, socket}
+    {:noreply,
+     socket
+     |> Actions.handle_event(menu_name, {key, value}, @standard_actions)}
   end
 
   def key({k, _v}), do: k

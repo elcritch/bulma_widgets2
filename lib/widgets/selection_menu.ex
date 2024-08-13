@@ -84,7 +84,7 @@ defmodule BulmaWidgets.Widgets.SelectionMenu do
       |> Map.new(fn {k,v} -> {v |> :erlang.phash2(), {k,v}} end)
       |> Map.get(hash_key)
 
-    Logger.warning("menu-select-action: #{inspect({key, value}, pretty: true)}")
+    # Logger.warning("menu-select-action: #{inspect({key, value}, pretty: true)}")
     {:noreply,
      socket
      |> Actions.handle_event(menu_name, {key, value}, @standard_actions)}

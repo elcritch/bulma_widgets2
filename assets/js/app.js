@@ -53,6 +53,10 @@ window.addEventListener(
   "phx:page-loading-stop",
   (_info) => setTheme(getTheme())
 );
+window.addEventListener(
+  "DOMContentLoaded",
+  (_info) => setTheme(getTheme())
+);
 
 
 // connect if there are any LiveViews on the page

@@ -88,6 +88,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         module={ScrollMenu}
         id="value_set"
         values={[{"A", 1}, {"B", 2}]}
+        data={@shared[:value_set]}
         extra_actions={[
           # broadcast value
           Widgets.send_action_data("test-value-set", into: :value_set),
@@ -132,6 +133,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       </.live_component>
 
       <br>
+      <.title size={4}>Non-shared local only Dropdown</.title>
       <.tagged is-link label="Wiper Selection:" value={prettify @wiper_selection}/>
 
       <.live_component
@@ -160,6 +162,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
       <br />
 
+      <.title size={4}>Shared and Cached Dropdown</.title>
       <.tagged is-link label="Wiper Options:" value={Event.key(@shared[:wiper_options]) }/>
 
       <.live_component

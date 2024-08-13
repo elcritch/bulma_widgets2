@@ -52,7 +52,7 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
 
     ~H"""
     <div id={@id} class={["dropdown", BulmaWidgets.classes(@rest, BulmaWidgets.attrs_atoms())]}
-        phx-click={JS.add_class("is-active", to: "##{@id}")}
+        phx-click={JS.toggle_class("is-active", to: "##{@id}")}
         phx-click-away={JS.remove_class("is-active", to: "##{@id}")}
     >
       <div class="dropdown-trigger ">

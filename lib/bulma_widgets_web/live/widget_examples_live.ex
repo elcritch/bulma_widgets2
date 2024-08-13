@@ -218,14 +218,14 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
   def tab_one(assigns) do
     ~H"""
       <.box>
-        <p>Tab view 1</p>
+        <p>First view</p>
       </.box>
     """
   end
   def tab_two(assigns) do
     ~H"""
       <.box>
-        <p>Tab view 1</p>
+        <p>Second view</p>
       </.box>
     """
   end

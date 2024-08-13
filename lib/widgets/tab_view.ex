@@ -13,10 +13,10 @@ defmodule BulmaWidgets.Widgets.TabView do
         module={TabView}
         id="example_tabs"
       >
-        <:tab name="Tab 1">
+        <:tab name="Tab 1" key="tab1">
           <.tab_one />
         </:tab>
-        <:tab name="Tab 2">
+        <:tab name="Tab 2" key="tab2">
           <.tab_two />
         </:tab>
       </.live_component>
@@ -55,11 +55,12 @@ defmodule BulmaWidgets.Widgets.TabView do
       <div class={["tabs", BulmaWidgets.classes(@rest)]}>
         <ul>
           <%= for tab <- @tab do %>
-            <li id={"#{@id}-#{tab.key}"}} class={[tab.key == key(@data) && "is-active" || ""]} >
+            <li id={"#{@id}-#{tab.key}"}
+                class={tab.key == value(@data) && "is-active" || ""}
+            >
               <a
                 phx-click={
                   JS.push("menu-select-action", target: @rest.myself)
-                  |> JS.remove_class("is-active", to: "##{@id}-#{tab.key}")
                 }
                 phx-value-id={@id}
                 phx-value-value-hash={tab.key |> :erlang.phash2()}
@@ -72,7 +73,7 @@ defmodule BulmaWidgets.Widgets.TabView do
         </ul>
       </div>
       <%= for tab <- @tab do %>
-        <%= if tab.key == key(@data) do %>
+        <%= if tab.key == value(@data) do %>
           <%= render_slot(tab) %>
         <% end %>
       <% end %>

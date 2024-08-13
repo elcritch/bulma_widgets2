@@ -15,8 +15,8 @@ defmodule BulmaWidgetsTest.Widgets do
     IO.puts(elem |> Floki.parse_fragment!() |> Floki.raw_html(pretty: true))
   end
 
-  @first_item "#wiper_options > ul:nth-child(2) > li:nth-child(1)"
-  @second_item "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
+  @wo_first_item "#wiper_options > ul:nth-child(2) > li:nth-child(1)"
+  @wo_second_item "#wiper_options > ul:nth-child(2) > li:nth-child(2)"
 
   test "basic menu selection", %{conn: conn} do
     # {:ok, view, html} = live(conn, "/examples/selection_menu")
@@ -25,16 +25,16 @@ defmodule BulmaWidgetsTest.Widgets do
 
     res =
       view
-        |> element(@second_item <> " > a:nth-child(1)")
+        |> element(@wo_second_item <> " > a:nth-child(1)")
         |> render_click()
 
     # IO.puts("\n\nRESULT: ")
     # IO.puts(res)
 
     refute has_element?(view, "#wiper_options > ul:nth-child(2) > li:nth-child(1) > a[class*=is-active]")
-    assert has_element?(view, @second_item <> " > a[class*=is-active]")
+    assert has_element?(view, @wo_second_item <> " > a[class*=is-active]")
 
-    # view |> prettyElement("element 2", @second_item <> " > a[class*=is-active]")
+    # view |> prettyElement("element 2", @wo_second_item <> " > a[class*=is-active]")
 
   end
 
@@ -47,24 +47,24 @@ defmodule BulmaWidgetsTest.Widgets do
     {:ok, view2, html2} = live(conn, "/widgets.html")
 
     # view |> prettyElement("wiper_options", "#wiper_options " )
-    refute has_element?(view, @first_item <> " > a[class*=is-active]")
-    refute has_element?(view, @second_item <> " > a[class*=is-active]")
-    refute has_element?(view2, @first_item <> " > a[class*=is-active]")
-    refute has_element?(view2, @second_item <> " > a[class*=is-active]")
+    refute has_element?(view, @wo_first_item <> " > a[class*=is-active]")
+    refute has_element?(view, @wo_second_item <> " > a[class*=is-active]")
+    refute has_element?(view2, @wo_first_item <> " > a[class*=is-active]")
+    refute has_element?(view2, @wo_second_item <> " > a[class*=is-active]")
 
     # select menu on first view, should broadcast update to second view
     res =
       view
-        |> element(@first_item <> " > a:nth-child(1)")
+        |> element(@wo_first_item <> " > a:nth-child(1)")
         |> render_click()
 
-    view |> prettyElement("wiper_options", "#wiper_options " )
-    assert has_element?(view, @first_item <> " > a[class*=is-active]")
-    refute has_element?(view, @second_item <> " > a[class*=is-active]")
+    # view |> prettyElement("wiper_options", "#wiper_options " )
+    assert has_element?(view, @wo_first_item <> " > a[class*=is-active]")
+    refute has_element?(view, @wo_second_item <> " > a[class*=is-active]")
 
-    view2 |> prettyElement("wiper_options", "#wiper_options " )
-    assert has_element?(view2, @first_item <> " > a[class*=is-active]")
-    refute has_element?(view2, @second_item <> " > a[class*=is-active]")
+    # view2 |> prettyElement("wiper_options", "#wiper_options " )
+    assert has_element?(view2, @wo_first_item <> " > a[class*=is-active]")
+    refute has_element?(view2, @wo_second_item <> " > a[class*=is-active]")
 
   end
 
@@ -79,7 +79,7 @@ defmodule BulmaWidgetsTest.Widgets do
 
     # view |> prettyElement("element 2", "#wiper_options " )
     refute has_element?(view, "#wiper_options > ul:nth-child(2) > li:nth-child(1) > a[class*=is-active]")
-    assert has_element?(view, @second_item <> " > a[class*=is-active]")
+    assert has_element?(view, @wo_second_item <> " > a[class*=is-active]")
 
   end
 
@@ -90,45 +90,64 @@ defmodule BulmaWidgetsTest.Widgets do
     {:ok, view, html} = live(conn, "/widgets.html")
 
     # view |> prettyElement("wiper_options", "#wiper_options " )
-    refute has_element?(view, @first_item <> " > a[class*=is-active]")
-    refute has_element?(view, @second_item <> " > a[class*=is-active]")
+    refute has_element?(view, @wo_first_item <> " > a[class*=is-active]")
+    refute has_element?(view, @wo_second_item <> " > a[class*=is-active]")
 
     # select menu, should update cache
     res =
       view
-        |> element(@first_item <> " > a:nth-child(1)")
+        |> element(@wo_first_item <> " > a:nth-child(1)")
         |> render_click()
 
     # view |> prettyElement("wiper_options", "#wiper_options " )
-    assert has_element?(view, @first_item <> " > a[class*=is-active]")
-    refute has_element?(view, @second_item <> " > a[class*=is-active]")
+    assert has_element?(view, @wo_first_item <> " > a[class*=is-active]")
+    refute has_element?(view, @wo_second_item <> " > a[class*=is-active]")
 
     # Load another view and verify it's updated
     {:ok, view2, html2} = live(conn, "/widgets.html")
 
-    view2 |> prettyElement("wiper_options", "#wiper_options " )
-    assert has_element?(view2, @first_item <> " > a[class*=is-active]")
-    refute has_element?(view2, @second_item <> " > a[class*=is-active]")
+    # view2 |> prettyElement("wiper_options", "#wiper_options " )
+    assert has_element?(view2, @wo_first_item <> " > a[class*=is-active]")
+    refute has_element?(view2, @wo_second_item <> " > a[class*=is-active]")
 
   end
+
+  @ws_label "#wiper_speed > div.dropdown-trigger > button > span:nth-child(1)"
+  @ws_items "#wiper_speed > div.dropdown-menu > div "
+  @ws_first_item "#wiper_speed > div.dropdown-menu > div > a:nth-child(1)"
+  @ws_second_item "#wiper_speed > div.dropdown-menu > div > a:nth-child(2)"
+
 
   test "basic scroll_menu selection", %{conn: conn} do
     # {:ok, view, html} = live(conn, "/examples/selection_menu")
     {:ok, view, html} = live(conn, "/widgets.html")
 
+    res = nil
 
-    res =
-      view
-        |> element(@second_item <> " > a:nth-child(1)")
-        |> render_click()
+    assert element(view, @ws_label) |> render() =~ "Test:"
+    refute element(view, @ws_first_item) |> render() =~ "class=\"is-active\""
+    refute element(view, @ws_second_item) |> render() =~ "class=\"is-active\""
+
+    refute has_element?(view, "#wiper_speed a[class*=is-active]")
 
     # IO.puts("\n\nRESULT: ")
     # IO.puts(res)
 
-    refute has_element?(view, "#wiper_options > ul:nth-child(2) > li:nth-child(1) > a[class*=is-active]")
-    assert has_element?(view, @second_item <> " > a[class*=is-active]")
+    res =
+      view
+        |> element(@ws_first_item)
+        |> render_click()
 
-    # view |> prettyElement("element 2", @second_item <> " > a[class*=is-active]")
+    assert has_element?(view, "#{@ws_items} .is-active:nth-child(1) ")
+    refute has_element?(view, "#{@ws_items} .is-active:nth-child(2) ")
+
+    res =
+      view
+        |> element(@ws_second_item)
+        |> render_click()
+
+    refute has_element?(view, "#{@ws_items} .is-active:nth-child(1) ")
+    assert has_element?(view, "#{@ws_items} .is-active:nth-child(2) ")
 
   end
 

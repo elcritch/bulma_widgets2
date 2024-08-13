@@ -30,18 +30,28 @@ defmodule BulmaWidgets.Main do
   attr(:light_text, :string, default: "Switch Light")
   def toggle_theme(assigns) do
     ~H"""
+    <style>
+      html.theme-light .bulma-widgets-theme-dark {
+        display: none;
+      }
+      html.theme-dark .bulma-widgets-theme-light {
+        display: none;
+      }
+    </style>
     <a class={["navbar-item", "is-unselectable" ]}>
-      <span id="dark-toggle" class="tag is-hidden"
-          phx-click={ JS.toggle_class("theme-dark", to: ["html", "body"]) |>
-           JS.toggle_class("is-hidden", to: ["#dark-toggle", "#light-toggle"]) }
-      >
-        <%= @light_text %>
-      </span>
-      <span id="light-toggle" class="tag"
-          phx-click={ JS.toggle_class("theme-dark", to: ["html", "body"]) |>
-           JS.toggle_class("is-hidden", to: ["#dark-toggle", "#light-toggle"]) }
+      <span class="tag bulma-widgets-theme-dark"
+          phx-click={
+            JS.dispatch("bulma-widgets:set-theme", detail: %{theme: "light"}, to: ["html"])
+          }
       >
         <%= @dark_text %>
+      </span>
+      <span class="tag bulma-widgets-theme-light"
+          phx-click={
+            JS.dispatch("bulma-widgets:set-theme", detail: %{theme: "dark"}, to: ["html"])
+          }
+      >
+        <%= @light_text %>
       </span>
     </a>
     """

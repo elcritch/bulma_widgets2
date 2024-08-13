@@ -11,9 +11,15 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
   def mount(_params, _session, socket) do
     # Logger.debug("tab_check_sensor:comp:mount: #{inspect(socket, pretty: true)}")
+    # Logger.debug("WidgetExamplesLive:mount:params: #{inspect(get_connect_params(socket), pretty: true)}")
+    params = get_connect_params(socket)
+    theme = params["bulma_theme"] || "light"
+    Logger.warning("widget:setting bulma theme: #{inspect theme}")
+
     {:ok,
      socket
      |> assign(:shared, %{})
+    #  |> assign(:bulma_theme , theme)
      |> assign(:page_title, "Widget Examples")
      |> assign(:menu_items, BulmaWidgetsWeb.MenuUtils.menu_items())
      |> assign(:wiper_mode, nil)

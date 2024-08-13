@@ -5,6 +5,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
   alias BulmaWidgets.Widgets.ScrollMenu
   alias BulmaWidgets.Widgets.SelectionMenu
   alias BulmaWidgets.Widgets.ActionButton
+  alias BulmaWidgets.Widgets.TabView
   alias BulmaWidgets.Action.UpdateHooks
 
   require Logger
@@ -184,14 +185,28 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
       <br />
 
-      event_action_listeners:
-      <pre>
-      <%= inspect(assigns[:__event_action_listeners__], pretty: true) %>
-      </pre>
+      <.title size={4}>Example Tabs</.title>
+      <br />
+
+      <.live_component
+        module={TabView}
+        id="example_tabs"
+        data={"tab1"}
+      >
+        <:tab name="Tab 1" key="tab1">
+          <.tab_one />
+        </:tab>
+        <:tab name="Tab 2" key="tab2">
+          <.tab_two />
+        </:tab>
+      </.live_component>
+
+      <br/><br/><br/>
     </.container>
     """
   end
 
+  @spec handle_event(<<_::32>>, any(), any()) :: {:noreply, any()}
   def handle_event("test", _params, socket) do
     Logger.info("test!")
 
@@ -199,4 +214,20 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
      socket
      |> put_flash!(:info, "It worked!")}
   end
+
+  def tab_one(assigns) do
+    ~H"""
+      <.box>
+        <p>Tab view 1</p>
+      </.box>
+    """
+  end
+  def tab_two(assigns) do
+    ~H"""
+      <.box>
+        <p>Tab view 1</p>
+      </.box>
+    """
+  end
+
 end

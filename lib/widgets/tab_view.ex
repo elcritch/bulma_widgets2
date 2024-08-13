@@ -51,7 +51,7 @@ defmodule BulmaWidgets.Widgets.TabView do
     # Logger.info("tab_view:render: tab: #{inspect(tab, pretty: true)}")
 
     ~H"""
-    <div>
+    <div id={@id}>
       <div class={["tabs", BulmaWidgets.classes(@rest)]}>
         <ul>
           <%= for tab <- @tab do %>
@@ -73,9 +73,9 @@ defmodule BulmaWidgets.Widgets.TabView do
         </ul>
       </div>
       <%= for tab <- @tab do %>
-        <%= if tab.key == value(@data) do %>
+        <div class={tab.key == value(@data) && "" || "is-hidden" } >
           <%= render_slot(tab) %>
-        <% end %>
+        </div>
       <% end %>
     </div>
     """

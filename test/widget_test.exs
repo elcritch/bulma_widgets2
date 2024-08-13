@@ -117,7 +117,6 @@ defmodule BulmaWidgetsTest.Widgets do
   @ws_first_item "#wiper_speed > div.dropdown-menu > div > a:nth-child(1)"
   @ws_second_item "#wiper_speed > div.dropdown-menu > div > a:nth-child(2)"
 
-
   test "basic scroll_menu selection", %{conn: conn} do
     # {:ok, view, html} = live(conn, "/examples/selection_menu")
     {:ok, view, html} = live(conn, "/widgets.html")
@@ -125,6 +124,41 @@ defmodule BulmaWidgetsTest.Widgets do
     res = nil
 
     assert element(view, @ws_label) |> render() =~ "Test:"
+    refute element(view, @ws_first_item) |> render() =~ "class=\"is-active\""
+    refute element(view, @ws_second_item) |> render() =~ "class=\"is-active\""
+
+    refute has_element?(view, "#wiper_speed a[class*=is-active]")
+
+    # IO.puts("\n\nRESULT: ")
+    # IO.puts(res)
+
+    res =
+      view
+        |> element(@ws_first_item)
+        |> render_click()
+
+    assert has_element?(view, "#{@ws_items} .is-active:nth-child(1) ")
+    refute has_element?(view, "#{@ws_items} .is-active:nth-child(2) ")
+
+    res =
+      view
+        |> element(@ws_second_item)
+        |> render_click()
+
+    refute has_element?(view, "#{@ws_items} .is-active:nth-child(1) ")
+    assert has_element?(view, "#{@ws_items} .is-active:nth-child(2) ")
+
+  end
+
+  @tab_label "#wiper_speed > div.dropdown-trigger > button > span:nth-child(1)"
+  @tab_items "#example_tabs-tab1 > a:nth-child(1)"
+
+  test "basic tab selection", %{conn: conn} do
+    # {:ok, view, html} = live(conn, "/examples/selection_menu")
+    {:ok, view, html} = live(conn, "/widgets.html")
+
+    res = nil
+
     refute element(view, @ws_first_item) |> render() =~ "class=\"is-active\""
     refute element(view, @ws_second_item) |> render() =~ "class=\"is-active\""
 

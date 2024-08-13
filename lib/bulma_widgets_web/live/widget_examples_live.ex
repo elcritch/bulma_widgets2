@@ -50,7 +50,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
       <.live_component
         module={ScrollMenu}
-        id={:wiper_mode}
+        id="wiper_mode_test"
         is-fullwidth
         is-info
         values={[{"Regular", 1}, {"Inverted", -1}]}

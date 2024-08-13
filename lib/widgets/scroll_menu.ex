@@ -67,7 +67,7 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
           </span>
         </button>
       </div>
-      <div class="dropdown-menu" id="dropdown-menu" role="menu">
+      <div class="dropdown-menu" role="menu">
         <div class="dropdown-content">
           <%= for {key, value} <- @values do %>
             <a href="#"

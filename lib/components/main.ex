@@ -26,8 +26,8 @@ defmodule BulmaWidgets.Main do
     """
   end
 
-  attr(:dark_text, :string, default: "Switch Dark")
-  attr(:light_text, :string, default: "Switch Light")
+  attr(:dark_text, :string, default: "Switch Light")
+  attr(:light_text, :string, default: "Switch Dark")
   def toggle_theme(assigns) do
     ~H"""
     <style>

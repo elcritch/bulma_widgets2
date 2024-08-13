@@ -43,7 +43,6 @@ function setTheme(theme) {
   console.log("setting theme: ", theme)
   localStorage.setItem("bulma-widgets:theme", theme)
   document.querySelector('html').className = "theme-" + theme 
-  document.querySelector('body').className = "theme-" + theme 
 }
 window.addEventListener(
   "bulma-widgets:set-theme",

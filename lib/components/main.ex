@@ -59,7 +59,7 @@ defmodule BulmaWidgets.Main do
 
   def item_span(assigns) do
     ~H"""
-      <span class="icon" :if={:item in @item}>
+      <span class="icon" :if={@item[:icon] != nil}>
         <i class={@item[:icon]} />
       </span>
       <span>

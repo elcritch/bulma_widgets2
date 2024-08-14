@@ -223,7 +223,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         </:tab>
       </.live_component>
 
-      <.modal id="my-modal" modal-fx-newsPaper={true} is-active={true} position="bottom">
+      <.modal id="my-modal" modal-fx-fadeInScale is-active={true} position="bottom">
           <:background />
           <:content>
             <.message is-link>

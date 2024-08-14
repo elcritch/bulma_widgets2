@@ -180,6 +180,7 @@ defmodule BulmaWidgets do
   def extended_grid_spacings(), do: @extended_grid_spacings
   def modal_fxs(), do: @modal_fxs
 
+  def global_atoms(), do: @global_atoms
   def colors_atoms(), do: @colors_atoms
   def attrs_atoms(), do: @attrs_atoms ++ @sizes_atoms
   def sizes_atoms(), do: @sizes_atoms
@@ -219,7 +220,7 @@ defmodule BulmaWidgets do
   def extras(rest) do
     rest
     |> Map.drop(@global_atoms)
-    |> Map.reject(fn {_,v} -> is_map(v) end)
+    |> Map.reject(fn {_,v} -> is_map(v) && !(is_struct(v, Phoenix.LiveView.JS)) end)
     |> Phoenix.Component.assigns_to_attributes([:socket, :myself, :flash])
   end
 

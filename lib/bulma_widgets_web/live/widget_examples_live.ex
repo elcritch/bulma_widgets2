@@ -45,8 +45,14 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
     <.container>
       <.title notification={true} size={3}>Widget Examples</.title>
       <br>
-      <.button phx-click="test" is-fullwidth is-loading={false}>
-        Click me
+      <.button
+        phx-click={
+          JS.add_class("is-active", to: "#my-modal")
+          |> JS.remove_class("is-active", transition: "testing", time: 2_000, to: "#my-modal")
+        }
+        is-fullwidth is-loading={false}
+      >
+        Modal Test
       </.button>
 
 
@@ -240,12 +246,11 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       </.live_component>
 
       <.modal id="my-modal"
-              is-active={false}
               modal-fx-fadeInScale
               position="bottom">
-        <:background />
+        <%!-- <:background /> --%>
         <:content>
-          <.message is-link>
+          <.message is-warning>
             <:header>
               <p>Hello World</p>
               <button class="delete"

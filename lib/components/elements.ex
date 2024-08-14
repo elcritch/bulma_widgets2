@@ -199,6 +199,7 @@ defmodule BulmaWidgets.Elements do
   slot(:inner_block, required: true)
 
   def button(assigns) do
+    Logger.info("BUTTON: #{inspect(assigns.rest, pretty: true)}")
 
     ~H"""
     <button class={["button", classes(@rest)]} {extras(@rest)}>

@@ -113,6 +113,7 @@ defmodule BulmaWidgets.Components do
 
 
   """
+  attr(:id, :any, required: true)
   attr(:show, :boolean, default: false)
   attr(:position, :string, default: nil)
   attr(:rest, :global, include: colors() ++ attrs() ++ modal_fxs())
@@ -126,7 +127,7 @@ defmodule BulmaWidgets.Components do
     # data-cancel={JS.exec(@on_cancel, "phx-remove")}
 
     ~H"""
-    <div class={["modal", classes(@rest)]} {extras(@rest)}>
+    <div id={@id} class={["modal", classes(@rest)]} {extras(@rest)}>
       <div :for={_background <- @background} class="modal-background"></div>
       <div class="modal-content" style={modal_position(@position)}>
         <%= render_slot(@content) %>

@@ -8,6 +8,7 @@
 import Config
 
 config :bulma_widgets,
+  running: true,
   generators: [timestamp_type: :utc_datetime]
 
 config :bulma_widgets,

@@ -21,7 +21,6 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
     {:ok,
      socket
      |> assign(:shared, %{})
-    #  |> assign(:bulma_theme , theme)
      |> assign(:page_title, "Widget Examples")
      |> assign(:menu_items, BulmaWidgetsWeb.MenuUtils.menu_items())
      |> assign(:wiper_mode, nil)
@@ -44,11 +43,15 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
     ~H"""
     <.container>
       <.title notification={true} size={3}>Widget Examples</.title>
+      <br>
       <.button phx-click="test" is-fullwidth is-loading={false}>
         Click me
       </.button>
 
+
         <p> shared: <%= @shared |> inspect() %> </p>
+
+      <.switch checked={true} phx-click="test" />
 
       <.live_component
         module={ScrollMenu}
@@ -224,7 +227,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       </.live_component>
 
       <.modal id="my-modal"
-              is-active={true}
+              is-active={false}
               modal-fx-fadeInScale
               position="bottom">
         <:background />
@@ -252,8 +255,8 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
   end
 
   @spec handle_event(<<_::32>>, any(), any()) :: {:noreply, any()}
-  def handle_event("test", _params, socket) do
-    Logger.info("test!")
+  def handle_event("test", params, socket) do
+    Logger.info("test! params: #{inspect(params)}")
 
     {:noreply,
      socket

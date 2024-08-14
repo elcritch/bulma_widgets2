@@ -26,6 +26,38 @@ defmodule BulmaWidgets.Components do
   end
 
   @doc """
+  Switch controls for Bulma CSS Framework — Pure HTML & CSS/SCSS.
+
+  Thanks to [Justboil](https://justboil.github.io/bulma-switch-control/)
+
+  ## Examples
+
+      <.switch id="confirm-modal" is-rounded >
+      </.modal>
+
+  """
+  attr(:checked, :boolean, default: false)
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  slot(:label, default: false)
+
+  def switch(assigns) do
+    ~H"""
+    <div class="field">
+      <label class={["switch", classes(@rest)]}>
+        <input type="checkbox" checked={@checked}
+          {extras(@rest)}
+          />
+        <span class="check"></span>
+        <span class="control-label">
+          <%= render_slot(@label) %>
+        </span>
+      </label>
+    </div>
+    """
+  end
+
+  @doc """
   Colored message blocks, to emphasize part of your page
 
   ## Examples
@@ -48,11 +80,8 @@ defmodule BulmaWidgets.Components do
 
   def message(assigns) do
     ~H"""
-    <article
-      class={["message", classes(@rest)]}
-      {extras(@rest)}
-    >
-      <div class="message-header" :for={header <- @header}>
+    <article class={["message", classes(@rest)]} {extras(@rest)}>
+      <div :for={header <- @header} class="message-header">
         <%= render_slot(header) %>
       </div>
       <div class="message-body">
@@ -94,23 +123,17 @@ defmodule BulmaWidgets.Components do
   slot(:content, required: true)
 
   def modal(assigns) do
-
-      # phx-mounted={@show && show_modal(@id)}
-      # phx-remove={hide_modal(@id)}
-      # data-cancel={JS.exec(@on_cancel, "phx-remove")}
+    # phx-mounted={@show && show_modal(@id)}
+    # phx-remove={hide_modal(@id)}
+    # data-cancel={JS.exec(@on_cancel, "phx-remove")}
 
     ~H"""
-    <div
-      class={["modal", classes(@rest)]}
-      {extras(@rest)}
-    >
-      <div class="modal-background" :for={_background <- @background}>
-      </div>
+    <div class={["modal", classes(@rest)]} {extras(@rest)}>
+      <div :for={_background <- @background} class="modal-background"></div>
       <div class="modal-content" style={modal_position(@position)}>
         <%= render_slot(@content) %>
       </div>
-      <button class="modal-close is-large" aria-label="close">
-      </button>
+      <button class="modal-close is-large" aria-label="close"></button>
     </div>
     """
   end
@@ -119,8 +142,10 @@ defmodule BulmaWidgets.Components do
     case position do
       "bottom" ->
         "position: absolute; bottom: 0px; "
+
       "top" ->
         "position: absolute; top: 0px; "
+
       _other ->
         ""
     end

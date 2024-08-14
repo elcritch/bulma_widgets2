@@ -6,6 +6,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
   alias BulmaWidgets.Widgets.SelectionMenu
   alias BulmaWidgets.Widgets.ActionButton
   alias BulmaWidgets.Widgets.TabView
+  alias BulmaWidgets.Widgets.HorizTabView
   alias BulmaWidgets.Action.UpdateHooks
 
   require Logger
@@ -191,6 +192,21 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <.live_component
         module={TabView}
         id="example_tabs"
+        data={"tab1"}
+        is-boxed
+      >
+        <:tab name="Tab 1" key="tab1">
+          <.tab_one />
+        </:tab>
+        <:tab name="Tab 2" key="tab2">
+          <.tab_two />
+        </:tab>
+      </.live_component>
+
+      <br/>
+      <.live_component
+        module={HorizTabView}
+        id="example_horiz_tabs"
         data={"tab1"}
         is-boxed
       >

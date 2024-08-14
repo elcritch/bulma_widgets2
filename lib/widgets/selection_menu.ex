@@ -55,20 +55,22 @@ defmodule BulmaWidgets.Widgets.SelectionMenu do
       </p>
 
       <ul class="menu-list">
-        <li :for={{key, value} <- @values}>
-          <a href="#"
-            class={[value == value(@data) && "is-active" || ""]}
-            phx-click={
-              JS.push("menu-select-action", target: @rest.myself)
-              |> JS.remove_class("is-active", to: "##{@id}")
-            }
-            phx-value-id={@id}
-            phx-value-value-hash={value |> :erlang.phash2()}
-            phx-target={@rest.myself}
-          >
-            <%= key %>
-          </a>
-        </li>
+        <%= for {key, value} <- @values do %>
+          <li>
+            <a href="#"
+              class={[value == value(@data) && "is-active" || ""]}
+              phx-click={
+                JS.push("menu-select-action", target: @rest.myself)
+                |> JS.remove_class("is-active", to: "##{@id}")
+              }
+              phx-value-id={@id}
+              phx-value-value-hash={value |> :erlang.phash2()}
+              phx-target={@rest.myself}
+            >
+              <%= key %>
+            </a>
+          </li>
+        <% end %>
       </ul>
     </aside>
     """

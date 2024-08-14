@@ -1,4 +1,4 @@
-defmodule BulmaWidgets.Widgets.TabView do
+defmodule BulmaWidgets.Widgets.HorizTabView do
   use Phoenix.LiveComponent
   use BulmaWidgets, :html_helpers
   alias BulmaWidgets.Action.AssignField
@@ -52,31 +52,6 @@ defmodule BulmaWidgets.Widgets.TabView do
 
     ~H"""
     <div id={@id}>
-      <div class={["tabs", BulmaWidgets.classes(@rest)]}>
-        <ul>
-          <%= for tab <- @tab do %>
-            <li id={"#{@id}-#{tab.key}"}
-                class={tab.key == value(@data) && "is-active" || ""}
-            >
-              <a
-                phx-click={
-                  JS.push("menu-select-action", target: @rest.myself)
-                }
-                phx-value-id={@id}
-                phx-value-value-hash={tab.key |> :erlang.phash2()}
-                phx-target={@rest.myself}
-              >
-                <%= tab.name %>
-              </a>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-      <%= for tab <- @tab do %>
-        <div class={tab.key == value(@data) && "" || "is-hidden" } >
-          <%= render_slot(tab) %>
-        </div>
-      <% end %>
     </div>
     """
   end

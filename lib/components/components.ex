@@ -68,40 +68,48 @@ defmodule BulmaWidgets.Components do
   ## Examples
 
       <.modal id="confirm-modal">
-        This is a modal.
+        <:background />
+        <:content>
+          <.message>
+            <:header>
+              This is a modal message
+              <button class="delete"
+                      aria-label="delete">
+              </button>
+            </:header>
+            <:content>
+              Some helpful message.
+            </:content>
+          </.message>
+        </.content>
       </.modal>
 
-  JS commands may be passed to the `:on_cancel` to configure
-  the closing/cancel event, for example:
-
-      <.modal id="confirm" on_cancel={JS.navigate(~p"/posts")}>
-        This is another modal.
-      </.modal>
 
   """
-  attr(:id, :string, required: true)
   attr(:show, :boolean, default: false)
-  attr(:on_cancel, JS, default: %JS{})
-  attr(:classes, :list, default: [])
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
-  slot(:inner_block, required: true)
+  slot(:background, required: false)
+  slot(:content, required: true)
 
   def modal(assigns) do
+
+      # phx-mounted={@show && show_modal(@id)}
+      # phx-remove={hide_modal(@id)}
+      # data-cancel={JS.exec(@on_cancel, "phx-remove")}
+
     ~H"""
     <div
-      id={@id}
-      class={["modal", @classes, classes(@rest)]}
-      phx-mounted={@show && show_modal(@id)}
-      phx-remove={hide_modal(@id)}
-      data-cancel={JS.exec(@on_cancel, "phx-remove")}
+      class={["modal", classes(@rest)]}
       {extras(@rest)}
     >
-      <div class="modal-background"></div>
-      <div class="modal-content">
-        <%= render_slot(@inner_block) %>
+      <div class="modal-background" :for={_background <- @background}>
       </div>
-      <button class="modal-close is-large" aria-label="close"></button>
+      <div class="modal-content">
+        <%= render_slot(@content) %>
+      </div>
+      <button class="modal-close is-large" aria-label="close">
+      </button>
     </div>
     """
   end

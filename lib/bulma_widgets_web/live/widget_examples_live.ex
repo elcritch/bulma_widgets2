@@ -223,7 +223,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         </:tab>
       </.live_component>
 
-      <div class="modal is-active">
+      <%!-- <div class="modal is-active">
         <div class="modal-content" style="position: absolute; bottom: 1em; ">
           <div class="content has-text-centered" >
 
@@ -246,7 +246,31 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
           </div>
         </div>
         <button class="modal-close is-large" aria-label="close"></button>
-      </div>
+      </div> --%>
+
+      <.modal id="my-modal" is-active={true}>
+          <:background />
+          <:content>
+            <.message>
+              <:header>
+                <p>Hello World</p>
+                <button class="delete"
+                        phx-click={JS.toggle_class("is-active", to: "#my-modal")}
+                        aria-label="delete">
+                </button>
+              </:header>
+              <:body>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec
+                nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus
+                diam, et dictum <a>felis venenatis</a> efficitur. Aenean ac
+                <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et
+                sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a
+                neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.
+              </:body>
+            </.message>
+          </:content>
+      </.modal>
 
       <br/><br/><br/>
     </.container>

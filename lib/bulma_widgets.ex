@@ -18,6 +18,7 @@ defmodule BulmaWidgets do
   )
 
   @attrs ~w(
+    is-active
     is-fullwidth
     is-hoverable
     is-loading

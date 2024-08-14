@@ -88,7 +88,7 @@ defmodule BulmaWidgets.Components do
   """
   attr(:show, :boolean, default: false)
   attr(:position, :string, default: nil)
-  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  attr(:rest, :global, include: colors() ++ attrs() ++ modal_fxs())
 
   slot(:background, required: false)
   slot(:content, required: true)
@@ -101,7 +101,7 @@ defmodule BulmaWidgets.Components do
 
     ~H"""
     <div
-      class={["modal", "modal-fx-newsPaper", classes(@rest)]}
+      class={["modal", classes(@rest)]}
       {extras(@rest)}
     >
       <div class="modal-background" :for={_background <- @background}>

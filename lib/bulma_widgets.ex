@@ -137,29 +137,56 @@ defmodule BulmaWidgets do
     is-gap-8	is-column-gap-8	is-row-gap-8
   )
 
+  @modal_fxs ~w(
+    modal-fx-normal
+    modal-fx-fadeInScale
+    modal-fx-slideRight
+    modal-fx-slideLeft
+    modal-fx-slideTop
+    modal-fx-slideBottom
+    modal-fx-fall
+    modal-fx-slideFall
+    modal-fx-newsPaper
+    modal-fx-3dFlipVertical
+    modal-fx-3dFlipHorizontal
+    modal-fx-3dSign
+    modal-fx-3dSignDown
+    modal-fx-superScaled
+    modal-fx-3dSlit
+    modal-fx-3dRotateFromBottom
+    modal-fx-3dRotateFromLeft
+  )
+
   @colors @base_colors ++ @extended_colors
   @colors_atoms Enum.map(@colors, &String.to_atom/1)
   @attrs_atoms Enum.map(@attrs, &String.to_atom/1)
   @sizes_atoms Enum.map(@sizes, &String.to_atom/1)
   @spacing_atoms Enum.map(@spacing, &String.to_atom/1)
   @text_colors_atoms Enum.map(@text_colors, &String.to_atom/1)
+  @extended_grid_spacings_atoms Enum.map(@extended_grid_spacings, &String.to_atom/1)
+  @modal_fxs_atoms  Enum.map(@modal_fxs, &String.to_atom/1)
 
   @global_atoms (@colors_atoms ++ @attrs_atoms ++
                 @sizes_atoms ++ @spacing_atoms ++
-                @text_colors_atoms)
+                @text_colors_atoms ++
+                @modal_fxs_atoms ++
+                @extended_grid_spacings_atoms )
 
   def colors(), do: @colors
   def text_colors(), do: @text_colors
   def spacing(), do: @spacing
   def attrs(), do: @attrs ++ @sizes
   def sizes(), do: @sizes
+  def extended_grid_spacings(), do: @extended_grid_spacings
+  def modal_fxs(), do: @modal_fxs
 
   def colors_atoms(), do: @colors_atoms
   def attrs_atoms(), do: @attrs_atoms ++ @sizes_atoms
   def sizes_atoms(), do: @sizes_atoms
   def spacing_atoms(), do: @spacing_atoms
   def text_colors_atoms(), do: @text_colors_atoms
-  def extended_grid_spacings(), do: @extended_grid_spacings
+  def extended_grid_spacings_atoms(), do: @extended_grid_spacings_atoms
+  def modal_fxs_atoms(), do: @modal_fxs_atoms
 
   @doc """
   gets css class for common BulmaWidgets attributes -- there's gotta be better way to handle this, but eh

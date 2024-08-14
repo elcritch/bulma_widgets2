@@ -8,7 +8,6 @@ defmodule BulmaWidgets.Layouts do
 
   require Logger
 
-
   @doc """
   A simple container to center your content horizontally
 
@@ -31,15 +30,18 @@ defmodule BulmaWidgets.Layouts do
   slot(:inner_block, doc: "the optional inner block that renders the flash message")
 
   def container(assigns) do
-
     ~H"""
-    <div class={["container", classes(@rest),
-                assigns |> css_maybe(:"is-widescreen"),
-                assigns |> css_maybe(:"is-fullhd"),
-                assigns |> css_maybe(:"is-max-desktop"),
-                assigns |> css_maybe(:"is-max-widescreen"),
-                ]}
-          {extras(@rest)} >
+    <div
+      class={[
+        "container",
+        classes(@rest),
+        assigns |> css_maybe(:"is-widescreen"),
+        assigns |> css_maybe(:"is-fullhd"),
+        assigns |> css_maybe(:"is-max-desktop"),
+        assigns |> css_maybe(:"is-max-widescreen")
+      ]}
+      {extras(@rest)}
+    >
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -63,10 +65,10 @@ defmodule BulmaWidgets.Layouts do
     ~H"""
     <section class={["hero", classes(@rest)]} {extras(@rest)}>
       <div class="hero-body">
-        <p class="title" :if={@title} >
+        <p :if={@title} class="title">
           <%= render_slot(@title) %>
         </p>
-        <p class="subtitle" :if={@subtitle}>
+        <p :if={@subtitle} class="subtitle">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -104,10 +106,10 @@ defmodule BulmaWidgets.Layouts do
         <%= render_slot(@head) %>
       </div>
       <div class="hero-body">
-        <p class="title" :if={@title} >
+        <p :if={@title} class="title">
           <%= render_slot(@title) %>
         </p>
-        <p class="subtitle" :if={@subtitle}>
+        <p :if={@subtitle} class="subtitle">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -139,10 +141,10 @@ defmodule BulmaWidgets.Layouts do
   def section(assigns) do
     ~H"""
     <section class={["section", classes(@rest)]} {extras(@rest)}>
-      <h1 class="title" :if={@title} >
+      <h1 :if={@title} class="title">
         <%= render_slot(@title) %>
       </h1>
-      <h2 class="subtitle" :if={@subtitle}>
+      <h2 :if={@subtitle} class="subtitle">
         <%= render_slot(@subtitle) %>
       </h2>
     </section>
@@ -180,11 +182,11 @@ defmodule BulmaWidgets.Layouts do
   def level(assigns) do
     ~H"""
     <nav class={["level", classes(@rest)]} {extras(@rest)}>
-      <div class="level-left" >
+      <div class="level-left">
         <%= render_slot(@left) %>
       </div>
       <%= render_slot(@center) %>
-      <div class="level-right" >
+      <div class="level-right">
         <%= render_slot(@right) %>
       </div>
     </nav>
@@ -199,7 +201,7 @@ defmodule BulmaWidgets.Layouts do
 
   def level_item(assigns) do
     ~H"""
-    <div class="level-item" >
+    <div class="level-item">
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -227,23 +229,30 @@ defmodule BulmaWidgets.Layouts do
       </.media>
   """
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
   slot(:left, doc: "media figure") do
     attr(:classes, :list, doc: "extra css classes")
   end
-  slot(:content, doc: "media content")
-  slot(:right, doc: "media right")
+
+  slot(:content, doc: "media content") do
+    attr(:classes, :list, doc: "extra css classes")
+  end
+
+  slot(:right, doc: "media right") do
+    attr(:classes, :list, doc: "extra css classes")
+  end
 
   def media(assigns) do
     ~H"""
     <article class={["media", classes(@rest)]} {extras(@rest)}>
-      <figure class={["media-left", left[:classes] || [] ]} :for={left <- @left}>
+      <figure :for={left <- @left} class={["media-left", left[:classes] || []]}>
         <%= render_slot(left) %>
       </figure>
-      <div class="media-content">
-        <%= render_slot(@content) %>
+      <div :for={content <- @content} class={["media-content", content[:classes] || []]}>
+        <%= render_slot(content) %>
       </div>
-      <div class="media-right">
-        <%= render_slot(@right) %>
+      <div :for={right <- @right} class={["media-right", right[:classes] || []]}>
+        <%= render_slot(right) %>
       </div>
     </article>
     """
@@ -256,7 +265,7 @@ defmodule BulmaWidgets.Layouts do
 
   def footer(assigns) do
     ~H"""
-    <footer class="footer" >
+    <footer class="footer">
       <%= render_slot(@inner_block) %>
     </footer>
     """
@@ -267,16 +276,35 @@ defmodule BulmaWidgets.Layouts do
   """
   attr(:columns, :integer, required: true)
   slot(:cell, required: false, doc: "grid cell items")
-  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  attr(:rest, :global, include: BulmaWidgets.extended_grid_spacings() ++ BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def fixed_grid(assigns) do
+
     ~H"""
-    <div class={["fixed-grid", "has-#{@columns}-cols"]} >
-      <div class="grid">
-        <div class={["cell", classes(t)]} :for={t <- @cell} >
+    <div class={["fixed-grid", "has-#{@columns}-cols"]}>
+      <div class={["grid", BulmaWidgets.classes(@rest, BulmaWidgets.extended_grid_spacings() ++ BulmaWidgets.colors() ++ BulmaWidgets.attrs())]}>
+        <div :for={t <- @cell} class={["cell", classes(t)]}>
           <%= render_slot(t) %>
         </div>
       </div>
+    </div>
+    """
+  end
+
+  @doc """
+  Fixed Grid
+  """
+  slot(:cell, required: false, doc: "grid cell items")
+  attr(:rest, :global, include: BulmaWidgets.extended_grid_spacings() ++ BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  def smart_grid(assigns) do
+    ~H"""
+    <div class={["grid", classes(@rest, extended_grid_spacings() ++ colors() ++ attrs())]}>
+      <%= for t <- @cell do %>
+        <div class={["cell", classes(t)]}>
+          <%= render_slot(t) %>
+        </div>
+      <% end %>
     </div>
     """
   end

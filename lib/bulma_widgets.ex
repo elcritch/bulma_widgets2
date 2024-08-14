@@ -115,6 +115,27 @@ defmodule BulmaWidgets do
     has-background-inherit
   )
 
+  @extended_grid_spacings ~w(
+    is-col-min-1 is-col-min-2 is-col-min-3 is-col-min-4
+    is-col-min-5 is-col-min-6 is-col-min-7 is-col-min-8
+    is-col-min-9 is-col-min-10 is-col-min-11 is-col-min-12
+    is-col-min-13 is-col-min-14 is-col-min-15 is-col-min-16
+    is-col-min-17 is-col-min-18 is-col-min-19 is-col-min-20
+    is-col-min-21 is-col-min-22 is-col-min-23 is-col-min-24
+    is-col-min-25 is-col-min-26 is-col-min-27 is-col-min-28
+    is-col-min-29 is-col-min-30 is-col-min-31 is-col-min-32
+
+    is-gap-0	is-column-gap-0	is-row-gap-0
+    is-gap-1	is-column-gap-1	is-row-gap-1
+    is-gap-2	is-column-gap-2	is-row-gap-2
+    is-gap-3	is-column-gap-3	is-row-gap-3
+    is-gap-4	is-column-gap-4	is-row-gap-4
+    is-gap-5	is-column-gap-5	is-row-gap-5
+    is-gap-6	is-column-gap-6	is-row-gap-6
+    is-gap-7	is-column-gap-7	is-row-gap-7
+    is-gap-8	is-column-gap-8	is-row-gap-8
+  )
+
   @colors @base_colors ++ @extended_colors
   @colors_atoms Enum.map(@colors, &String.to_atom/1)
   @attrs_atoms Enum.map(@attrs, &String.to_atom/1)
@@ -137,6 +158,7 @@ defmodule BulmaWidgets do
   def sizes_atoms(), do: @sizes_atoms
   def spacing_atoms(), do: @spacing_atoms
   def text_colors_atoms(), do: @text_colors_atoms
+  def extended_grid_spacings(), do: @extended_grid_spacings
 
   @doc """
   gets css class for common BulmaWidgets attributes -- there's gotta be better way to handle this, but eh

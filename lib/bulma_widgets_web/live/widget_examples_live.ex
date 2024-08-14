@@ -206,7 +206,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <br/>
       <.live_component
         module={VertTabView}
-        id="example_horiz_tabs"
+        id="example_vert_tabs"
         data={"tab1"}
         is-boxed
       >

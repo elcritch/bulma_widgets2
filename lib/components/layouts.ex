@@ -279,13 +279,14 @@ defmodule BulmaWidgets.Layouts do
   attr(:rest, :global, include: BulmaWidgets.extended_grid_spacings() ++ BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   def fixed_grid(assigns) do
-
     ~H"""
     <div class={["fixed-grid", "has-#{@columns}-cols"]}>
-      <div class={["grid", BulmaWidgets.classes(@rest, BulmaWidgets.extended_grid_spacings() ++ BulmaWidgets.colors() ++ BulmaWidgets.attrs())]}>
-        <div :for={t <- @cell} class={["cell", classes(t)]}>
-          <%= render_slot(t) %>
-        </div>
+      <div class={["grid", classes(@rest, extended_grid_spacings() ++ colors() ++ attrs())]}>
+        <%= for t <- @cell do %>
+          <div class={["cell", classes(t)]}>
+            <%= render_slot(t) %>
+          </div>
+        <% end %>
       </div>
     </div>
     """

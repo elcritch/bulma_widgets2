@@ -56,9 +56,9 @@ defmodule BulmaWidgets.Widgets.VertTabView do
 
     ~H"""
     <div id={@id}>
-      <.smart_grid is-gap-0	>
-        <:cell>
-          <aside class="menu " id={@id}>
+      <.media >
+        <:left classes={~w(m-0 p-0)}>
+          <aside class="menu m-0 p-0 " id={@id}>
             <p class="menu-label" :if={@label != []}>
               <%= @label %>
             </p>
@@ -82,15 +82,15 @@ defmodule BulmaWidgets.Widgets.VertTabView do
               <% end %>
             </ul>
           </aside>
-        </:cell>
-        <:cell>
+        </:left>
+        <:content>
           <%= for tab <- @tab do %>
             <div class={tab.key == value(@data) && "" || "is-hidden" } >
               <%= render_slot(tab) %>
             </div>
           <% end %>
-        </:cell>
-      </.smart_grid>
+        </:content>
+      </.media>
     </div>
     """
   end

@@ -25,6 +25,42 @@ defmodule BulmaWidgets.Components do
     text
   end
 
+  @doc """
+  Colored message blocks, to emphasize part of your page
+
+  ## Examples
+
+      <.message id="confirm-modal" is-warning is-medium>
+        <:header>
+          This is a modal.
+        </:header>
+        <:content>
+          Some message
+        </:content>
+      </.modal>
+
+  """
+  attr(:show, :boolean, default: false)
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  slot(:header, required: false)
+  slot(:body, required: true)
+
+  def message(assigns) do
+    ~H"""
+    <article
+      class={["message", classes(@rest)]}
+      {extras(@rest)}
+    >
+      <div class="message-header" :for={header <- @header}>
+        <%= render_slot(header) %>
+      </div>
+      <div class="message-body">
+        <%= render_slot(@body) %>
+      </div>
+    </article>
+    """
+  end
 
   @doc """
   Renders a modal.
@@ -52,7 +88,6 @@ defmodule BulmaWidgets.Components do
   slot(:inner_block, required: true)
 
   def modal(assigns) do
-
     ~H"""
     <div
       id={@id}
@@ -68,7 +103,6 @@ defmodule BulmaWidgets.Components do
       </div>
       <button class="modal-close is-large" aria-label="close"></button>
     </div>
-
     """
   end
 
@@ -179,7 +213,6 @@ defmodule BulmaWidgets.Components do
     </.form>
     """
   end
-
 
   ## JS Commands
 

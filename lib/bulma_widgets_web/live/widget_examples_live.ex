@@ -209,6 +209,8 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         id="example_vert_tabs"
         data={"tab1"}
         is-boxed
+        min_menu_width={"7em"}
+        min_menu_height={"20em"}
       >
         <:tab name="Tab 1" key="tab1">
           <.tab_one />
@@ -216,7 +218,35 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         <:tab name="Tab 2" key="tab2">
           <.tab_two />
         </:tab>
+        <:tab name="Tab 3" key="tab3">
+          <.tab_three />
+        </:tab>
       </.live_component>
+
+      <div class="modal is-active">
+        <div class="modal-content" style="position: absolute; bottom: 1em; ">
+          <div class="content has-text-centered" >
+
+            <.message>
+              <:header>
+                <p>Hello World</p>
+                <button class="delete" aria-label="delete"></button>
+              </:header>
+              <:body>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec
+                nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus
+                diam, et dictum <a>felis venenatis</a> efficitur. Aenean ac
+                <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et
+                sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a
+                neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.
+              </:body>
+            </.message>
+
+          </div>
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
+      </div>
 
       <br/><br/><br/>
     </.container>
@@ -246,5 +276,17 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       </.box>
     """
   end
+  def tab_three(assigns) do
+    ~H"""
+      <.box>
+        <p>Third view</p>
+        <br>
+        <br>
+        <br>
+        <br>
+      </.box>
+    """
+  end
+
 
 end

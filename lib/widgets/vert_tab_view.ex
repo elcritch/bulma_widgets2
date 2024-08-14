@@ -37,6 +37,7 @@ defmodule BulmaWidgets.Widgets.VertTabView do
 
   attr(:id, :string, required: true)
   attr(:data, :any, default: {nil, nil})
+  attr(:min_menu_width, :string, default: nil)
   attr(:extra_actions, :list, default: [])
   attr(:standard_actions, :list, default: @standard_actions)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
@@ -58,7 +59,7 @@ defmodule BulmaWidgets.Widgets.VertTabView do
     <div id={@id}>
       <.media >
         <:left classes={~w(m-0 p-0)}>
-          <aside class="menu m-0 p-0 " id={@id}>
+          <aside class="menu m-0 p-0 " style={[min_width(assigns)]} >
             <p class="menu-label" :if={@label != []}>
               <%= @label %>
             </p>
@@ -93,6 +94,14 @@ defmodule BulmaWidgets.Widgets.VertTabView do
       </.media>
     </div>
     """
+  end
+
+  def min_width(assigns) do
+    [assigns.min_menu_width && "min-width: #{assigns.min_menu_width}" || ""]
+  end
+
+  def min_height(assigns) do
+    [assigns.min_menu_height && "min-height: #{assigns.min_menu_height}" || ""]
   end
 
   def handle_event("menu-select-action", data, socket) do

@@ -93,6 +93,7 @@ defmodule BulmaWidgetsWeb do
       # Core UI components and translation
       import BulmaWidgets.Elements
       import BulmaWidgets.Layouts
+      import BulmaWidgets.Components
 
       alias BulmaWidgets.Event
       alias BulmaWidgets.Events

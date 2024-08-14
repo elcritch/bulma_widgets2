@@ -101,7 +101,7 @@ defmodule BulmaWidgets.Components do
 
     ~H"""
     <div
-      class={["modal", classes(@rest)]}
+      class={["modal", "modal-fx-newsPaper", classes(@rest)]}
       {extras(@rest)}
     >
       <div class="modal-background" :for={_background <- @background}>

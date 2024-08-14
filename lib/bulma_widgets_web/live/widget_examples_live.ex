@@ -223,7 +223,9 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         </:tab>
       </.live_component>
 
-      <.modal id="my-modal" is-active={true} position="bottom">
+      <link rel="stylesheet" href="https://unpkg.com/bulma-modal-fx/dist/css/modal-fx.min.css" />
+
+      <.modal id="my-modal"  is-active={true} position="bottom">
           <:background />
           <:content>
             <.message is-link>

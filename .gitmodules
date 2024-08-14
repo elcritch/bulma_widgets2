@@ -1,3 +1,6 @@
 [submodule "assets/css/bulma"]
 	path = assets/css/bulma
 	url = https://github.com/jgthms/bulma.git
+[submodule "assets/css/bulma-modal-fx"]
+	path = assets/css/bulma-modal-fx
+	url = https://github.com/postare/bulma-modal-fx.git

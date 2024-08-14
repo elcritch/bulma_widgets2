@@ -19,7 +19,8 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/bulma_components>.
 
-## Thanks
+## Credits and Thanks
 
 - [Bulma](https://bulma.io)
 - [Bulma Modal FX](https://github.com/postare/bulma-modal-fx)
+- [Bulma Switch Controls](https://github.com/justboil/bulma-switch-control)

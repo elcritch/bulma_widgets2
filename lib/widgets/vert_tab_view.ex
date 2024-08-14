@@ -2,6 +2,8 @@ defmodule BulmaWidgets.Widgets.VertTabView do
   use Phoenix.LiveComponent
   use BulmaWidgets, :html_helpers
   alias BulmaWidgets.Action.AssignField
+  alias BulmaWidgets.Widgets.SelectionMenu
+  import BulmaWidgets.Layouts
 
   require Logger
 
@@ -48,10 +50,47 @@ defmodule BulmaWidgets.Widgets.VertTabView do
   def render(assigns) do
     # Logger.info("tab_view:render: assigns: #{inspect(assigns, pretty: true)}")
     # Logger.info("scroll_menu:render: assigns:data: #{inspect(assigns.data)}")
-    # Logger.info("tab_view:render: tab: #{inspect(tab, pretty: true)}")
+    Logger.info("tab_view:render: tab: #{inspect(assigns.tab, pretty: true)}")
+    values = assigns.tab |> Enum.map(fn t -> {t.name, t.key} end)
+    assigns = assigns |> assign(:values, values)
 
     ~H"""
     <div id={@id}>
+      <.media >
+        <:left classes={["m-0", "p-0"]}>
+          <aside class="menu" id={@id}>
+            <p class="menu-label" :if={@label != ""}>
+              <%= @label %>
+            </p>
+
+            <ul class="menu-list">
+              <%= for {key, value} <- @values do %>
+                <li>
+                  <a href="#"
+                    class={[value == value(@data) && "is-active" || ""]}
+                    phx-click={
+                      JS.push("menu-select-action", target: @rest.myself)
+                      |> JS.remove_class("is-active", to: "##{@id}")
+                    }
+                    phx-value-id={@id}
+                    phx-value-value-hash={value |> :erlang.phash2()}
+                    phx-target={@rest.myself}
+                  >
+                    <%= key %>
+                  </a>
+                </li>
+              <% end %>
+            </ul>
+          </aside>
+        </:left>
+        <:content>
+          <%= for tab <- @tab do %>
+            <div class={tab.key == value(@data) && "" || "is-hidden" } >
+              <%= render_slot(tab) %>
+            </div>
+          <% end %>
+        </:content>
+      </.media>
     </div>
     """
   end

@@ -227,15 +227,17 @@ defmodule BulmaWidgets.Layouts do
       </.media>
   """
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
-  slot(:left, doc: "media figure")
+  slot(:left, doc: "media figure") do
+    attr(:classes, :list, doc: "extra css classes")
+  end
   slot(:content, doc: "media content")
   slot(:right, doc: "media right")
 
   def media(assigns) do
     ~H"""
     <article class={["media", classes(@rest)]} {extras(@rest)}>
-      <figure class="media-left">
-        <%= render_slot(@left) %>
+      <figure class={["media-left", left[:classes] || [] ]} :for={left <- @left}>
+        <%= render_slot(left) %>
       </figure>
       <div class="media-content">
         <%= render_slot(@content) %>

@@ -52,7 +52,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
         <p> shared: <%= @shared |> inspect() %> </p>
 
-      <.switch checked={true} phx-click="test" />
+      <.switch checked={@shared[:switch_test]} phx-click="test" />
 
       <.live_component
         module={Switch}

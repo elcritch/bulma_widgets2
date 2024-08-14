@@ -79,7 +79,7 @@ defmodule BulmaWidgets.Widgets.Switch do
     # Logger.debug("scroll_menu:socket: #{inspect(socket, pretty: true)}")
     {:noreply,
      socket
-     |> Actions.handle_event(menu_name, {menu_name, value}, @standard_actions)}
+     |> Actions.handle_event(menu_name, value, @standard_actions)}
   end
 
   def key({k, _v}), do: k

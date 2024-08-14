@@ -44,7 +44,7 @@ defmodule BulmaWidgets.Components do
   def switch(assigns) do
     ~H"""
       <label class={["switch", classes(@rest)]}>
-        <input type="checkbox" checked={@checked}
+        <input type="checkbox" checked={@checked && "true" || "false"}
           {extras(@rest)}
           />
         <span class="check"></span>

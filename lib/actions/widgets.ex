@@ -57,9 +57,9 @@ defmodule BulmaWidgets.Actions.Widgets do
         Logger.debug("send_action_data: into: #{inspect name} ")
 
         fn evt ->
-          {k, v} = evt.data
-          Logger.debug("send_action_data: run: name: #{inspect(name)} data:#{inspect({k,v})}")
-          %{evt | data: %FieldAssigns{into: name, fields: %{name => {k,v}}}}
+          data = evt.data
+          Logger.debug("send_action_data: run: name: #{inspect(name)} data:#{inspect(data)}")
+          %{evt | data: %FieldAssigns{into: name, fields: %{name => data}}}
         end
       end
 

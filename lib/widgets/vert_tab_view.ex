@@ -1,4 +1,4 @@
-defmodule BulmaWidgets.Widgets.HorizTabView do
+defmodule BulmaWidgets.Widgets.VertTabView do
   use Phoenix.LiveComponent
   use BulmaWidgets, :html_helpers
   alias BulmaWidgets.Action.AssignField

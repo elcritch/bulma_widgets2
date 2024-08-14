@@ -6,7 +6,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
   alias BulmaWidgets.Widgets.SelectionMenu
   alias BulmaWidgets.Widgets.ActionButton
   alias BulmaWidgets.Widgets.TabView
-  alias BulmaWidgets.Widgets.HorizTabView
+  alias BulmaWidgets.Widgets.VertTabView
   alias BulmaWidgets.Action.UpdateHooks
 
   require Logger
@@ -205,7 +205,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
       <br/>
       <.live_component
-        module={HorizTabView}
+        module={VertTabView}
         id="example_horiz_tabs"
         data={"tab1"}
         is-boxed

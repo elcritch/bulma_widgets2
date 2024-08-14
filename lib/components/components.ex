@@ -87,6 +87,7 @@ defmodule BulmaWidgets.Components do
 
   """
   attr(:show, :boolean, default: false)
+  attr(:position, :string, default: nil)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   slot(:background, required: false)
@@ -105,13 +106,24 @@ defmodule BulmaWidgets.Components do
     >
       <div class="modal-background" :for={_background <- @background}>
       </div>
-      <div class="modal-content">
+      <div class="modal-content" style={modal_position(@position)}>
         <%= render_slot(@content) %>
       </div>
       <button class="modal-close is-large" aria-label="close">
       </button>
     </div>
     """
+  end
+
+  defp modal_position(position) do
+    case position do
+      "bottom" ->
+        "position: absolute; bottom: 0px; "
+      "top" ->
+        "position: absolute; top: 0px; "
+      _other ->
+        ""
+    end
   end
 
   @doc """

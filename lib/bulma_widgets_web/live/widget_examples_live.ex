@@ -248,7 +248,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         <button class="modal-close is-large" aria-label="close"></button>
       </div> --%>
 
-      <.modal id="my-modal" is-active={true}>
+      <.modal id="my-modal" is-active={true} position="bottom">
           <:background />
           <:content>
             <.message>
@@ -269,6 +269,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
                 neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.
               </:body>
             </.message>
+            <br>
           </:content>
       </.modal>
 

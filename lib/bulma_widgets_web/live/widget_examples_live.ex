@@ -7,6 +7,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
   alias BulmaWidgets.Widgets.ActionButton
   alias BulmaWidgets.Widgets.TabView
   alias BulmaWidgets.Widgets.VertTabView
+  alias BulmaWidgets.Widgets.Switch
   alias BulmaWidgets.Action.UpdateHooks
 
   require Logger
@@ -52,6 +53,16 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         <p> shared: <%= @shared |> inspect() %> </p>
 
       <.switch checked={true} phx-click="test" />
+
+      <.live_component
+        module={Switch}
+        id="switch_test"
+        extra_actions={[
+          Widgets.send_action_data("test-value-set", into: :switch_test),
+        ]}
+      >
+      </.live_component>
+
 
       <.live_component
         module={ScrollMenu}

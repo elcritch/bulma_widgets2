@@ -43,7 +43,6 @@ defmodule BulmaWidgets.Components do
 
   def switch(assigns) do
     ~H"""
-    <div class="field">
       <label class={["switch", classes(@rest)]}>
         <input type="checkbox" checked={@checked}
           {extras(@rest)}
@@ -53,7 +52,6 @@ defmodule BulmaWidgets.Components do
           <%= render_slot(@label) %>
         </span>
       </label>
-    </div>
     """
   end
 

@@ -61,6 +61,8 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
           Widgets.send_action_data("test-value-set", into: :switch_test),
         ]}
       >
+        <:label when={true}>On</:label>
+        <:label when={false}>Off</:label>
       </.live_component>
 
 

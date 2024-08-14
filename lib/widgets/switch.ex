@@ -12,16 +12,27 @@ defmodule BulmaWidgets.Widgets.Switch do
   ## Examples
 
       <.live_component
-        module={TabView}
-        id="example_tabs"
+        module={Switch}
+        id="switch_test"
+        extra_actions={[
+          Widgets.send_action_data("test-value-set", into: :switch_test),
+        ]}
       >
-        <:tab name="Tab 1" key="tab1">
-          <.tab_one />
-        </:tab>
-        <:tab name="Tab 2" key="tab2">
-          <.tab_two />
-        </:tab>
+        <:label when={true}>On</:label>
+        <:label when={false}>Off</:label>
       </.live_component>
+
+  Or with a fixed label:
+      <.live_component
+        module={Switch}
+        id="switch_test"
+        extra_actions={[
+          Widgets.send_action_data("test-value-set", into: :switch_test),
+        ]}
+      >
+        <:label>Enable</:label>
+      </.live_component>
+
   """
 
   @standard_actions [
@@ -36,15 +47,13 @@ defmodule BulmaWidgets.Widgets.Switch do
   end
 
   attr(:id, :string, required: true)
-  attr(:data, :any, default: {nil, nil})
+  attr(:data, :boolean, default: false)
   attr(:extra_actions, :list, default: [])
   attr(:standard_actions, :list, default: @standard_actions)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
-  slot(:label)
-  slot(:tab) do
-    attr(:name, :string, doc: "Display name of tag")
-    attr(:key, :string, doc: "Index id of tab")
+  slot(:label) do
+    attr(:when, :boolean, doc: "only show label when state is true or false")
   end
 
   def render(assigns) do
@@ -62,8 +71,10 @@ defmodule BulmaWidgets.Widgets.Switch do
             {extras(@rest)}
             />
           <span class="check"></span>
-          <span class="control-label">
-            <%= render_slot(@label) %>
+          <span class="control-label"
+                :for={label <- @label}
+                :if={if label[:when] != nil do label.when == value(@data) else true end}>
+            <%= render_slot(label) %>
           </span>
         </label>
       </div>

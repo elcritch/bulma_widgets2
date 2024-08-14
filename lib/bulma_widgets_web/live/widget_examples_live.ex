@@ -192,6 +192,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         module={TabView}
         id="example_tabs"
         data={"tab1"}
+        is-boxed
       >
         <:tab name="Tab 1" key="tab1">
           <.tab_one />

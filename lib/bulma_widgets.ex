@@ -22,6 +22,8 @@ defmodule BulmaWidgets do
     is-hoverable
     is-loading
     is-outlined
+    is-toggle
+    is-boxed
     has-text-centered
 
     is-rounded

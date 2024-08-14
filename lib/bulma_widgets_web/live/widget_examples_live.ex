@@ -223,24 +223,27 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         </:tab>
       </.live_component>
 
-      <.modal id="my-modal" modal-fx-fadeInScale is-active={true} position="bottom">
-          <:background />
-          <:content>
-            <.message is-link>
-              <:header>
-                <p>Hello World</p>
-                <button class="delete"
-                        phx-click={JS.toggle_class("is-active", to: "#my-modal")}
-                        aria-label="delete">
-                </button>
-              </:header>
-              <:body>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec
-              </:body>
-            </.message>
-            <br>
-          </:content>
+      <.modal id="my-modal"
+              is-active={true}
+              modal-fx-fadeInScale
+              position="bottom">
+        <:background />
+        <:content>
+          <.message is-link>
+            <:header>
+              <p>Hello World</p>
+              <button class="delete"
+                      phx-click={JS.toggle_class("is-active", to: "#my-modal")}
+                      aria-label="delete">
+              </button>
+            </:header>
+            <:body>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec
+            </:body>
+          </.message>
+          <br>
+        </:content>
       </.modal>
 
       <br/><br/><br/>

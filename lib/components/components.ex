@@ -44,7 +44,7 @@ defmodule BulmaWidgets.Components do
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   slot(:header, required: false)
-  slot(:body, required: true)
+  slot(:body, required: false)
 
   def message(assigns) do
     ~H"""

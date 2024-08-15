@@ -167,13 +167,25 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <.title size={4}>Dropdown Test</.title>
       <.dropdown id={"dropdown-test"}
       >
-        <:label :let={sel}> <%= Event.key(sel, "Dropdown") %> </:label>
+        <:label :let={sel}><%= Event.key(sel, "Dropdown") %></:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
-        <:items :let={%{selected: selected}}>
-          <a href="#"
-             class={"dropdown-item #{selected && "is-active" || ""}"}
-          >
+        <:value key={:a}>Option A</:value>
+        <:value key={:b}>Option B</:value>
+
+      </.dropdown>
+      <.dropdown id={"dropdown-test-2"}
+      >
+        <:label :let={sel}>Test 2 <%= Event.key(sel, "Dropdown") %></:label>
+        <:label_icon base="fas" name="fa-angle-down"/>
+
+        <:value key={:a}>A</:value>
+        <:value key={:b}>B</:value>
+
+        <:items :let={%{key: key, label: label, selected: selected}}>
+          <a href="#" class={["dropdown-item", selected && "is-active" || ""]}
+             phx-value-id={key} >
+            Custom: <%= label %>
           </a>
         </:items>
       </.dropdown>

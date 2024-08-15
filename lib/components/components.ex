@@ -66,34 +66,18 @@ defmodule BulmaWidgets.Components do
         <:value key={"a"}> Item A </:value>
         <:value key={"b"}> Item B </:value>
 
-        <:item :let={%{id: id, label: label, key: key, parent: parent, selected: selected}}>
-          <a href="#"
-              class={"dropdown-item \#{selected && "is-active" || ""}"}
-              phx-click="menu-select"
-              phx-value-id={id}
-              phx-value-key={key}
-              phx-value-value={value}
-              phx-target={@parent} >
-            <%= key %>
-          </a>
-        </:item>
       </.dropdown>
 
       <.dropdown id="confirm-modal" values={ [{"A", 1, {"B", 2}] }>
         <:label :let={{k,v}}> <%= k %> </:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
-        <:item :let={%{id: id, label: label, key: key, parent: parent, selected: selected}}>
-          <a href="#"
-              class={"dropdown-item \#{selected && "is-active" || ""}"}
-              phx-click="menu-select"
-              phx-value-id={id}
-              phx-value-key={key}
-              phx-value-value={value}
-              phx-target={@parent} >
-            <%= key %>
+        <:items :let={%{id: id, label: label, key: key, parent: parent, selected: selected}}>
+          <a href="#" class={["dropdown-item", selected && "is-active" || ""]}
+             phx-value-id={key} >
+            Custom: <%= label %>
           </a>
-        </:item>
+        </:items>
       </.dropdown>
 
   """
@@ -106,8 +90,10 @@ defmodule BulmaWidgets.Components do
     attr(:base, :string)
     attr(:name, :string)
   end
-  slot(:value)
-  slot(:items, required: true)
+  slot(:value) do
+    attr(:key, :any, required: true)
+  end
+  slot(:items)
 
   def dropdown(assigns) do
 
@@ -115,7 +101,7 @@ defmodule BulmaWidgets.Components do
       case assigns[:values] do
         nil ->
           assigns.value |> Enum.map(fn v ->
-            {~H"<%= render_slot(v) %>", v.key}
+            {v.key, ~H"<%= render_slot(v) %>"}
           end)
         values ->
           values
@@ -146,19 +132,42 @@ defmodule BulmaWidgets.Components do
       </div>
       <div class="dropdown-menu" role="menu">
         <div class="dropdown-content">
-          <%= for {key, value} <- @values do %>
-            <%= render_slot(@items, %{
-              id: @id,
-              key: key,
-              value: value,
-              parent: @rest.myself,
-              selected: value == Event.val(@selected)
-            }) %>
+          <%= for {key, label} <- @values do %>
+            <%= if @items == [] do %>
+              <a href="#" phx-value-key={key}
+                 class={["dropdown-item", key == Event.key(@selected) && "is-active" || ""]}
+              >
+                <%= label %>
+              </a>
+            <% else %>
+              <%= render_slot(@items, %{
+                id: @id,
+                key: key,
+                label: label,
+                parent: @id,
+                selected: key == Event.key(@selected)
+              }) %>
+            <% end %>
           <% end %>
         </div>
       </div>
     </div>
     """
+  end
+
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  slot(:label)
+  slot(:label_icon) do
+    attr(:base, :string)
+    attr(:name, :string)
+  end
+  slot(:value) do
+    attr(:key, :any, required: true)
+  end
+  slot(:items, required: true)
+
+  def dropdown_item(assigns) do
   end
 
   @doc """

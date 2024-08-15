@@ -134,7 +134,7 @@ defmodule BulmaWidgets.Components do
         <div class="dropdown-content">
           <%= for {key, label} <- @values do %>
             <%= if @items == [] do %>
-              <a href="#" phx-value-key={key}
+              <a phx-value-key={key}
                  class={["dropdown-item", key == Event.key(@selected) && "is-active" || ""]}
               >
                 <%= label %>

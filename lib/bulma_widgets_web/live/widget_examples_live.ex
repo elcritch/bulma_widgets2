@@ -1,4 +1,5 @@
 defmodule BulmaWidgetsWeb.WidgetExamplesLive do
+  alias Phoenix.Component
   use BulmaWidgetsWeb, :live_view
 
   use BulmaWidgets.Actions, pubsub: BulmaWidgetsWeb.PubSub
@@ -164,7 +165,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       </.live_component>
 
       <br>
-      <.title size={4}>Dropdown Test</.title>
+      <.title size={4}>Dropdown Component Test</.title>
       <.dropdown id={"dropdown-test"}
       >
         <:label :let={sel}><%= Event.key(sel, "Dropdown") %></:label>
@@ -183,7 +184,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         <:value key={:b}>B</:value>
 
         <:items :let={%{key: key, label: label, selected: selected}}>
-          <a href="#" class={["dropdown-item", selected && "is-active" || ""]}
+          <a class={["dropdown-item", selected && "is-active" || ""]}
              phx-value-id={key} >
             Custom: <%= label %>
           </a>

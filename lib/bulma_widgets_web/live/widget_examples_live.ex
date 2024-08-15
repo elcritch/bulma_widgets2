@@ -167,7 +167,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <br>
       <.title size={4}>Dropdown Component Test</.title>
       <.dropdown id={"dropdown-test-1"}  >
-        <:label :let={sel}><%= Event.val(sel, "Dropsown") %></:label>
+        <:label :let={sel}><%= Event.val(sel, "Dropdown") %></:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
         <:value key={:a}>Option A</:value>
@@ -176,7 +176,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       </.dropdown>
 
       <.dropdown id={"dropdown-test-2"} selected={:a} >
-        <:label :let={sel}><%= Event.val(sel, "Dropsown") %></:label>
+        <:label :let={sel}><%= Event.val(sel, "Dropdown") %></:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
         <:value key={:a}>Option A</:value>

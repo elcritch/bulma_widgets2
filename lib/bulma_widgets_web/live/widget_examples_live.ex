@@ -45,7 +45,10 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
     ~H"""
     <.container>
       <.title notification={true} size={3}>Widget Examples</.title>
+
       <br>
+      <.title size={4}>Button Examples</.title>
+
       <.button
         phx-click={
           JS.add_class("is-active", to: "#my-modal")
@@ -63,11 +66,15 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         Test Break
       </.button>
 
-        <p> shared: <%= @shared |> inspect() %> </p>
+      <p> shared: <%= @shared |> inspect() %> </p>
 
-      <.switch checked={@shared[:switch_test]} phx-click="test" />
+      <br>
+      <.title size={4}>Switch Examples</.title>
+      <p>One way binding:</p>
+      <.switch checked={@shared[:switch_test]} />
       <br>
 
+      <p>Two way binding:</p>
       <.live_component
         module={Switch}
         id="switch_test"

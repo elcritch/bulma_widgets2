@@ -94,14 +94,24 @@ defmodule BulmaWidgets.Elements do
     ~H"""
     <%= if @notification do %>
       <div class={["notification notification-title has-text-centered", classes(@rest)]} {extras(@rest)}>
-        <h3 class={["title", "is-#{@size}", classes(@rest)]} {extras(@rest)}>
-          <%= render_slot(@inner_block) %>
-        </h3>
+        <%= hh(assigns) %>
       </div>
     <% else %>
-      <h3 class={["title", "is-#{@size}", classes(@rest)]} {extras(@rest)}>
-        <%= render_slot(@inner_block) %>
-      </h3>
+      <%= hh(assigns) %>
+    <% end %>
+    """
+  end
+
+  attr(:size, :integer, required: true)
+  def hh(assigns) do
+    ~H"""
+    <%= case @size do %>
+      <% 1 -> %> <h1 class={["title", "is-1", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h1>
+      <% 2 -> %> <h2 class={["title", "is-2", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h2>
+      <% 3 -> %> <h3 class={["title", "is-3", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h3>
+      <% 4 -> %> <h4 class={["title", "is-4", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h4>
+      <% 5 -> %> <h5 class={["title", "is-5", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h5>
+      <% 6 -> %> <h6 class={["title", "is-6", classes(@rest)]} {extras(@rest)}> <%= render_slot(@inner_block) %> </h6>
     <% end %>
     """
   end

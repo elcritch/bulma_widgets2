@@ -41,15 +41,13 @@ defmodule BulmaWidgets.Components do
 
   def switch(assigns) do
     ~H"""
-      <label class={["switch", classes(@rest)]}>
-        <input type="checkbox" checked={@checked}
-          {extras(@rest)}
-          />
-        <span class="check"></span>
-        <span class="control-label">
-          <%= render_slot(@label) %>
-        </span>
-      </label>
+    <label class={["switch", classes(@rest)]}>
+      <input type="checkbox" checked={@checked} {extras(@rest)} />
+      <span class="check"></span>
+      <span class="control-label">
+        <%= render_slot(@label) %>
+      </span>
+    </label>
     """
   end
 
@@ -89,13 +87,18 @@ defmodule BulmaWidgets.Components do
 
   def dropdown(assigns) do
     ~H"""
-    <div id={@id} class={["dropdown", classes(@rest, attrs_atoms())]}
-        phx-click={JS.toggle_class("is-active", to: "##{@id}")}
-        phx-click-away={JS.remove_class("is-active", to: "##{@id}")}
+    <div
+      id={@id}
+      class={["dropdown", classes(@rest, attrs_atoms())]}
+      phx-click={JS.toggle_class("is-active", to: "##{@id}")}
+      phx-click-away={JS.remove_class("is-active", to: "##{@id}")}
     >
       <div class="dropdown-trigger">
-        <button class={["button", classes(@rest, colors_atoms())]}
-                aria-haspopup="true" aria-controls="dropdown-menu">
+        <button
+          class={["button", classes(@rest, colors_atoms())]}
+          aria-haspopup="true"
+          aria-controls="dropdown-menu"
+        >
           <span>
             <%= if @data == nil || @data == {nil, nil} do %>
               <%= render_slot(@default_label) %>
@@ -110,18 +113,13 @@ defmodule BulmaWidgets.Components do
       <div class="dropdown-menu" role="menu">
         <div class="dropdown-content">
           <%= for {key, value} <- @values do %>
-            <a href="#"
-                class={"dropdown-item #{key == Event.key(@data) && "is-active" || ""}"}
-                phx-click={
-                  JS.push("menu-select-action", target: @rest.myself)
-                  |> JS.remove_class("is-active", to: "##{@id}")
-                }
-                phx-value-id={@id}
-                phx-value-key={key}
-                phx-value-value-hash={value |> :erlang.phash2()}
-                phx-target={@rest.myself} >
-              <%= key %>
-            </a>
+            <%= render_slot(@icon, %{
+              id: @id,
+              key: key,
+              value: value,
+              parent: @rest.myself,
+              selected: selected
+            }) %>
           <% end %>
         </div>
       </div>
@@ -152,10 +150,7 @@ defmodule BulmaWidgets.Components do
 
   def message(assigns) do
     ~H"""
-    <article
-        class={["message", classes(@rest), @kind && "is-#{@kind}" || ""]}
-        {extras(@rest)}
-    >
+    <article class={["message", classes(@rest), (@kind && "is-#{@kind}") || ""]} {extras(@rest)}>
       <div :for={header <- @header} class="message-header">
         <%= render_slot(header) %>
       </div>
@@ -206,7 +201,7 @@ defmodule BulmaWidgets.Components do
     ~H"""
     <div id={@id} class={["modal", classes(@rest)]} {extras(@rest)}>
       <div :for={_background <- @background} class="modal-background"></div>
-      <div class="modal-content" style={(@position)}>
+      <div class="modal-content" style={@position}>
         <%= render_slot(@content) %>
       </div>
       <button class="modal-close is-large" aria-label="close"></button>
@@ -238,7 +233,12 @@ defmodule BulmaWidgets.Components do
   attr(:id, :string, doc: "the optional id of flash container")
   attr(:flash, :map, default: %{}, doc: "the map of flash messages to display")
   attr(:title, :string, default: nil)
-  attr(:kind, :atom, values: [:info, :success, :warning, :danger], doc: "used for styling and flash lookup")
+
+  attr(:kind, :atom,
+    values: [:info, :success, :warning, :danger],
+    doc: "used for styling and flash lookup"
+  )
+
   attr(:rest, :global, doc: "the arbitrary HTML attributes to add to the flash container")
 
   slot(:inner_block, doc: "the optional inner block that renders the flash message")
@@ -255,20 +255,24 @@ defmodule BulmaWidgets.Components do
       class={["flash-item"]}
       {extras(@rest)}
     >
-        <.message kind={@kind}>
-          <:header>
-            <p><%= "#{@kind}" |> String.capitalize() %></p>
-            <button class="delete"
-                    phx-click={JS.push("lv:clear-flash", value: %{key: @kind})
-                                |> hide("##{@id}")}
-                    aria-label="delete">
-            </button>
-          </:header>
-          <:body>
-            <%= msg %>
-            <%= render_slot(@inner_block) %>
-          </:body>
-        </.message>
+      <.message kind={@kind}>
+        <:header>
+          <p><%= "#{@kind}" |> String.capitalize() %></p>
+          <button
+            class="delete"
+            phx-click={
+              JS.push("lv:clear-flash", value: %{key: @kind})
+              |> hide("##{@id}")
+            }
+            aria-label="delete"
+          >
+          </button>
+        </:header>
+        <:body>
+          <%= msg %>
+          <%= render_slot(@inner_block) %>
+        </:body>
+      </.message>
     </div>
     """
   end
@@ -286,7 +290,7 @@ defmodule BulmaWidgets.Components do
 
   def flash_group(assigns) do
     ~H"""
-    <div class={["flash-group", "is-centered", "flash-#{@position}" ]} id={@id} >
+    <div class={["flash-group", "is-centered", "flash-#{@position}"]} id={@id}>
       <.flash id="info" kind={:info} title={gettext("Info!")} flash={@flash} />
       <.flash id="success" kind={:success} title={gettext("Success!")} flash={@flash} />
       <.flash id="warning" kind={:warning} title={gettext("Error!")} flash={@flash} />
@@ -390,5 +394,4 @@ defmodule BulmaWidgets.Components do
     |> JS.remove_class("overflow-hidden", to: "body")
     |> JS.pop_focus()
   end
-
 end

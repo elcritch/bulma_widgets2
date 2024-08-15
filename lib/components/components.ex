@@ -132,7 +132,7 @@ defmodule BulmaWidgets.Components do
     ~H"""
     <div id={@id} class={["modal", classes(@rest)]} {extras(@rest)}>
       <div :for={_background <- @background} class="modal-background"></div>
-      <div class="modal-content" style={modal_position(@position)}>
+      <div class="modal-content" style={(@position)}>
         <%= render_slot(@content) %>
       </div>
       <button class="modal-close is-large" aria-label="close"></button>
@@ -181,7 +181,7 @@ defmodule BulmaWidgets.Components do
       class={[]}
       {extras(@rest)}
     >
-        <.message is-overlay kind={@kind}>
+        <.message kind={@kind}>
           <:header>
             <p><%= "#{@kind}" |> String.capitalize() %></p>
             <button class="delete"
@@ -199,6 +199,19 @@ defmodule BulmaWidgets.Components do
     """
   end
 
+  defp flash_position(position) do
+    case position do
+      "bottom" ->
+        "bottom: 0px; "
+
+      "top" ->
+        "top: 0px; "
+
+      _other ->
+        ""
+    end
+  end
+
   @doc """
   Shows the flash group with standard titles and content.
 
@@ -207,11 +220,12 @@ defmodule BulmaWidgets.Components do
       <.flash_group flash={@flash} />
   """
   attr(:flash, :map, required: true, doc: "the map of flash messages")
+  attr(:position, :string, values: ["top", "bottom", nil], default: nil)
   attr(:id, :string, default: "flash-group", doc: "the optional id of flash container")
 
   def flash_group(assigns) do
     ~H"""
-    <div class="" id={@id}>
+    <div class="flash-group is-centered " id={@id} style={[" ", flash_position(@position) ]}>
       <.flash id="info" kind={:info} title={gettext("Info!")} flash={@flash} />
       <%!-- <.flash kind={:success} title={gettext("Success!")} flash={@flash} /> --%>
       <.flash id="error" kind={:error} title={gettext("Error!")} flash={@flash} />

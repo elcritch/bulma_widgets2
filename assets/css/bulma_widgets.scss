@@ -3,3 +3,14 @@
 // import modal-fx component
 @import "modal-fx/main.scss";
 @import "bulma-switch-control.scss";
+
+.flash-group {
+  display: grid;
+  position: fixed;
+  grid-template-columns: 80%;
+  justify-content: center;    
+  left: 0px;
+  width: 100%;
+  align-items: center;
+  z-index: 40;
+}

@@ -48,7 +48,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <.button
         phx-click={
           JS.add_class("is-active", to: "#my-modal")
-          |> JS.remove_class("is-active", transition: "testing", time: 2_000, to: "#my-modal")
+          #|> JS.remove_class("is-active", transition: "testing", time: 2_000, to: "#my-modal")
         }
         is-fullwidth is-loading={false}
       >
@@ -61,6 +61,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       >
         Flash Test
       </.button>
+      <BulmaWidgets.Components.flash_group flash={@flash} position="bottom" />
 
         <p> shared: <%= @shared |> inspect() %> </p>
 
@@ -287,7 +288,6 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         </:content>
       </.modal>
 
-      <BulmaWidgets.Components.flash_group flash={@flash} />
       <br/><br/><br/>
     </.container>
     """
@@ -299,7 +299,8 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
     {:noreply,
      socket
-     |> put_flash(:info, "It worked!")}
+     |> put_flash(:info, "It worked!")
+     |> put_flash(:error, "It broke!")}
   end
 
   def tab_one(assigns) do

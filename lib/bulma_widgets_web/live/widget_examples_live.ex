@@ -298,6 +298,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
     {:noreply,
      socket
      |> put_flash(:info, "It worked!")
+     |> put_flash(:info, "It really worked!")
      |> put_flash(:danger, "It broke!")}
   end
 

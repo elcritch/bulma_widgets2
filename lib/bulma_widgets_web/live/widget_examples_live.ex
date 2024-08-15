@@ -55,13 +55,12 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         Modal Test
       </.button>
 
-      <.button
-        phx-click="test"
-        is-fullwidth is-loading={false}
-      >
+      <.button phx-click="test" is-fullwidth is-loading={false} >
         Flash Test
       </.button>
-      <BulmaWidgets.Components.flash_group flash={@flash} position="bottom" />
+      <.button phx-click="test-break" is-fullwidth is-loading={false} >
+        Test Break
+      </.button>
 
         <p> shared: <%= @shared |> inspect() %> </p>
 
@@ -293,14 +292,22 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
     """
   end
 
-  @spec handle_event(<<_::32>>, any(), any()) :: {:noreply, any()}
   def handle_event("test", params, socket) do
     Logger.info("test! params: #{inspect(params)}")
 
     {:noreply,
      socket
      |> put_flash(:info, "It worked!")
-     |> put_flash(:error, "It broke!")}
+     |> put_flash(:danger, "It broke!")}
+  end
+
+  def handle_event("test-break", params, socket) do
+    Logger.info("test! params: #{{1,2,3}}")
+
+    {:noreply,
+     socket
+     |> put_flash(:info, "It worked!")
+     |> put_flash(:danger, "It broke!")}
   end
 
   def tab_one(assigns) do

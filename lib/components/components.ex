@@ -164,7 +164,7 @@ defmodule BulmaWidgets.Components do
   attr(:id, :string, doc: "the optional id of flash container")
   attr(:flash, :map, default: %{}, doc: "the map of flash messages to display")
   attr(:title, :string, default: nil)
-  attr(:kind, :atom, values: [:info, :success, :warning, :error], doc: "used for styling and flash lookup")
+  attr(:kind, :atom, values: [:info, :success, :warning, :danger], doc: "used for styling and flash lookup")
   attr(:rest, :global, doc: "the arbitrary HTML attributes to add to the flash container")
 
   slot(:inner_block, doc: "the optional inner block that renders the flash message")
@@ -214,16 +214,16 @@ defmodule BulmaWidgets.Components do
     ~H"""
     <div class={["flash-group", "is-centered", "flash-#{@position}" ]} id={@id} >
       <.flash id="info" kind={:info} title={gettext("Info!")} flash={@flash} />
-      <%!-- <.flash kind={:success} title={gettext("Success!")} flash={@flash} /> --%>
-      <.flash id="error" kind={:error} title={gettext("Error!")} flash={@flash} />
+      <.flash id="success" kind={:success} title={gettext("Success!")} flash={@flash} />
+      <.flash id="warning" kind={:warning} title={gettext("Error!")} flash={@flash} />
+      <.flash id="error" kind={:danger} title={gettext("Error!")} flash={@flash} />
 
       <.flash
         id="server-error"
-        kind={:error}
+        kind={:danger}
         title={gettext("Something went wrong!")}
         phx-disconnected={show(".phx-server-error #server-error")}
         phx-connected={hide("#server-error")}
-        hidden
       >
         <%= gettext("Hang in there while we get back on track") %>
       </.flash>

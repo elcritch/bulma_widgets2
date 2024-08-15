@@ -65,6 +65,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         <p> shared: <%= @shared |> inspect() %> </p>
 
       <.switch checked={@shared[:switch_test]} phx-click="test" />
+      <br>
 
       <.live_component
         module={Switch}
@@ -161,6 +162,21 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <.live_component module={ActionButton} id="test-run" is-fullwidth extra_actions={[]}>
         Click me
       </.live_component>
+
+      <br>
+      <.title size={4}>Dropdown Test</.title>
+      <.dropdown id={"dropdown-test"}
+      >
+        <:label :let={{k,_}}> <%= k %> </:label>
+        <:label_icon base="fas" name="fa-angle-down"/>
+
+        <:items :let={%{selected: selected}}>
+          <a href="#"
+             class={"dropdown-item #{selected && "is-active" || ""}"}
+          >
+          </a>
+        </:items>
+      </.dropdown>
 
       <br>
       <.title size={4}>Non-shared local only Dropdown</.title>

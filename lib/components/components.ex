@@ -22,6 +22,7 @@ defmodule BulmaWidgets.Components do
   alias BulmaWidgets.Event
   import BulmaWidgets.Elements
   require Logger
+  alias BulmaWidgets.Event
 
   @doc """
   Switch controls for Bulma CSS Framework — Pure HTML & CSS/SCSS.
@@ -63,8 +64,8 @@ defmodule BulmaWidgets.Components do
         <:label :let={{k,v}}> <%= k %> </:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
-        <:value label="Item A" key={1} />
-        <:value label="Item B" key={2} />
+        <:value key={"a"}> Item A </:value>
+        <:value key={"b"}> Item B </:value>
 
         <:item :let={%{id: id, label: label, key: key, parent: parent, selected: selected}}>
           <a href="#"
@@ -98,19 +99,26 @@ defmodule BulmaWidgets.Components do
 
   """
   attr(:id, :string, required: true)
-  attr(:selected, :any)
+  attr(:selected, :any, default: nil)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   slot(:label_default)
   slot(:label)
-  slot(:label_icon)
+  slot(:label_icon) do
+    attr(:base, :string)
+    attr(:name, :string)
+  end
+  slot(:value)
+  slot(:items, required: true)
 
   def dropdown(assigns) do
 
     values =
-      case assigns.values do
+      case assigns[:values] do
         nil ->
-          assigns.value |> Enum.map(fn v -> %{label: v.label, key: v.key} end)
+          assigns.value |> Enum.map(fn v ->
+            {~H"<%= render_slot(v) %>", v.key}
+          end)
         values ->
           values
       end
@@ -133,24 +141,27 @@ defmodule BulmaWidgets.Components do
           aria-controls="dropdown-menu"
         >
           <span>
-            <%= if @label_default != [] && @data == nil || @data == {nil, nil} do %>
-              <%= render_slot(@default_label) %>
-            <% else %>
-              <%= render_slot(@label, @data) %>
+            <%= cond do %>
+              <% @label_default != [] && Event.val(@selected) == nil -> %>
+                <%= render_slot(@label_default) %>
+              <% Event.val(@selected) == nil -> %>
+                <%= render_slot(@label, @selected) %>
+              <% true -> %>
+                <!-- none -->
             <% end %>
           </span>
-          <%= render_slot(@icon) %>
+          <.icon base={icon.base} name={icon.name} :for={icon <- @label_icon} />
         </button>
       </div>
       <div class="dropdown-menu" role="menu">
         <div class="dropdown-content">
           <%= for {key, value} <- @values do %>
-            <%= render_slot(@icon, %{
+            <%= render_slot(@items, %{
               id: @id,
               key: key,
               value: value,
               parent: @rest.myself,
-              selected: value == BulmaWidgets.Event.val(@selected)
+              selected: value == Event.val(@selected)
             }) %>
           <% end %>
         </div>

@@ -166,21 +166,31 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
       <br>
       <.title size={4}>Dropdown Component Test</.title>
-      <.dropdown id={"dropdown-test"} selected={:a} >
-        <:label :let={sel}><%= Event.key(sel, "Dropdown") %></:label>
+      <.dropdown id={"dropdown-test-1"}  >
+        <:label :let={sel}><%= Event.val(sel, "Dropsown") %></:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
         <:value key={:a}>Option A</:value>
         <:value key={:b}>Option B</:value>
 
       </.dropdown>
+
+      <.dropdown id={"dropdown-test-2"} selected={:a} >
+        <:label :let={sel}><%= Event.val(sel, "Dropsown") %></:label>
+        <:label_icon base="fas" name="fa-angle-down"/>
+
+        <:value key={:a}>Option A</:value>
+        <:value key={:b}>Option B</:value>
+
+      </.dropdown>
+
       <.dropdown
-          id={"dropdown-test-2"}
+          id={"dropdown-test-3"}
           values={[{1, "A"}, {2, "B"}]}
           selected={2}
       >
 
-        <:label :let={sel}>Test 2 <%= Event.key(sel, "Dropdown") %></:label>
+        <:label :let={sel}>Option <%= Event.val(sel, "Dropdown") %></:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
         <:items :let={%{key: key, label: label, selected: selected}}>

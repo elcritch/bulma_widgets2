@@ -69,7 +69,7 @@ defmodule BulmaWidgets.Components do
       </.dropdown>
 
       <.dropdown id="confirm-modal" values={ [{1, "A"}, {2,"B"}] }>
-        <:label :let={{k,v}}> <%= k %> </:label>
+        <:label :let={{k,l}}> <%= k %> </:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
         <:items :let={%{id: id, label: label, key: key, parent: parent, selected: selected}}>
@@ -127,7 +127,7 @@ defmodule BulmaWidgets.Components do
           aria-controls="dropdown-menu"
         >
           <span>
-            <%= render_slot(@label) %>
+            <%= render_slot(@label, @selected) %>
           </span>
           <.icon base={icon.base} name={icon.name} :for={icon <- @label_icon} />
         </button>

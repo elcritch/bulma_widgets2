@@ -50,7 +50,7 @@ defmodule BulmaWidgets.Widgets.VertTabView do
   def render(assigns) do
     # Logger.info("tab_view:render: assigns: #{inspect(assigns, pretty: true)}")
     # Logger.info("scroll_menu:render: assigns:data: #{inspect(assigns.data)}")
-    Logger.info("tab_view:render: tab: #{inspect(assigns.tab, pretty: true)}")
+    # Logger.info("tab_view:render: tab: #{inspect(assigns.tab, pretty: true)}")
     values = assigns.tab |> Enum.map(fn t -> {t.name, t.key} end)
     assigns = assigns |> assign(:values, values)
 

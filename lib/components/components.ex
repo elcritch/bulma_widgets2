@@ -83,6 +83,7 @@ defmodule BulmaWidgets.Components do
   """
   attr(:id, :string, required: true)
   attr(:selected, :any, default: nil)
+  attr(:values, :any, default: nil)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   slot(:label)
@@ -111,6 +112,7 @@ defmodule BulmaWidgets.Components do
       assigns
       |> assign(:values, values)
 
+    Logger.info("DROPDOWN: #{inspect(assigns.values, pretty: true)}")
     ~H"""
     <div
       id={@id}

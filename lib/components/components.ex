@@ -178,7 +178,7 @@ defmodule BulmaWidgets.Components do
       id={@id}
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
-      class={[]}
+      class={["flash-item"]}
       {extras(@rest)}
     >
         <.message kind={@kind}>
@@ -199,19 +199,6 @@ defmodule BulmaWidgets.Components do
     """
   end
 
-  defp flash_position(position) do
-    case position do
-      "bottom" ->
-        "bottom: 0px; "
-
-      "top" ->
-        "top: 0px; "
-
-      _other ->
-        ""
-    end
-  end
-
   @doc """
   Shows the flash group with standard titles and content.
 
@@ -225,7 +212,7 @@ defmodule BulmaWidgets.Components do
 
   def flash_group(assigns) do
     ~H"""
-    <div class="flash-group is-centered " id={@id} style={[" ", flash_position(@position) ]}>
+    <div class={["flash-group", "is-centered", "flash-#{@position}" ]} id={@id} >
       <.flash id="info" kind={:info} title={gettext("Info!")} flash={@flash} />
       <%!-- <.flash kind={:success} title={gettext("Success!")} flash={@flash} /> --%>
       <.flash id="error" kind={:error} title={gettext("Error!")} flash={@flash} />

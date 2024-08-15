@@ -7,10 +7,20 @@
 .flash-group {
   display: grid;
   position: fixed;
-  grid-template-columns: 80%;
+  grid-template-columns: 1fr minmax(20em, 4fr) 1fr;
   justify-content: center;    
   left: 0px;
   width: 100%;
   align-items: center;
   z-index: 40;
+}
+.flash-bottom {
+  bottom: 0px;
+}
+.flash-top {
+  top: 0px;
+}
+.flash-item {
+  grid-column-start: 2;
+  grid-column-end: 3;
 }

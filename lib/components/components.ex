@@ -174,7 +174,7 @@ defmodule BulmaWidgets.Components do
 
     ~H"""
     <div
-      :if={_msg = Phoenix.Flash.get(@flash, @kind)}
+      :if={msg = Phoenix.Flash.get(@flash, @kind)}
       id={@id}
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
@@ -183,13 +183,15 @@ defmodule BulmaWidgets.Components do
     >
         <.message is-overlay kind={@kind}>
           <:header>
-            <p>Hello World</p>
+            <p><%= "#{@kind}" |> String.capitalize() %></p>
             <button class="delete"
-                    phx-click={JS.remove_class("is-active", to: "#my-modal")}
+                    phx-click={JS.push("lv:clear-flash", value: %{key: @kind})
+                                |> hide("##{@id}")}
                     aria-label="delete">
             </button>
           </:header>
           <:body>
+            <%= msg %>
             <%= render_slot(@inner_block) %>
           </:body>
         </.message>
@@ -209,10 +211,10 @@ defmodule BulmaWidgets.Components do
 
   def flash_group(assigns) do
     ~H"""
-    <div class="box is-overlay" id={@id}>
-      <.flash kind={:info} title={gettext("Info!")} flash={@flash} />
+    <div class="" id={@id}>
+      <.flash id="info" kind={:info} title={gettext("Info!")} flash={@flash} />
       <%!-- <.flash kind={:success} title={gettext("Success!")} flash={@flash} /> --%>
-      <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
+      <.flash id="error" kind={:error} title={gettext("Error!")} flash={@flash} />
 
       <.flash
         id="server-error"

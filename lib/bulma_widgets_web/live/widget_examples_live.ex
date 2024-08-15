@@ -55,6 +55,12 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         Modal Test
       </.button>
 
+      <.button
+        phx-click="test"
+        is-fullwidth is-loading={false}
+      >
+        Flash Test
+      </.button>
 
         <p> shared: <%= @shared |> inspect() %> </p>
 
@@ -245,7 +251,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         </:tab>
       </.live_component>
 
-          <.message is-warning is-overlay>
+          <.message is-warning >
             <:header>
               <p>Hello World</p>
               <button class="delete"
@@ -281,6 +287,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         </:content>
       </.modal>
 
+      <BulmaWidgets.Components.flash_group flash={@flash} />
       <br/><br/><br/>
     </.container>
     """
@@ -292,7 +299,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
     {:noreply,
      socket
-     |> put_flash!(:info, "It worked!")}
+     |> put_flash(:info, "It worked!")}
   end
 
   def tab_one(assigns) do

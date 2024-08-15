@@ -65,3 +65,18 @@ defmodule BulmaWidgets.Utils.Time do
   # date |> Calendar.Strftime.strftime!("m/d H:M:S")
   # end
 end
+
+defmodule BulmaWidgets.Utils.Menu do
+  require Logger
+
+  def convert(vals) do
+    for val <- vals, into: [] do
+      case val do
+        {k, v} -> {k, v}
+        [k, v] -> {k, v}
+        val -> {val, val}
+      end
+    end
+  end
+
+end

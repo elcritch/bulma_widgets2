@@ -2,7 +2,6 @@ defmodule BulmaWidgets.Widgets.VertTabView do
   use Phoenix.LiveComponent
   use BulmaWidgets, :html_helpers
   alias BulmaWidgets.Action.AssignField
-  alias BulmaWidgets.Widgets.SelectionMenu
   import BulmaWidgets.Layouts
 
   require Logger

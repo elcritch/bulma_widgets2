@@ -59,14 +59,20 @@ defmodule BulmaWidgets.Components do
 
   ## Examples
 
+  Items can be passed statically using `value` slots:
+
       <.dropdown id="confirm-modal" selected={:a}>
-        <:label :let={{k,v}}> <%= k %> </:label>
+        <:label :let={sel}>
+          <%= BulmaWidgets.Event.val(sel, "Dropdown") %>
+        </:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
         <:value key={"a"}> Item A </:value>
         <:value key={"b"}> Item B </:value>
 
       </.dropdown>
+
+  Or menu items can be passed using `values` attribute:
 
       <.dropdown id="confirm-modal" values={ [{1, "A"}, {2,"B"}] }>
         <:label :let={{k,l}}> <%= k %> </:label>

@@ -85,10 +85,10 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         id="wiper_mode_test"
         is-fullwidth
         is-info
-        values={[{"Regular", 1}, {"Inverted", -1}]}
+        values={[{1, "Regular"}, {-1, "Inverted"}]}
       >
-        <:label :let={{k, _}}>
-          Test: <%= k %>
+        <:label :let={sel}>
+          Test: <%= Event.val(sel) %>
         </:label>
       </.live_component>
 
@@ -101,7 +101,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         module={ScrollMenu}
         is-primary
         id="wiper_speed"
-        values={[{"Slow", 1}, {"Fast", 2}]}
+        values={[{1, "Slow"}, {2, "Fast"}]}
         extra_actions={[
           #{Event.Commands,
           #commands: fn evt ->
@@ -111,15 +111,15 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
           Widgets.set_action_data(into: :wiper_mode, to: self())
         ]}
       >
-        <:label :let={{k, _}}>
-          Test: <%= k %>
+        <:label :let={sel}>
+          Test: <%= Event.val(sel) %>
         </:label>
       </.live_component>
 
       <.live_component
         module={ScrollMenu}
         id="value_set"
-        values={[{"A", 1}, {"B", 2}]}
+        values={[{:a, "A"}, {:b, "B"}]}
         data={@shared[:value_set]}
         extra_actions={[
           # broadcast value
@@ -128,6 +128,9 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         ]}
       >
         <:default_label> Example </:default_label>
+        <:label :let={sel}>
+          <%= Event.val(sel, "Example") %>
+        </:label>
       </.live_component>
 
       <.live_component

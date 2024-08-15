@@ -2,6 +2,7 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
   use Phoenix.LiveComponent
   use BulmaWidgets, :html_helpers
   alias BulmaWidgets.Action.AssignField
+  import BulmaWidgets.Components
 
   require Logger
 
@@ -51,54 +52,42 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
     # Logger.info("scroll_menu:render: assigns:data: #{inspect(assigns.data)}")
 
     ~H"""
-    <div id={@id} class={["dropdown", BulmaWidgets.classes(@rest, BulmaWidgets.attrs_atoms())]}
-        phx-click={JS.toggle_class("is-active", to: "##{@id}")}
-        phx-click-away={JS.remove_class("is-active", to: "##{@id}")}
-    >
-      <div class="dropdown-trigger ">
-        <button class={["button", BulmaWidgets.classes(@rest, BulmaWidgets.colors_atoms())]} aria-haspopup="true" aria-controls="dropdown-menu">
-          <span>
-          <%= render_slot(@label, @data) ||
-            (key(@data) == nil && render_slot(@default_label, @data)) ||
-            key(@data) %>
-          </span>
-          <span class="icon is-small">
-            <i class="fas fa-angle-down" aria-hidden="true"></i>
-          </span>
-        </button>
-      </div>
-      <div class="dropdown-menu" role="menu">
-        <div class="dropdown-content">
-          <%= for {key, value} <- @values do %>
-            <a href="#"
-              class={"dropdown-item #{value == value(@data) && "is-active" || ""}"}
-              phx-click={
-                JS.push("menu-select-action", target: @rest.myself)
-                |> JS.remove_class("is-active", to: "##{@id}")
-              }
-              phx-value-id={@id}
-              phx-value-key={key}
-              phx-value-value-hash={value |> :erlang.phash2()}
-              phx-target={@rest.myself}
-            >
-              <%= key %>
-            </a>
-          <% end %>
-        </div>
-      </div>
+    <div>
+      <.dropdown id={@id} values={@values} selected={@data}>
+        <:label :let={sel}>
+          <%= render_slot(@label, sel) %>
+        </:label>
+        <:label_icon base="fas" name="fa-angle-down" />
+
+        <:items :let={%{id: id, label: label, key: key, parent: _parent, selected: selected}}>
+          <a
+            class={["dropdown-item", (selected && "is-active") || ""]}
+            phx-click={
+              JS.push("menu-select-action", target: @rest.myself)
+              |> JS.remove_class("is-active", to: "##{@id}")
+            }
+            phx-value-id={id}
+            phx-value-value-hash={key |> :erlang.phash2()}
+            phx-target={@rest.myself}
+          >
+            <%= label %>
+          </a>
+        </:items>
+      </.dropdown>
     </div>
 
     """
   end
 
-  def handle_event( "menu-select-action", data, socket) do
+  def handle_event("menu-select-action", data, socket) do
     %{"id" => menu_name, "value-hash" => hash} = data
 
     # lookup menu item based on selected value hash
     {hash_key, ""} = hash |> Integer.parse()
+
     {key, value} =
       socket.assigns.values
-      |> Map.new(fn {k,v} -> {v |> :erlang.phash2(), {k,v}} end)
+      |> Map.new(fn {k, v} -> {k |> :erlang.phash2(), {k, v}} end)
       |> Map.get(hash_key)
 
     Logger.debug("menu-select-action: #{inspect({key, value}, pretty: true)}")

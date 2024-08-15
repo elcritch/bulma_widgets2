@@ -254,7 +254,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
             <:header>
               <p>Hello World</p>
               <button class="delete"
-                      phx-click={JS.toggle_class("is-active", to: "#my-modal")}
+                      phx-click={JS.remove_class("is-active", to: "#my-modal")}
                       aria-label="delete">
               </button>
             </:header>

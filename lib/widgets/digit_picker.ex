@@ -28,6 +28,53 @@ defmodule BulmaWidgets.Widgets.MultiPickMenu do
     {AssignField, field: :data}
   ]
 
+  @digit_values (0..9 |> Enum.to_list() |> BulmaWidgets.Utils.Menu.convert())
+  @sign_values ([:+, :-] |> BulmaWidgets.Utils.Menu.convert())
+
+  def mount(socket) do
+
+    menu_id = socket.assigns.id
+    value = socket.assigns.value
+    digit_config = socket.assigns.digits # digits: {4, 3, true},
+
+    unless is_float(value),
+      do: raise(%ArgumentError{message: "value must be an integer - got #{inspect value}"})
+    keys = to_digit_indexes(digit_config)
+    # item = socket.assigns[menu_id] || %DigitPickerLive{digit_config: digit_config, keys: keys}
+
+    digit_values = number_to_digits(value, digit_config)
+
+    Logger.info("assign multi item: #{inspect digit_values} ")
+
+    subitems =
+      for {data, sub_key} <- Enum.zip(digit_values, keys), into: [] do
+        scrollitems = if is_atom(sub_key), do: @sign_values, else: @digit_values
+        # sub_item = struct(ScrollMenuLive, [])
+        sub_id = subid(menu_id, sub_key)
+        values = scrollitems |> Enum.to_list()
+
+        {sub_id, %{id: sub_id, data: {to_string(data), data}, values: values, layout: @layout}}
+      end
+
+    # Add layout opts
+    # item = %{item | layout: struct(item.layout, opts)}
+
+    # IO.inspect(item, label: :date_picker_values)
+    # Logger.info("multi item: #{inspect item} ")
+    Logger.info("multi subitems: #{inspect subitems} ")
+
+    # data = for sub_key <- digit_config
+    socket! =
+      socket
+      |> assign(:key, keys)
+      |> assign(:data, data: value)
+      |> assign(subitems)
+
+    # IO.inspect(socket!.assigns, label: :date_picker_assigns, pretty: true)
+    # IO.inspect(socket!.changed, label: :date_picker_sockets, pretty: true)
+    socket!
+  end
+
   def update(assigns, socket) do
     # Logger.debug("selection_menu:comp:update: #{inspect(assigns, pretty: true)}")
     # send message to listen here!
@@ -49,29 +96,27 @@ defmodule BulmaWidgets.Widgets.MultiPickMenu do
     # Logger.info("selection_menu:render: assigns:data: #{inspect(assigns.data)}")
 
     ~H"""
-    <aside class="menu" id={@id}>
-      <p class="menu-label" :if={@label != ""}>
-        <%= @label %>
-      </p>
-
-      <ul class="menu-list">
-        <%= for {key, value} <- @values do %>
-          <li>
-            <a href="#"
-              phx-click={
-                JS.push("menu-select-action", target: @rest.myself)
-                |> JS.remove_class("is-active", to: "##{@id}")
-              }
-              phx-value-id={@id}
-              phx-value-value-hash={value |> :erlang.phash2()}
-              phx-target={@rest.myself}
-            >
-              <%= key %>
-            </a>
-          </li>
+      <div class="date-picker-field field is-grouped" >
+        <%= for key <- @keys do %>
+          <%!-- <%= get_in(opts, [:"#{key}", :pre]) %> --%>
+          <div class="control <%= key %> ">
+            <%!-- <%= ScrollMenuLive.live_render(socket_assigns, id: subid(menu_id, key)) %> --%>
+          </div>
+          <%= if index(@digit_config, key) == 0 do %>
+            <span class="icon has-text-centered is-size-1 has-text-white"
+                  style="padding-right: 0.5em; width: 0.5em;">
+                .
+            </span>
+          <% end %>
+          <%= if rem(index(@digit_config, key), 3) == 0 && index(@digit_config, key) != 0 do %>
+            <span class="icon has-text-centered is-size-1 has-text-white"
+                  style="padding-right: 0.5em; width: 0.5em;">
+                ,
+            </span>
+          <% end %>
+          <%!-- <%= get_in(opts, [:"#{key}", :post]) %> --%>
         <% end %>
-      </ul>
-    </aside>
+      </div>
     """
   end
 
@@ -104,9 +149,6 @@ defmodule BulmaWidgets.Widgets.MultiPickMenu do
     end
   end
 
-
-  @digit_values (0..9 |> Enum.to_list() |> BulmaWidgets.Utils.Menu.convert())
-  @sign_values ([:+, :-] |> BulmaWidgets.Utils.Menu.convert())
 
   def number_to_digits(value, {digits, decimals, sign}) do
     # Logger.warning("NUMBER_TO_DIGITS: #{inspect value} <- #{inspect {digits, decimals, sign}}")
@@ -175,5 +217,11 @@ defmodule BulmaWidgets.Widgets.MultiPickMenu do
     result
   end
 
+  def index(digit_config, key) when is_atom(key) do
+    -1
+  end
+  def index(digit_config, key) do
+    elem(digit_config, 0) - elem(digit_config, 1) - key - 1
+  end
 
 end

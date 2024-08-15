@@ -19,11 +19,9 @@ defmodule BulmaWidgets.Components do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
+  alias BulmaWidgets.Event
+  import BulmaWidgets.Elements
   require Logger
-
-  def gettext(text) do
-    text
-  end
 
   @doc """
   Switch controls for Bulma CSS Framework — Pure HTML & CSS/SCSS.
@@ -52,6 +50,82 @@ defmodule BulmaWidgets.Components do
           <%= render_slot(@label) %>
         </span>
       </label>
+    """
+  end
+
+  @doc """
+  Switch controls for Bulma CSS Framework — Pure HTML & CSS/SCSS.
+
+  Thanks to [Justboil](https://justboil.github.io/bulma-switch-control/)
+
+  ## Examples
+
+      <.dropdown id="confirm-modal">
+        <:label_default> Test </:label_default>
+        <:label :let={{k,v}}> <%= k %> </:label>
+        <:label_icon base="fas" name="fa-angle-down"/>
+
+        <:item :let={%{id: id, key: key, value: value, parent: parent, selected: selected}}>
+          <a href="#"
+              class={"dropdown-item \#{selected && "is-active" || ""}"}
+              phx-click="menu-select"
+              phx-value-id={id}
+              phx-value-key={key}
+              phx-value-value={value}
+              phx-target={@parent} >
+            <%= key %>
+          </a>
+        </:item>
+      </.dropdown>
+
+  """
+  attr(:id, :string, required: true)
+  # attr(:values, :list, required: true)
+  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
+  slot(:label_default)
+  slot(:label)
+  slot(:label_icon)
+
+  def dropdown(assigns) do
+    ~H"""
+    <div id={@id} class={["dropdown", classes(@rest, attrs_atoms())]}
+        phx-click={JS.toggle_class("is-active", to: "##{@id}")}
+        phx-click-away={JS.remove_class("is-active", to: "##{@id}")}
+    >
+      <div class="dropdown-trigger">
+        <button class={["button", classes(@rest, colors_atoms())]}
+                aria-haspopup="true" aria-controls="dropdown-menu">
+          <span>
+            <%= if @data == nil || @data == {nil, nil} do %>
+              <%= render_slot(@default_label) %>
+            <% else %>
+              <%= render_slot(@label, @data) %>
+            <% end %>
+          </span>
+          <%= render_slot(@icon) %>
+          <.icon base="fas" name="fa-angle-down" />
+        </button>
+      </div>
+      <div class="dropdown-menu" role="menu">
+        <div class="dropdown-content">
+          <%= for {key, value} <- @values do %>
+            <a href="#"
+                class={"dropdown-item #{key == Event.key(@data) && "is-active" || ""}"}
+                phx-click={
+                  JS.push("menu-select-action", target: @rest.myself)
+                  |> JS.remove_class("is-active", to: "##{@id}")
+                }
+                phx-value-id={@id}
+                phx-value-key={key}
+                phx-value-value-hash={value |> :erlang.phash2()}
+                phx-target={@rest.myself} >
+              <%= key %>
+            </a>
+          <% end %>
+        </div>
+      </div>
+    </div>
     """
   end
 
@@ -317,31 +391,4 @@ defmodule BulmaWidgets.Components do
     |> JS.pop_focus()
   end
 
-  @doc """
-  Translates an error message using gettext.
-  """
-  def translate_error({msg, opts}) do
-    # When using gettext, we typically pass the strings we want
-    # to translate as a static argument:
-    #
-    #     # Translate the number of files with plural rules
-    #     dngettext("errors", "1 file", "%{count} files", count)
-    #
-    # However the error messages in our forms and APIs are generated
-    # dynamically, so we need to translate them by calling Gettext
-    # with our gettext backend as first argument. Translations are
-    # available in the errors.po file (as we use the "errors" domain).
-    if count = opts[:count] do
-      Gettext.dngettext(BulmaWidgets.Gettext, "errors", msg, msg, count, opts)
-    else
-      Gettext.dgettext(BulmaWidgets.Gettext, "errors", msg, opts)
-    end
-  end
-
-  @doc """
-  Translates the errors for a field from a keyword list of errors.
-  """
-  def translate_errors(errors, field) when is_list(errors) do
-    for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
-  end
 end

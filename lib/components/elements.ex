@@ -230,7 +230,7 @@ defmodule BulmaWidgets.Elements do
 
   ## Examples
 
-      <.delete is-medium></.delete>
+      <.icon is-medium></.icon>
   """
   attr(:base, :string, default: "fas")
   attr(:name, :string, required: true)
@@ -242,10 +242,8 @@ defmodule BulmaWidgets.Elements do
 
     ~H"""
     <%= if @text do %>
-      <span class="icon-text">
-        <span class={["icon", classes(@rest)]} {extras(@rest)}>
-          <i class={[@base, @name]}></i>
-        </span>
+      <span class={["icon", classes(@rest)]} {extras(@rest)}>
+        <i class={[@base, @name]}></i>
       </span>
     <% else %>
       <span class="icon-text">

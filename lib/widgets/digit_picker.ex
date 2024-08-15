@@ -99,7 +99,7 @@ defmodule BulmaWidgets.Widgets.MultiPickMenu do
       <div class="date-picker-field field is-grouped" >
         <%= for key <- @keys do %>
           <%!-- <%= get_in(opts, [:"#{key}", :pre]) %> --%>
-          <div class="control <%= key %> ">
+          <div class={["control", key ]}>
             <%!-- <%= ScrollMenuLive.live_render(socket_assigns, id: subid(menu_id, key)) %> --%>
           </div>
           <%= if index(@digit_config, key) == 0 do %>

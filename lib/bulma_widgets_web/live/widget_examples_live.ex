@@ -245,6 +245,20 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         </:tab>
       </.live_component>
 
+          <.message is-warning is-overlay>
+            <:header>
+              <p>Hello World</p>
+              <button class="delete"
+                      phx-click={JS.remove_class("is-active", to: "#my-modal")}
+                      aria-label="delete">
+              </button>
+            </:header>
+            <:body>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec
+            </:body>
+          </.message>
+
       <.modal id="my-modal"
               modal-fx-fadeInScale
               position="bottom">

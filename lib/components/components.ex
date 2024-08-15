@@ -70,7 +70,7 @@ defmodule BulmaWidgets.Components do
       </.modal>
 
   """
-  attr(:show, :boolean, default: false)
+  attr(:kind, :atom, default: nil)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   slot(:header, required: false)
@@ -78,7 +78,10 @@ defmodule BulmaWidgets.Components do
 
   def message(assigns) do
     ~H"""
-    <article class={["message", classes(@rest)]} {extras(@rest)}>
+    <article
+        class={["message", classes(@rest), @kind && "is-#{@kind}" || ""]}
+        {extras(@rest)}
+    >
       <div :for={header <- @header} class="message-header">
         <%= render_slot(header) %>
       </div>
@@ -161,7 +164,7 @@ defmodule BulmaWidgets.Components do
   attr(:id, :string, doc: "the optional id of flash container")
   attr(:flash, :map, default: %{}, doc: "the map of flash messages to display")
   attr(:title, :string, default: nil)
-  attr(:kind, :atom, values: [:info, :error], doc: "used for styling and flash lookup")
+  attr(:kind, :atom, values: [:info, :success, :warning, :error], doc: "used for styling and flash lookup")
   attr(:rest, :global, doc: "the arbitrary HTML attributes to add to the flash container")
 
   slot(:inner_block, doc: "the optional inner block that renders the flash message")
@@ -178,14 +181,18 @@ defmodule BulmaWidgets.Components do
       class={[]}
       {extras(@rest)}
     >
-      <div class="width-full py-1 px-3 position-absolute bottom-0 right-0 anim-fade-in fast">
-        <%!-- <.alert state={"#{@kind}"}>
-          <%= msg %>
-          <.button class="flash-close">
-            <.octicon name="x-16" />
-          </.button>
-        </.alert> --%>
-      </div>
+        <.message is-overlay kind={@kind}>
+          <:header>
+            <p>Hello World</p>
+            <button class="delete"
+                    phx-click={JS.remove_class("is-active", to: "#my-modal")}
+                    aria-label="delete">
+            </button>
+          </:header>
+          <:body>
+            <%= render_slot(@inner_block) %>
+          </:body>
+        </.message>
     </div>
     """
   end
@@ -202,10 +209,10 @@ defmodule BulmaWidgets.Components do
 
   def flash_group(assigns) do
     ~H"""
-    <div class="box" id={@id}>
+    <div class="box is-overlay" id={@id}>
       <.flash kind={:info} title={gettext("Info!")} flash={@flash} />
       <%!-- <.flash kind={:success} title={gettext("Success!")} flash={@flash} /> --%>
-      <%!-- <.flash kind={:error} title={gettext("Error!")} flash={@flash} /> --%>
+      <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
 
       <.flash
         id="server-error"

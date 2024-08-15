@@ -25,6 +25,7 @@ defmodule BulmaWidgets do
     is-outlined
     is-toggle
     is-boxed
+    is-overlay
     has-text-centered
 
     is-rounded

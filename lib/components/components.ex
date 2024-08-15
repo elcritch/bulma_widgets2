@@ -63,7 +63,27 @@ defmodule BulmaWidgets.Components do
         <:label :let={{k,v}}> <%= k %> </:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
-        <:item :let={%{id: id, key: key, value: value, parent: parent, selected: selected}}>
+        <:value label="Item A" key={1} />
+        <:value label="Item B" key={2} />
+
+        <:item :let={%{id: id, label: label, key: key, parent: parent, selected: selected}}>
+          <a href="#"
+              class={"dropdown-item \#{selected && "is-active" || ""}"}
+              phx-click="menu-select"
+              phx-value-id={id}
+              phx-value-key={key}
+              phx-value-value={value}
+              phx-target={@parent} >
+            <%= key %>
+          </a>
+        </:item>
+      </.dropdown>
+
+      <.dropdown id="confirm-modal" values={ [{"A", 1, {"B", 2}] }>
+        <:label :let={{k,v}}> <%= k %> </:label>
+        <:label_icon base="fas" name="fa-angle-down"/>
+
+        <:item :let={%{id: id, label: label, key: key, parent: parent, selected: selected}}>
           <a href="#"
               class={"dropdown-item \#{selected && "is-active" || ""}"}
               phx-click="menu-select"
@@ -78,7 +98,7 @@ defmodule BulmaWidgets.Components do
 
   """
   attr(:id, :string, required: true)
-  # attr(:values, :list, required: true)
+  attr(:selected, :any)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   slot(:label_default)
@@ -86,6 +106,19 @@ defmodule BulmaWidgets.Components do
   slot(:label_icon)
 
   def dropdown(assigns) do
+
+    values =
+      case assigns.values do
+        nil ->
+          assigns.value |> Enum.map(fn v -> %{label: v.label, key: v.key} end)
+        values ->
+          values
+      end
+
+    assigns =
+      assigns
+      |> assign(:values, values)
+
     ~H"""
     <div
       id={@id}
@@ -100,14 +133,13 @@ defmodule BulmaWidgets.Components do
           aria-controls="dropdown-menu"
         >
           <span>
-            <%= if @data == nil || @data == {nil, nil} do %>
+            <%= if @label_default != [] && @data == nil || @data == {nil, nil} do %>
               <%= render_slot(@default_label) %>
             <% else %>
               <%= render_slot(@label, @data) %>
             <% end %>
           </span>
           <%= render_slot(@icon) %>
-          <.icon base="fas" name="fa-angle-down" />
         </button>
       </div>
       <div class="dropdown-menu" role="menu">
@@ -118,7 +150,7 @@ defmodule BulmaWidgets.Components do
               key: key,
               value: value,
               parent: @rest.myself,
-              selected: selected
+              selected: value == BulmaWidgets.Event.val(@selected)
             }) %>
           <% end %>
         </div>

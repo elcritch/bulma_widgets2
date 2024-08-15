@@ -71,7 +71,7 @@ defmodule BulmaWidgets.Widgets.ScrollMenu do
         <div class="dropdown-content">
           <%= for {key, value} <- @values do %>
             <a href="#"
-              class={"dropdown-item #{key == key(@data) && "is-active" || ""}"}
+              class={"dropdown-item #{value == value(@data) && "is-active" || ""}"}
               phx-click={
                 JS.push("menu-select-action", target: @rest.myself)
                 |> JS.remove_class("is-active", to: "##{@id}")

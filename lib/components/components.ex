@@ -59,7 +59,7 @@ defmodule BulmaWidgets.Components do
 
   ## Examples
 
-      <.dropdown id="confirm-modal">
+      <.dropdown id="confirm-modal" selected={:a}>
         <:label :let={{k,v}}> <%= k %> </:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
@@ -68,7 +68,7 @@ defmodule BulmaWidgets.Components do
 
       </.dropdown>
 
-      <.dropdown id="confirm-modal" values={ [{"A", 1, {"B", 2}] }>
+      <.dropdown id="confirm-modal" values={ [{1, "A"}, {2,"B"}] }>
         <:label :let={{k,v}}> <%= k %> </:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
@@ -83,7 +83,7 @@ defmodule BulmaWidgets.Components do
   """
   attr(:id, :string, required: true)
   attr(:selected, :any, default: nil)
-  attr(:values, :any, default: nil)
+  attr(:values, :any, default: nil, doc: "optional list of `{key, lable}` items to be used for the menu")
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
   slot(:label)

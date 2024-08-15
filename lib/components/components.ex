@@ -60,7 +60,6 @@ defmodule BulmaWidgets.Components do
   ## Examples
 
       <.dropdown id="confirm-modal">
-        <:label_default> Test </:label_default>
         <:label :let={{k,v}}> <%= k %> </:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
@@ -102,7 +101,6 @@ defmodule BulmaWidgets.Components do
   attr(:selected, :any, default: nil)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
-  slot(:label_default)
   slot(:label)
   slot(:label_icon) do
     attr(:base, :string)
@@ -141,14 +139,7 @@ defmodule BulmaWidgets.Components do
           aria-controls="dropdown-menu"
         >
           <span>
-            <%= cond do %>
-              <% @label_default != [] && Event.val(@selected) == nil -> %>
-                <%= render_slot(@label_default) %>
-              <% Event.val(@selected) == nil -> %>
-                <%= render_slot(@label, @selected) %>
-              <% true -> %>
-                <!-- none -->
-            <% end %>
+            <%= render_slot(@label) %>
           </span>
           <.icon base={icon.base} name={icon.name} :for={icon <- @label_icon} />
         </button>

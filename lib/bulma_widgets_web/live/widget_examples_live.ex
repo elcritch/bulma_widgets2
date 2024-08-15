@@ -167,7 +167,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <.title size={4}>Dropdown Test</.title>
       <.dropdown id={"dropdown-test"}
       >
-        <:label :let={{k,_}}> <%= k %> </:label>
+        <:label :let={sel}> <%= Event.key(sel, "Dropdown") %> </:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
         <:items :let={%{selected: selected}}>

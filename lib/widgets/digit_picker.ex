@@ -76,12 +76,12 @@ defmodule BulmaWidgets.Widgets.MultiPickMenu do
   end
 
   def handle_event( "menu-select-action", data, socket) do
-    Logger.warninging("menu-select-action: #{inspect(data, pretty: true)}")
+    Logger.warning("menu-select-action: #{inspect(data, pretty: true)}")
     %{"id" => menu_name, } = data
 
     data = [1,2,3]
 
-    # Logger.warninging("menu-select-action: #{inspect({key, value}, pretty: true)}")
+    # Logger.warning("menu-select-action: #{inspect({key, value}, pretty: true)}")
     {:noreply,
      socket
      |> Actions.handle_event(menu_name, data, @standard_actions)}

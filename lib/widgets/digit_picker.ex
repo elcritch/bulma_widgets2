@@ -109,8 +109,6 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
     <div class="date-picker-field field is-grouped">
       <%= for item <- @keys do %>
         <% digit = @subitems[item] %>
-        <% Logger.warning("ITEM: #{inspect(item)}") %>
-        <% Logger.warning("DIGIT: #{inspect(digit)}") %>
         <div class={["control", digit.key]}>
           <.dropdown id={digit.id} values={digit.values} selected={Event.key(digit.data)}>
             <:label :let={sel}>
@@ -157,14 +155,21 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
 
   def handle_event("menu-select-action", data, socket) do
     Logger.warning("menu-select-action: #{inspect(data, pretty: true)}")
-    %{"id" => menu_name} = data
+    %{"id" => menu_name, "digit" => digit_raw} = data
 
+    {subid, ""} =
+      menu_name
+      |> String.replace_leading("#{socket.assigns.id}--", "")
+      |> Integer.parse()
+    {digit, ""} = digit_raw |> Integer.parse()
+
+    subitems = put_in(socket.assigns.subitems, [subid, :data], {digit, digit} )
+
+    socket = socket |> assign(:subitems, subitems)
     data = [1, 2, 3]
 
-    subitems = socket.assigns.subitems
-    # put_in()
-
-    Logger.warning("menu-select-action:subitems: #{inspect(subitems , pretty: true)}")
+    Logger.warning("menu-select-action:subid: #{inspect(subid , pretty: false)}")
+    # Logger.warning("menu-select-action:subitems: #{inspect(subitems , pretty: true)}")
     {:noreply,
      socket
      |> Actions.handle_event(menu_name, data, @standard_actions)}

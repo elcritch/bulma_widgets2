@@ -49,19 +49,18 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
     Logger.info("assign multi item: digits: #{inspect(digit_values)} ")
 
     subitems =
-      for {data, sub_key} <- Enum.zip(digit_values, keys), into: [] do
+      for {data, sub_key} <- Enum.zip(digit_values, keys), into: %{} do
         scrollitems = if is_atom(sub_key), do: @sign_values, else: @digit_values
         # sub_item = struct(ScrollMenuLive, [])
         sub_id = subid(menu_id, sub_key)
         values = scrollitems |> Enum.to_list()
 
-        {sub_id,
+        {sub_key,
          %{
            id: sub_id,
            key: sub_key,
            data: {to_string(data), data},
            values: values,
-           layout: @layout
          }}
       end
 
@@ -93,6 +92,7 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
   attr :label, :string, default: ""
   attr :values, :list, required: true
   attr :data, :any, default: {nil, nil}
+  attr :keys, :list
   attr :subitems, :list
   attr :digit_config, :any
   attr :extra_actions, :list, default: []
@@ -107,25 +107,25 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
 
     ~H"""
     <div class="date-picker-field field is-grouped">
-      <%= for {subid, digit} <- @subitems do %>
-        <%!-- <p>Key: <%= inspect(digit) %></p> --%>
-        <%!-- <%= get_in(opts, [:"#{key}", :pre]) %> --%>
+      <%= for item <- @keys do %>
+        <% digit = @subitems[item] %>
+        <% Logger.warning("ITEM: #{inspect(item)}") %>
+        <% Logger.warning("DIGIT: #{inspect(digit)}") %>
         <div class={["control", digit.key]}>
-          <%!-- <%= ScrollMenuLive.live_render(socket_assigns, id: subid(menu_id, key)) %> --%>
-          <.dropdown id={subid} values={digit.values} selected={Event.key(digit.data)}>
+          <.dropdown id={digit.id} values={digit.values} selected={Event.key(digit.data)}>
             <:label :let={sel}>
-              <%= render_slot(@label, sel) %>
+              <%= BulmaWidgets.Event.val(sel, "Dropdown") %>
             </:label>
-            <:label_icon base="fas" name="fa-angle-down" />
 
             <:items :let={%{id: id, label: label, key: key, parent: _parent, selected: selected}}>
               <a
                 class={["dropdown-item", (selected && "is-active") || ""]}
                 phx-click={
                   JS.push("menu-select-action", target: @rest.myself)
-                  |> JS.remove_class("is-active", to: "##{@id}")
+                  |> JS.remove_class("is-active", to: "##{id}")
                 }
                 phx-value-id={id}
+                phx-value-digit={key}
                 phx-value-value-hash={key |> :erlang.phash2()}
                 phx-target={@rest.myself}
               >
@@ -137,7 +137,6 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
         <%= if index(@digit_config, digit.key) == 0 do %>
           <span
             class="icon has-text-centered is-size-1 has-text-white"
-            style="padding-right: 0.5em; width: 0.5em;"
           >
             .
           </span>
@@ -162,7 +161,10 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
 
     data = [1, 2, 3]
 
-    # Logger.warning("menu-select-action: #{inspect({key, value}, pretty: true)}")
+    subitems = socket.assigns.subitems
+    # put_in()
+
+    Logger.warning("menu-select-action:subitems: #{inspect(subitems , pretty: true)}")
     {:noreply,
      socket
      |> Actions.handle_event(menu_name, data, @standard_actions)}

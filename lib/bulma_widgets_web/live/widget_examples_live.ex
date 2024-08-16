@@ -40,6 +40,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
     {:noreply, Actions.update(assigns, socket)}
   end
 
+  @spec render(any()) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~H"""
     <.container>
@@ -49,7 +50,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <.live_component
         module={DigitPicker}
         id="digit_test"
-        value={514.14}
+        value={51414}
         digits={{4,3,true}}
         extra_actions={[
           Widgets.send_action_data("test-value-set", into: :switch_test)

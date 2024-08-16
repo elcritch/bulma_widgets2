@@ -153,6 +153,7 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
     Logger.warning("menu-select-action:subitems: #{inspect(socket.assigns.subitems |> Map.keys(), pretty: true)}")
     %{"id" => menu_name, "digit" => digit_raw} = data
 
+    ## gross, really need to just redo this and change the {idx, label} stuff to structs
     subid =
       menu_name
       |> String.replace_leading("#{socket.assigns.id}--", "")

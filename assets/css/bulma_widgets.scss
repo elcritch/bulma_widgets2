@@ -1,6 +1,5 @@
 @import "bulma/bulma.scss";
 
-// import modal-fx component
 @import "modal-fx/main.scss";
 @import "bulma-switch-control.scss";
 
@@ -23,4 +22,12 @@
 .flash-item {
   grid-column-start: 2;
   grid-column-end: 3;
+}
+
+.bd-hr {
+  background-color: var(--theme-color, var(--bulma-primary));
+  border-radius: 9999px;
+  height: .25rem;
+  margin: 0.25em auto;
+  width: 4em;
 }

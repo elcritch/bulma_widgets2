@@ -46,8 +46,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
     <.container>
       <.title notification={true} size={3}>Widget Examples</.title>
 
-      <br>
-      <.title size={4}>Button Examples</.title>
+      <.title size={5} dashed>Examples of using buttons</.title>
 
       <.button
         phx-click={
@@ -68,8 +67,8 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
       <p> shared: <%= @shared |> inspect() %> </p>
 
-      <br>
-      <.title size={4}>Switch Examples</.title>
+      <.title size={4} dashed>Switch Examples</.title>
+
       <p>One way binding:</p>
       <.switch checked={@shared[:switch_test]} />
       <br>

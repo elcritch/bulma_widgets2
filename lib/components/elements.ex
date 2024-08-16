@@ -88,17 +88,22 @@ defmodule BulmaWidgets.Elements do
   """
   attr(:size, :integer, required: true)
   attr(:notification, :boolean, default: false)
+  attr(:dashed, :boolean, default: false)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
   slot(:inner_block, required: false)
   def title(assigns) do
     ~H"""
-    <%= if @notification do %>
-      <div class={["notification notification-title has-text-centered", classes(@rest)]} {extras(@rest)}>
-        <%= hh(assigns) %>
-      </div>
-    <% else %>
-      <%= hh(assigns) %>
-    <% end %>
+      <%= if @notification do %>
+        <div class={["notification notification-title has-text-centered", classes(@rest)]} {extras(@rest)}>
+          <%= hh(assigns) %>
+        </div>
+      <% else %>
+        <div class="my-3">
+          <%= hh(assigns) %>
+          <hr class="bd-hr is-pulled-left" :if={@dashed} >
+          <br class="my-0">
+        </div>
+      <% end %>
     """
   end
 

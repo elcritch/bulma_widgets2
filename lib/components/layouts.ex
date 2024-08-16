@@ -66,43 +66,13 @@ defmodule BulmaWidgets.Layouts do
     ~H"""
     <section class={["hero", classes(@rest)]} {extras(@rest)}>
       <div class="hero-body">
-        <p :if={@title} class="title">
+        <p :if={@title != []} class="title">
           <%= render_slot(@title) %>
         </p>
-        <p :if={@subtitle} class="subtitle">
+        <hr :if={@hr != []} class="hr">
+        <p :if={@subtitle != []} class="subtitle">
           <%= render_slot(@subtitle) %>
         </p>
-      </div>
-    </section>
-    """
-  end
-
-  @doc """
-  An imposing hero banner to showcase something
-
-  ## Examples
-
-      <.bd_hero is-success>
-        <:title>Hero Title</:title>
-        <:subtitle>Hero Title</:subtitle>
-      </.bd_hero>
-  """
-  attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
-  slot(:title, doc: "hero title")
-  slot(:hr, doc: "hero title")
-  slot(:subtitle, doc: "hero subtitle")
-
-  def bd_hero(assigns) do
-    ~H"""
-    <section class={["bd-hero", classes(@rest)]} {extras(@rest)}>
-      <div class="bd-hero-body">
-        <h1 :for={title <- @title} class="bd-hero-title">
-          <%= render_slot(title) %>
-        </h1>
-        <hr :for={_hr <- @hr} class="bd-hero-hr">
-        <h2 :for={subtitle <- @subtitle} class="bd-hero-subtitle">
-          <%= render_slot(subtitle) %>
-        </h2>
       </div>
     </section>
     """
@@ -126,6 +96,7 @@ defmodule BulmaWidgets.Layouts do
       </.hero_fullheight>
   """
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+
   slot(:head, doc: "hero header")
   slot(:title, doc: "hero title")
   slot(:subtitle, doc: "hero subtitle")

@@ -26,9 +26,10 @@ defmodule BulmaWidgets do
     is-toggle
     is-boxed
     is-overlay
-    has-text-centered
-
     is-rounded
+    is-horizontal
+
+    has-text-centered
     delete
   )
 

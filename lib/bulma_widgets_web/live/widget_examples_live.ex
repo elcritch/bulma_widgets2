@@ -9,7 +9,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
   alias BulmaWidgets.Widgets.TabView
   alias BulmaWidgets.Widgets.VertTabView
   alias BulmaWidgets.Widgets.Switch
-  alias BulmaWidgets.Widgets.DigitPickMenu
+  alias BulmaWidgets.Widgets.DigitPicker
   alias BulmaWidgets.Action.UpdateHooks
 
   require Logger
@@ -47,7 +47,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
       <.title size={5} dashed>Digit Picker</.title>
       <.live_component
-        module={DigitPickMenu}
+        module={DigitPicker}
         id="digit_test"
         value={514.14}
         digits={{4,3,true}}

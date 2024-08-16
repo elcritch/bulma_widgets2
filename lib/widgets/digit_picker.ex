@@ -1,4 +1,4 @@
-defmodule BulmaWidgets.Widgets.DigitPickMenu do
+defmodule BulmaWidgets.Widgets.DigitPicker do
   use Phoenix.LiveComponent
   use BulmaWidgets, :html_helpers
   use BulmaWidgets, :css_utilities
@@ -12,14 +12,12 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
   ## Examples
 
       <.live_component
-        module={SelectionMenu}
-        id="wiper_mode"
-        is-fullwidth
-        is-info
-        label="Wiper Modes"
-        values={[
-          {"Regular", 1},
-          {"Inverted", -1}
+        module={DigitPicker}
+        id="digit_test"
+        value={514.14}
+        digits={{4,3,true}}
+        extra_actions={[
+          Widgets.send_action_data("test-value-set", into: :switch_test)
         ]}
       >
       </.live_component>

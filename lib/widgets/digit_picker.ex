@@ -99,6 +99,8 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
     ~H"""
       <div class="date-picker-field field is-grouped" >
         <%= for key <- @keys do %>
+          <p> Key: <%= inspect(key) %> </p>
+          <p> Subid: <%= subid(@id, key) %> </p>
           <%!-- <%= get_in(opts, [:"#{key}", :pre]) %> --%>
           <div class={["control", key ]}>
             <%!-- <%= ScrollMenuLive.live_render(socket_assigns, id: subid(menu_id, key)) %> --%>

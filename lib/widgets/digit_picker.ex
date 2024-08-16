@@ -29,24 +29,24 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
     {AssignField, field: :data}
   ]
 
-  @digit_values (0..9 |> Enum.to_list() |> BulmaWidgets.Utils.Menu.convert())
-  @sign_values ([:+, :-] |> BulmaWidgets.Utils.Menu.convert())
+  @digit_values 0..9 |> Enum.to_list() |> BulmaWidgets.Utils.Menu.convert()
+  @sign_values [:+, :-] |> BulmaWidgets.Utils.Menu.convert()
 
   def update(assigns, socket) do
-
     menu_id = assigns.id
     value = assigns.value
-    digit_config = assigns.digits # digits: {4, 3, true},
+    # digits: {4, 3, true},
+    digit_config = assigns.digits
 
     unless is_float(value),
-      do: raise(%ArgumentError{message: "value must be an integer - got #{inspect value}"})
+      do: raise(%ArgumentError{message: "value must be an integer - got #{inspect(value)}"})
 
     keys = to_digit_indexes(digit_config)
 
     digit_values = number_to_digits(value, digit_config)
 
-    Logger.info("assign multi item: keys: #{inspect keys} ")
-    Logger.info("assign multi item: digits: #{inspect digit_values} ")
+    Logger.info("assign multi item: keys: #{inspect(keys)} ")
+    Logger.info("assign multi item: digits: #{inspect(digit_values)} ")
 
     subitems =
       for {data, sub_key} <- Enum.zip(digit_values, keys), into: [] do
@@ -55,15 +55,22 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
         sub_id = subid(menu_id, sub_key)
         values = scrollitems |> Enum.to_list()
 
-        {sub_id, %{id: sub_id, key: sub_key, data: {to_string(data), data}, values: values, layout: @layout}}
+        {sub_id,
+         %{
+           id: sub_id,
+           key: sub_key,
+           data: {to_string(data), data},
+           values: values,
+           layout: @layout
+         }}
       end
 
     # Add layout opts
     # item = %{item | layout: struct(item.layout, opts)}
 
     # IO.inspect(item, label: :date_picker_values)
-    Logger.info("multi item: #{inspect assigns,pretty: true} ")
-    Logger.info("multi subitems: #{inspect subitems} ")
+    Logger.info("multi item: #{inspect(assigns, pretty: true)} ")
+    Logger.info("multi subitems: #{inspect(subitems)} ")
 
     # data = for sub_key <- digit_config
     socket =
@@ -93,62 +100,67 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
   attr :rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs()
 
   slot :default_label
+
   def render(assigns) do
     Logger.info("selection_menu:render: assigns: #{inspect(assigns, pretty: true)}")
     # Logger.info("selection_menu:render: assigns:data: #{inspect(assigns.data)}")
 
     ~H"""
-      <div class="date-picker-field field is-grouped" >
-        <%= for {subid, digit} <- @subitems do %>
-          <p> Key: <%= inspect(digit) %> </p>
-          <%!-- <%= get_in(opts, [:"#{key}", :pre]) %> --%>
-          <div class={["control", digit.key ]}>
-            <%!-- <%= ScrollMenuLive.live_render(socket_assigns, id: subid(menu_id, key)) %> --%>
-            <.dropdown id={subid} values={digit.values} selected={digit.data}>
-              <:label :let={sel}>
-                <%= render_slot(@label, sel) %>
-              </:label>
-              <:label_icon base="fas" name="fa-angle-down" />
+    <div class="date-picker-field field is-grouped">
+      <%= for {subid, digit} <- @subitems do %>
+        <%!-- <p>Key: <%= inspect(digit) %></p> --%>
+        <%!-- <%= get_in(opts, [:"#{key}", :pre]) %> --%>
+        <div class={["control", digit.key]}>
+          <%!-- <%= ScrollMenuLive.live_render(socket_assigns, id: subid(menu_id, key)) %> --%>
+          <.dropdown id={subid} values={digit.values} selected={Event.key(digit.data)}>
+            <:label :let={sel}>
+              <%= render_slot(@label, sel) %>
+            </:label>
+            <:label_icon base="fas" name="fa-angle-down" />
 
-              <:items :let={%{id: id, label: label, key: key, parent: _parent, selected: selected}}>
-                <a
-                  class={["dropdown-item", (selected && "is-active") || ""]}
-                  phx-click={
-                    JS.push("menu-select-action", target: @rest.myself)
-                    |> JS.remove_class("is-active", to: "##{@id}")
-                  }
-                  phx-value-id={id}
-                  phx-value-value-hash={key |> :erlang.phash2()}
-                  phx-target={@rest.myself}
-                >
-                  <%= label %>
-                </a>
-              </:items>
-            </.dropdown>
-          </div>
-          <%= if index(@digit_config, digit.key) == 0 do %>
-            <span class="icon has-text-centered is-size-1 has-text-white"
-                  style="padding-right: 0.5em; width: 0.5em;">
-                .
-            </span>
-          <% end %>
-          <%= if rem(index(@digit_config, digit.key), 3) == 0 && index(@digit_config, digit.key) != 0 do %>
-            <span class="icon has-text-centered is-size-1 has-text-white"
-                  style="padding-right: 0.5em; width: 0.5em;">
-                ,
-            </span>
-          <% end %>
-          <%!-- <%= get_in(opts, [:"#{key}", :post]) %> --%>
+            <:items :let={%{id: id, label: label, key: key, parent: _parent, selected: selected}}>
+              <a
+                class={["dropdown-item", (selected && "is-active") || ""]}
+                phx-click={
+                  JS.push("menu-select-action", target: @rest.myself)
+                  |> JS.remove_class("is-active", to: "##{@id}")
+                }
+                phx-value-id={id}
+                phx-value-value-hash={key |> :erlang.phash2()}
+                phx-target={@rest.myself}
+              >
+                <%= label %>
+              </a>
+            </:items>
+          </.dropdown>
+        </div>
+        <%= if index(@digit_config, digit.key) == 0 do %>
+          <span
+            class="icon has-text-centered is-size-1 has-text-white"
+            style="padding-right: 0.5em; width: 0.5em;"
+          >
+            .
+          </span>
         <% end %>
-      </div>
+        <%= if rem(index(@digit_config, digit.key), 3) == 0 && index(@digit_config, digit.key) != 0 do %>
+          <span
+            class="icon has-text-centered is-size-1 has-text-white"
+            style="padding-right: 0.5em; width: 0.5em;"
+          >
+            ,
+          </span>
+        <% end %>
+        <%!-- <%= get_in(opts, [:"#{key}", :post]) %> --%>
+      <% end %>
+    </div>
     """
   end
 
-  def handle_event( "menu-select-action", data, socket) do
+  def handle_event("menu-select-action", data, socket) do
     Logger.warning("menu-select-action: #{inspect(data, pretty: true)}")
-    %{"id" => menu_name, } = data
+    %{"id" => menu_name} = data
 
-    data = [1,2,3]
+    data = [1, 2, 3]
 
     # Logger.warning("menu-select-action: #{inspect({key, value}, pretty: true)}")
     {:noreply,
@@ -156,14 +168,14 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
      |> Actions.handle_event(menu_name, data, @standard_actions)}
   end
 
-
-  defp subid(menu_id, sub_key), do: String.to_atom("#{menu_id}/#{sub_key}")
+  defp subid(menu_id, sub_key), do: String.to_atom("#{menu_id}--#{sub_key}")
 
   def to_digit_indexes({:{}, _meta, value}) do
-    to_digit_indexes(value |> :erlang.list_to_tuple)
+    to_digit_indexes(value |> :erlang.list_to_tuple())
   end
+
   def to_digit_indexes({digits, _decimals, sign}) do
-    digs = Enum.to_list(0..digits-1)
+    digs = Enum.to_list(0..(digits - 1))
 
     if sign do
       # digs |> List.replace_at(0, "0")
@@ -172,7 +184,6 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
       digs
     end
   end
-
 
   def number_to_digits(value, {digits, decimals, sign}) do
     # Logger.warning("NUMBER_TO_DIGITS: #{inspect value} <- #{inspect {digits, decimals, sign}}")
@@ -185,7 +196,7 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
       |> Enum.map(fn x -> x - 48 end)
       |> Enum.take(digits)
 
-    Logger.warning("NUMBER_TO_DIGITS: dvs: #{inspect digit_values}")
+    Logger.warning("NUMBER_TO_DIGITS: dvs: #{inspect(digit_values)}")
 
     result =
       if sign do
@@ -194,14 +205,18 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
       else
         digit_values
       end
-    Logger.warning("NUMBER_TO_DIGITS: post: #{inspect result} ")
+
+    Logger.warning("NUMBER_TO_DIGITS: post: #{inspect(result)} ")
     result
   end
 
   def digits_to_number(numbers, {digits, decimals, sign}) do
     dsign = if sign, do: numbers |> List.pop_at(0) |> elem(0), else: :+
     numbers = if sign, do: numbers |> List.delete_at(0), else: numbers
-    Logger.warning("DIGITS_TO_NUMBER: s: #{inspect dsign} num: #{inspect numbers} => #{inspect {digits, decimals, sign}}")
+
+    Logger.warning(
+      "DIGITS_TO_NUMBER: s: #{inspect(dsign)} num: #{inspect(numbers)} => #{inspect({digits, decimals, sign})}"
+    )
 
     {value, ""} =
       numbers
@@ -209,43 +224,48 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
       |> Enum.join()
       |> Integer.parse()
 
-    Logger.warning("DIGITS_TO_NUMBER: post: #{inspect value}")
+    Logger.warning("DIGITS_TO_NUMBER: post: #{inspect(value)}")
     result = value * :math.pow(10, -decimals)
-    Logger.warning("DIGITS_TO_NUMBER: result: #{inspect result}")
+    Logger.warning("DIGITS_TO_NUMBER: result: #{inspect(result)}")
     result = if dsign == :-, do: result * -1.0, else: result
-    Logger.warning("DIGITS_TO_NUMBER: result sign: #{inspect result}")
+    Logger.warning("DIGITS_TO_NUMBER: result sign: #{inspect(result)}")
     result
   end
 
   def set_digit(value, dval, index, {digits, decimals, sign}) do
-    Logger.warning("SET_DIGIT: #{inspect {value, dval}} idx: #{inspect index} <- #{inspect {digits, decimals, sign}}")
+    Logger.warning(
+      "SET_DIGIT: #{inspect({value, dval})} idx: #{inspect(index)} <- #{inspect({digits, decimals, sign})}"
+    )
+
     numbers =
       value
       |> number_to_digits({digits, decimals, sign})
 
-    Logger.warning("SET_DIGIT: numbers: #{inspect numbers} ")
+    Logger.warning("SET_DIGIT: numbers: #{inspect(numbers)} ")
+
     numbers =
       if sign do
         if index in [:+, :-] do
           numbers |> List.replace_at(0, index)
         else
-          numbers |> List.replace_at(index+1, dval)
+          numbers |> List.replace_at(index + 1, dval)
         end
       else
         numbers |> List.replace_at(index, dval)
       end
-    Logger.warning("SET_DIGIT: numbers: post: #{inspect numbers} ")
+
+    Logger.warning("SET_DIGIT: numbers: post: #{inspect(numbers)} ")
 
     result = numbers |> digits_to_number({digits, decimals, sign})
-    Logger.warning("SET_DIGIT: post: #{inspect result} ")
+    Logger.warning("SET_DIGIT: post: #{inspect(result)} ")
     result
   end
 
   def index(digit_config, key) when is_atom(key) do
     -1
   end
+
   def index(digit_config, key) do
     elem(digit_config, 0) - elem(digit_config, 1) - key - 1
   end
-
 end

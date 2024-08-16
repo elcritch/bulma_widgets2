@@ -55,8 +55,6 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
           Widgets.send_action_data("test-value-set", into: :switch_test)
         ]}
       >
-        <:label when={true}>On</:label>
-        <:label when={false}>Off</:label>
       </.live_component>
 
       <.title size={5} dashed>Examples of using buttons</.title>
@@ -206,7 +204,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         <:value key={:b}>Option B</:value>
       </.dropdown>
 
-      <.dropdown id="dropdown-test-3" values={[{1, "A"}, {2, "B"}]} selected={2}>
+      <.dropdown id="dropdown-test-3" selected={1} values={[{1, "A"}, {2, "B"}]} selected={2}>
         <:label :let={sel}>Option <%= Event.val(sel, "Dropdown") %></:label>
         <:label_icon base="fas" name="fa-angle-down" />
 

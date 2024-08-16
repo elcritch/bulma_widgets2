@@ -67,8 +67,8 @@ defmodule BulmaWidgets.Components do
         </:label>
         <:label_icon base="fas" name="fa-angle-down"/>
 
-        <:value key={"a"}> Item A </:value>
-        <:value key={"b"}> Item B </:value>
+        <:value key={:a}> Item A </:value>
+        <:value key={:b}> Item B </:value>
 
       </.dropdown>
 
@@ -133,7 +133,7 @@ defmodule BulmaWidgets.Components do
           aria-controls="dropdown-menu"
         >
           <span>
-            <%= render_slot(@label, @selected) %>
+            <%= render_slot(@label, Map.new(@values) |> Map.get(@selected)) %>
           </span>
           <.icon base={icon.base} name={icon.name} :for={icon <- @label_icon} />
         </button>

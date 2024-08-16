@@ -29,8 +29,8 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
     {AssignField, field: :data}
   ]
 
-  @digit_values 0..9 |> Enum.to_list() |> BulmaWidgets.Utils.Menu.convert()
-  @sign_values [:+, :-] |> BulmaWidgets.Utils.Menu.convert()
+  @digit_values 0..9 |> Enum.to_list() |> Enum.map(fn n -> {n, n} end)
+  @sign_values [{0, :+}, {1, :-}]
 
   def update(assigns, socket) do
     menu_id = assigns.id
@@ -41,7 +41,8 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
     unless is_float(value),
       do: raise(%ArgumentError{message: "value must be an integer - got #{inspect(value)}"})
 
-    keys = to_digit_indexes(digit_config)
+    keys =
+      to_digit_indexes(digit_config)
 
     digit_values = number_to_digits(value, digit_config)
 
@@ -50,16 +51,17 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
 
     subitems =
       for {data, sub_key} <- Enum.zip(digit_values, keys), into: %{} do
-        scrollitems = if is_atom(sub_key), do: @sign_values, else: @digit_values
-        # sub_item = struct(ScrollMenuLive, [])
+        scrollitems = if sub_key in [:sign], do: @sign_values, else: @digit_values
         sub_id = subid(menu_id, sub_key)
         values = scrollitems |> Enum.to_list()
+        Logger.info("  item: data: #{inspect(data)} ")
+        item = values |> Enum.find(fn {_,l} -> l == data end)
 
-        {sub_key,
+        {String.to_atom("#{sub_key}"),
          %{
            id: sub_id,
            key: sub_key,
-           data: {to_string(data), data},
+           data: item,
            values: values,
          }}
       end
@@ -74,7 +76,7 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
     # data = for sub_key <- digit_config
     socket =
       socket
-      |> assign(:keys, keys)
+      |> assign(:keys, keys |> Enum.map(fn x -> String.to_atom("#{x}") end))
       |> assign(:digit_config, digit_config)
       |> assign(:data, value)
       |> assign(:subitems, subitems)
@@ -89,11 +91,7 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
   end
 
   attr :id, :string, required: true
-  attr :label, :string, default: ""
-  attr :values, :list, required: true
-  attr :data, :any, default: {nil, nil}
-  attr :keys, :list
-  attr :subitems, :list
+  attr :value, :float, default: 0.0
   attr :digit_config, :any
   attr :extra_actions, :list, default: []
   attr :standard_actions, :list, default: @standard_actions
@@ -102,20 +100,20 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
   slot :default_label
 
   def render(assigns) do
-    Logger.info("selection_menu:render: assigns: #{inspect(assigns, pretty: true)}")
+    # Logger.info("selection_menu:render: assigns: #{inspect(assigns, pretty: true)}")
     # Logger.info("selection_menu:render: assigns:data: #{inspect(assigns.data)}")
 
     ~H"""
     <div class="date-picker-field field is-grouped">
-      <%= for item <- @keys do %>
-        <% digit = @subitems[item] %>
+      <%= for item <- @rest.keys do %>
+        <% digit = @rest.subitems[item] %>
         <div class={["control", digit.key]}>
           <.dropdown id={digit.id} values={digit.values} selected={Event.key(digit.data)}>
             <:label :let={sel}>
-              <%= BulmaWidgets.Event.val(sel, "Dropdown") %>
+              <%= BulmaWidgets.Event.val(sel) %>
             </:label>
 
-            <:items :let={%{id: id, label: label, key: key, parent: _parent, selected: selected}}>
+            <:items :let={%{id: id, label: label, key: menu_key, parent: _parent, selected: selected}}>
               <a
                 class={["dropdown-item", (selected && "is-active") || ""]}
                 phx-click={
@@ -123,8 +121,7 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
                   |> JS.remove_class("is-active", to: "##{id}")
                 }
                 phx-value-id={id}
-                phx-value-digit={key}
-                phx-value-value-hash={key |> :erlang.phash2()}
+                phx-value-digit={menu_key}
                 phx-target={@rest.myself}
               >
                 <%= label %>
@@ -157,18 +154,22 @@ defmodule BulmaWidgets.Widgets.DigitPickMenu do
     Logger.warning("menu-select-action: #{inspect(data, pretty: true)}")
     %{"id" => menu_name, "digit" => digit_raw} = data
 
-    {subid, ""} =
+    subid =
       menu_name
       |> String.replace_leading("#{socket.assigns.id}--", "")
-      |> Integer.parse()
-    {digit, ""} = digit_raw |> Integer.parse()
+      |> String.to_existing_atom()
 
-    subitems = put_in(socket.assigns.subitems, [subid, :data], {digit, digit} )
+    Logger.warning("menu-select-action:digit_raw: #{inspect(digit_raw, pretty: false)}")
+    {digit, ""} = digit_raw |> Integer.parse()
+    dvalue = socket.assigns.subitems[subid].values |> Enum.at(digit)
+    Logger.warning("menu-select-action:subid: #{inspect(subid , pretty: false)}")
+    Logger.warning("menu-select-action:dvalue: #{inspect(dvalue, pretty: false)}")
+
+    subitems = put_in(socket.assigns.subitems, [subid, :data], dvalue )
 
     socket = socket |> assign(:subitems, subitems)
     data = [1, 2, 3]
 
-    Logger.warning("menu-select-action:subid: #{inspect(subid , pretty: false)}")
     # Logger.warning("menu-select-action:subitems: #{inspect(subitems , pretty: true)}")
     {:noreply,
      socket

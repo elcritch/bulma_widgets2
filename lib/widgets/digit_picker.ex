@@ -1,4 +1,4 @@
-defmodule BulmaWidgets.Widgets.MultiPickMenu do
+defmodule BulmaWidgets.Widgets.DigitPickMenu do
   use Phoenix.LiveComponent
   use BulmaWidgets, :html_helpers
   use BulmaWidgets, :css_utilities
@@ -31,20 +31,21 @@ defmodule BulmaWidgets.Widgets.MultiPickMenu do
   @digit_values (0..9 |> Enum.to_list() |> BulmaWidgets.Utils.Menu.convert())
   @sign_values ([:+, :-] |> BulmaWidgets.Utils.Menu.convert())
 
-  def mount(socket) do
+  def update(assigns, socket) do
 
-    menu_id = socket.assigns.id
-    value = socket.assigns.value
-    digit_config = socket.assigns.digits # digits: {4, 3, true},
+    menu_id = assigns.id
+    value = assigns.value
+    digit_config = assigns.digits # digits: {4, 3, true},
 
     unless is_float(value),
       do: raise(%ArgumentError{message: "value must be an integer - got #{inspect value}"})
+
     keys = to_digit_indexes(digit_config)
-    # item = socket.assigns[menu_id] || %DigitPickerLive{digit_config: digit_config, keys: keys}
 
     digit_values = number_to_digits(value, digit_config)
 
-    Logger.info("assign multi item: #{inspect digit_values} ")
+    Logger.info("assign multi item: keys: #{inspect keys} ")
+    Logger.info("assign multi item: digits: #{inspect digit_values} ")
 
     subitems =
       for {data, sub_key} <- Enum.zip(digit_values, keys), into: [] do
@@ -60,22 +61,20 @@ defmodule BulmaWidgets.Widgets.MultiPickMenu do
     # item = %{item | layout: struct(item.layout, opts)}
 
     # IO.inspect(item, label: :date_picker_values)
-    # Logger.info("multi item: #{inspect item} ")
+    Logger.info("multi item: #{inspect assigns,pretty: true} ")
     Logger.info("multi subitems: #{inspect subitems} ")
 
     # data = for sub_key <- digit_config
-    socket! =
+    socket =
       socket
-      |> assign(:key, keys)
-      |> assign(:data, data: value)
-      |> assign(subitems)
+      |> assign(:keys, keys)
+      |> assign(:digit_config, digit_config)
+      |> assign(:data, value)
+      # |> assign(subitems)
 
     # IO.inspect(socket!.assigns, label: :date_picker_assigns, pretty: true)
     # IO.inspect(socket!.changed, label: :date_picker_sockets, pretty: true)
-    socket!
-  end
 
-  def update(assigns, socket) do
     # Logger.debug("selection_menu:comp:update: #{inspect(assigns, pretty: true)}")
     # send message to listen here!
 
@@ -86,13 +85,15 @@ defmodule BulmaWidgets.Widgets.MultiPickMenu do
   attr :label, :string, default: ""
   attr :values, :list, required: true
   attr :data, :any, default: {nil, nil}
+  attr :keys, :list
+  attr :digit_config, :any
   attr :extra_actions, :list, default: []
   attr :standard_actions, :list, default: @standard_actions
   attr :rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs()
 
   slot :default_label
   def render(assigns) do
-    # Logger.info("selection_menu:render: assigns: #{inspect(assigns, pretty: true)}")
+    Logger.info("selection_menu:render: assigns: #{inspect(assigns, pretty: true)}")
     # Logger.info("selection_menu:render: assigns:data: #{inspect(assigns.data)}")
 
     ~H"""

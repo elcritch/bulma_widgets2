@@ -9,6 +9,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
   alias BulmaWidgets.Widgets.TabView
   alias BulmaWidgets.Widgets.VertTabView
   alias BulmaWidgets.Widgets.Switch
+  alias BulmaWidgets.Widgets.DigitPickMenu
   alias BulmaWidgets.Action.UpdateHooks
 
   require Logger
@@ -18,7 +19,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
     # Logger.debug("WidgetExamplesLive:mount:params: #{inspect(get_connect_params(socket), pretty: true)}")
     params = get_connect_params(socket)
     theme = params["bulma_theme"] || "light"
-    Logger.warning("widget:setting bulma theme: #{inspect theme}")
+    Logger.warning("widget:setting bulma theme: #{inspect(theme)}")
 
     {:ok,
      socket
@@ -28,9 +29,8 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
      |> assign(:wiper_mode, nil)
      |> assign(:wiper_selection, nil)
      |> assign(:wiper_options, nil)
-    #  |> mount_broadcast(topics: ["test-value-set"])
-     |> mount_shared(topics: ["test-value-set"])
-    }
+     #  |> mount_broadcast(topics: ["test-value-set"])
+     |> mount_shared(topics: ["test-value-set"])}
   end
 
   def handle_info({:updates, assigns}, socket) do
@@ -41,50 +41,63 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
   end
 
   def render(assigns) do
-
     ~H"""
     <.container>
       <.title notification={true} size={3}>Widget Examples</.title>
 
-      <.title size={5} dashed>Examples of using buttons</.title>
-
-      <.button
-        phx-click={
-          JS.add_class("is-active", to: "#my-modal")
-          #|> JS.remove_class("is-active", transition: "testing", time: 2_000, to: "#my-modal")
-        }
-        is-fullwidth is-loading={false}
-      >
-        Modal Test
-      </.button>
-
-      <.button phx-click="test" is-fullwidth is-loading={false} >
-        Flash Test
-      </.button>
-      <.button phx-click="test-break" is-fullwidth is-loading={false} >
-        Test Break
-      </.button>
-
-      <p> shared: <%= @shared |> inspect() %> </p>
-
-      <.title size={4} dashed>Switch Examples</.title>
-
-      <p>One way binding:</p>
-      <.switch checked={@shared[:switch_test]} />
-      <br>
-
-      <p>Two way binding:</p>
+      <.title size={5} dashed>Digit Picker</.title>
       <.live_component
-        module={Switch}
-        id="switch_test"
+        module={DigitPickMenu}
+        id="digit_test"
+        value={514.14}
+        digits={{4,3,true}}
         extra_actions={[
-          Widgets.send_action_data("test-value-set", into: :switch_test),
+          Widgets.send_action_data("test-value-set", into: :switch_test)
         ]}
       >
         <:label when={true}>On</:label>
         <:label when={false}>Off</:label>
       </.live_component>
 
+      <.title size={5} dashed>Examples of using buttons</.title>
+
+      <.button
+        phx-click={
+          JS.add_class("is-active", to: "#my-modal")
+          # |> JS.remove_class("is-active", transition: "testing", time: 2_000, to: "#my-modal")
+        }
+        is-fullwidth
+        is-loading={false}
+      >
+        Modal Test
+      </.button>
+
+      <.button phx-click="test" is-fullwidth is-loading={false}>
+        Flash Test
+      </.button>
+      <.button phx-click="test-break" is-fullwidth is-loading={false}>
+        Test Break
+      </.button>
+
+      <p>shared: <%= @shared |> inspect() %></p>
+
+      <.title size={4} dashed>Switch Examples</.title>
+
+      <p>One way binding:</p>
+      <.switch checked={@shared[:switch_test]} />
+      <br />
+
+      <p>Two way binding:</p>
+      <.live_component
+        module={Switch}
+        id="switch_test"
+        extra_actions={[
+          Widgets.send_action_data("test-value-set", into: :switch_test)
+        ]}
+      >
+        <:label when={true}>On</:label>
+        <:label when={false}>Off</:label>
+      </.live_component>
 
       <.live_component
         module={ScrollMenu}
@@ -100,7 +113,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
       <br />
 
-      <.tagged is-link label="Wiper Modes:" value={prettify @wiper_mode}/>
+      <.tagged is-link label="Wiper Modes:" value={prettify(@wiper_mode)} />
       <br />
 
       <.live_component
@@ -108,14 +121,16 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         is-primary
         id="wiper_speed"
         values={[{1, "Slow"}, {2, "Fast"}]}
-        extra_actions={[
-          #{Event.Commands,
-          #commands: fn evt ->
-          #  Logger.info("Wiper:hi!!! #{inspect({evt.id, evt.data}, pretty: false)}")
-          #  evt
-          #end},
-          Widgets.set_action_data(into: :wiper_mode, to: self())
-        ]}
+        extra_actions={
+          [
+            # {Event.Commands,
+            # commands: fn evt ->
+            #  Logger.info("Wiper:hi!!! #{inspect({evt.id, evt.data}, pretty: false)}")
+            #  evt
+            # end},
+            Widgets.set_action_data(into: :wiper_mode, to: self())
+          ]
+        }
       >
         <:label :let={sel}>
           Test: <%= Event.val(sel) %>
@@ -127,92 +142,84 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         id="value_set"
         values={[{:a, "A"}, {:b, "B"}]}
         data={@shared[:value_set]}
-        extra_actions={[
-          # broadcast value
-          Widgets.send_action_data("test-value-set", into: :value_set),
-          #Widgets.send_shared("test-value-set", loading: true),
-        ]}
+        extra_actions={
+          [
+            # broadcast value
+            Widgets.send_action_data("test-value-set", into: :value_set)
+            # Widgets.send_shared("test-value-set", loading: true),
+          ]
+        }
       >
-        <:default_label> Example </:default_label>
+        <:default_label>Example</:default_label>
         <:label :let={sel}>
           <%= Event.val(sel, "Example") %>
         </:label>
       </.live_component>
 
       <.live_component
-          id="test-start"
-          module={ActionButton}
-          is-primary
-          extra_actions={
-            [
-              Widgets.send_shared("test-value-set",
-                loading: true
-              ),
-          ]}
-          >
+        id="test-start"
+        module={ActionButton}
+        is-primary
+        extra_actions={[
+          Widgets.send_shared("test-value-set",
+            loading: true
+          )
+        ]}
+      >
         Start
       </.live_component>
 
       <.live_component
-          id="test-stop"
-          module={ActionButton}
-          is-primary
-          extra_actions={
-            [
-              Widgets.send_shared("test-value-set",
-                loading: false
-              ),
-          ]}
-          >
+        id="test-stop"
+        module={ActionButton}
+        is-primary
+        extra_actions={[
+          Widgets.send_shared("test-value-set",
+            loading: false
+          )
+        ]}
+      >
         Stop
       </.live_component>
 
-      <br>
+      <br />
 
       <.live_component module={ActionButton} id="test-run" is-fullwidth extra_actions={[]}>
         Click me
       </.live_component>
 
-      <br>
+      <br />
       <.title size={4}>Dropdown Component Test</.title>
-      <.dropdown id={"dropdown-test-1"}  >
+      <.dropdown id="dropdown-test-1">
         <:label :let={sel}><%= Event.val(sel, "Dropdown") %></:label>
-        <:label_icon base="fas" name="fa-angle-down"/>
+        <:label_icon base="fas" name="fa-angle-down" />
 
         <:value key={:a}>Option A</:value>
         <:value key={:b}>Option B</:value>
-
       </.dropdown>
 
-      <.dropdown id={"dropdown-test-2"} selected={:a} >
+      <.dropdown id="dropdown-test-2" selected={:a}>
         <:label :let={sel}><%= Event.val(sel, "Dropdown") %></:label>
-        <:label_icon base="fas" name="fa-angle-down"/>
+        <:label_icon base="fas" name="fa-angle-down" />
 
         <:value key={:a}>Option A</:value>
         <:value key={:b}>Option B</:value>
-
       </.dropdown>
 
-      <.dropdown
-          id={"dropdown-test-3"}
-          values={[{1, "A"}, {2, "B"}]}
-          selected={2}
-      >
-
+      <.dropdown id="dropdown-test-3" values={[{1, "A"}, {2, "B"}]} selected={2}>
         <:label :let={sel}>Option <%= Event.val(sel, "Dropdown") %></:label>
-        <:label_icon base="fas" name="fa-angle-down"/>
+        <:label_icon base="fas" name="fa-angle-down" />
 
         <:items :let={%{key: key, label: label, selected: selected}}>
-          <a class={["dropdown-item", selected && "is-active" || ""]}
-             phx-value-id={key} >
+          <a class={["dropdown-item", (selected && "is-active") || ""]} phx-value-id={key}>
             Custom: <%= label %>
           </a>
         </:items>
       </.dropdown>
 
-      <br>
+      <br />
       <.title size={4}>Non-shared local only Dropdown</.title>
-      <.tagged is-link label="Wiper Selection:" value={prettify @wiper_selection}/>
+      <.tagged is-link label="Wiper Selection:" value={prettify(@wiper_selection)} />
 
       <.live_component
         module={SelectionMenu}
@@ -226,14 +233,13 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         ]}
         extra_actions={[
           {UpdateHooks,
-            to: self(),
-            hooks: [
-              fn evt ->
-                Logger.warning("wiper_mode:selection:update: #{inspect(evt, pretty: true)} ")
-                %{evt | socket: evt.socket |> assign(:wiper_selection, evt.data)}
-              end
-            ]
-          }
+           to: self(),
+           hooks: [
+             fn evt ->
+               Logger.warning("wiper_mode:selection:update: #{inspect(evt, pretty: true)} ")
+               %{evt | socket: evt.socket |> assign(:wiper_selection, evt.data)}
+             end
+           ]}
         ]}
       >
       </.live_component>
@@ -241,7 +247,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <br />
 
       <.title size={4}>Shared and Cached Dropdown</.title>
-      <.tagged is-link label="Wiper Options:" value={Event.key(@shared[:wiper_options]) }/>
+      <.tagged is-link label="Wiper Options:" value={Event.key(@shared[:wiper_options])} />
 
       <.live_component
         module={SelectionMenu}
@@ -255,7 +261,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
           {"Inverted", -1}
         ]}
         extra_actions={[
-          Widgets.send_action_data("test-value-set", into: :wiper_options),
+          Widgets.send_action_data("test-value-set", into: :wiper_options)
         ]}
       >
       </.live_component>
@@ -265,12 +271,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <.title size={4}>Example Tabs</.title>
       <br />
 
-      <.live_component
-        module={TabView}
-        id="example_tabs"
-        data={"tab1"}
-        is-boxed
-      >
+      <.live_component module={TabView} id="example_tabs" data="tab1" is-boxed>
         <:tab name="Tab 1" key="tab1">
           <.tab_one />
         </:tab>
@@ -279,14 +280,14 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         </:tab>
       </.live_component>
 
-      <br/>
+      <br />
       <.live_component
         module={VertTabView}
         id="example_vert_tabs"
-        data={"tab1"}
+        data="tab1"
         is-boxed
-        min_menu_width={"7em"}
-        min_menu_height={"20em"}
+        min_menu_width="7em"
+        min_menu_height="20em"
       >
         <:tab name="Tab 1" key="tab1">
           <.tab_one />
@@ -299,43 +300,43 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         </:tab>
       </.live_component>
 
-          <.message is-warning >
-            <:header>
-              <p>Hello World</p>
-              <button class="delete"
-                      phx-click={JS.remove_class("is-active", to: "#my-modal")}
-                      aria-label="delete">
-              </button>
-            </:header>
-            <:body>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec
-            </:body>
-          </.message>
+      <.message is-warning>
+        <:header>
+          <p>Hello World</p>
+          <button
+            class="delete"
+            phx-click={JS.remove_class("is-active", to: "#my-modal")}
+            aria-label="delete"
+          >
+          </button>
+        </:header>
+        <:body>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec
+        </:body>
+      </.message>
 
-      <.modal id="my-modal"
-              modal-fx-fadeInScale
-              position="bottom">
+      <.modal id="my-modal" modal-fx-fadeInScale position="bottom">
         <%!-- <:background /> --%>
         <:content>
           <.message is-warning>
             <:header>
               <p>Hello World</p>
-              <button class="delete"
-                      phx-click={JS.remove_class("is-active", to: "#my-modal")}
-                      aria-label="delete">
+              <button
+                class="delete"
+                phx-click={JS.remove_class("is-active", to: "#my-modal")}
+                aria-label="delete"
+              >
               </button>
             </:header>
             <:body>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec
             </:body>
           </.message>
-          <br>
+          <br />
         </:content>
       </.modal>
 
-      <br/><br/><br/>
+      <br /><br /><br />
     </.container>
     """
   end
@@ -351,7 +352,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
   end
 
   def handle_event("test-break", params, socket) do
-    Logger.info("test! params: #{{1,2,3}}")
+    Logger.info("test! params: #{{1, 2, 3}}")
 
     {:noreply,
      socket
@@ -361,29 +362,29 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
 
   def tab_one(assigns) do
     ~H"""
-      <.box>
-        <p>First view</p>
-      </.box>
+    <.box>
+      <p>First view</p>
+    </.box>
     """
   end
+
   def tab_two(assigns) do
     ~H"""
-      <.box>
-        <p>Second view</p>
-      </.box>
+    <.box>
+      <p>Second view</p>
+    </.box>
     """
   end
+
   def tab_three(assigns) do
     ~H"""
-      <.box>
-        <p>Third view</p>
-        <br>
-        <br>
-        <br>
-        <br>
-      </.box>
+    <.box>
+      <p>Third view</p>
+      <br />
+      <br />
+      <br />
+      <br />
+    </.box>
     """
   end
-
-
 end

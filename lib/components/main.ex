@@ -70,7 +70,7 @@ defmodule BulmaWidgets.Main do
 
   attr(:'is-right', :boolean, default: false, doc: "the data structure for the form")
   attr(:'is-hoverable', :boolean, default: true, doc: "the data structure for the form")
-  attr(:title, :any, default: "Menu", doc: "the menu")
+  attr(:title, :any, default: nil, doc: "the menu")
   attr(:items, :any, required: true, doc: "the data structure for the form")
   slot(:menu, doc: "navbar start") do
     attr(:classes, :list, doc: "extra css classes")
@@ -78,7 +78,7 @@ defmodule BulmaWidgets.Main do
   def navbar_dropdown(assigns) do
     ~H"""
           <div class={["navbar-item", "has-dropdown", BulmaWidgets.classes(assigns, [:"is-hoverable"])]}>
-            <a class="navbar-link">
+            <a class="navbar-link" :if={@title}>
               <%= @title %>
             </a>
 
@@ -138,7 +138,6 @@ defmodule BulmaWidgets.Main do
 
       <div id="navMenuMain" class="navbar-menu ">
         <div class="navbar-start">
-          <%= render_slot(@navbar_start, @menu_items) %>
         </div>
 
         <div class="navbar-end">

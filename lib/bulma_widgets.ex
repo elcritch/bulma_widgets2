@@ -31,6 +31,21 @@ defmodule BulmaWidgets do
 
     has-text-centered
     delete
+    column
+    columns
+
+    is-four-fifths
+    is-three-fifths
+    is-two-fifths
+    is-one-fifth
+
+    is-three-quarters
+    is-two-thirds
+    is-half
+    is-one-third
+    is-one-quarter
+    is-full
+
   )
 
   @spacing ~w(

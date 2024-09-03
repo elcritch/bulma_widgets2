@@ -73,7 +73,7 @@ defmodule BulmaWidgets.Widgets.TabView do
         </ul>
       </div>
       <%= for tab <- @tab do %>
-        <div class={tab.key == value(@data) && "" || "is-hidden" } >
+        <div class={["blmw-view-tabs", tab.key, tab.key == value(@data) && "" || "is-hidden"]} >
           <%= render_slot(tab) %>
         </div>
       <% end %>

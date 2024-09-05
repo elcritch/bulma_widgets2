@@ -35,7 +35,8 @@ defmodule BulmaWidgets.Widgets.VertTabView do
   end
 
   attr(:id, :string, required: true)
-  attr(:data, :any, default: {nil, nil})
+  attr(:default_tab, :any, default: nil)
+  attr(:data, :any, default: nil)
   attr(:min_menu_width, :string, default: nil)
   attr(:extra_actions, :list, default: [])
   attr(:standard_actions, :list, default: @standard_actions)
@@ -53,6 +54,7 @@ defmodule BulmaWidgets.Widgets.VertTabView do
     # Logger.info("tab_view:render: tab: #{inspect(assigns.tab, pretty: true)}")
     values = assigns.tab |> Enum.map(fn t -> {t.name, t.key} end)
     assigns = assigns |> assign(:values, values)
+    assigns = assigns |> assign(data: assigns.data || assigns.default_tab)
 
     ~H"""
     <div id={@id}>

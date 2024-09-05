@@ -283,6 +283,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <.live_component
         module={VertTabView}
         id="example_vert_tabs"
+        default_tab="tab2"
         is-boxed
         min_menu_width="7em"
         min_menu_height="20em"

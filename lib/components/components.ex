@@ -32,7 +32,7 @@ defmodule BulmaWidgets.Components do
   ## Examples
 
       <.switch id="confirm-modal" is-rounded >
-      </.modal>
+      </.switch>
 
   """
   attr(:checked, :boolean, default: false)

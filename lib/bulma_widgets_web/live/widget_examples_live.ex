@@ -270,7 +270,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <.title size={4}>Example Tabs</.title>
       <br />
 
-      <.live_component module={TabView} id="example_tabs" data="tab1" is-boxed>
+      <.live_component module={TabView} id="example_tabs" default_tab="tab1" is-boxed>
         <:tab name="Tab 1" key="tab1">
           <.tab_one />
         </:tab>
@@ -283,7 +283,6 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <.live_component
         module={VertTabView}
         id="example_vert_tabs"
-        data="tab1"
         is-boxed
         min_menu_width="7em"
         min_menu_height="20em"

@@ -34,7 +34,8 @@ defmodule BulmaWidgets.Widgets.TabView do
   end
 
   attr(:id, :string, required: true)
-  attr(:data, :any, default: {nil, nil})
+  attr(:default_tab, :any, default: nil)
+  attr(:data, :any, default: nil)
   attr(:extra_actions, :list, default: [])
   attr(:standard_actions, :list, default: @standard_actions)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
@@ -49,6 +50,8 @@ defmodule BulmaWidgets.Widgets.TabView do
     # Logger.info("tab_view:render: assigns: #{inspect(assigns, pretty: true)}")
     # Logger.info("scroll_menu:render: assigns:data: #{inspect(assigns.data)}")
     # Logger.info("tab_view:render: tab: #{inspect(tab, pretty: true)}")
+
+    assigns = assigns |> assign(data: assigns.data || assigns.default_tab)
 
     ~H"""
     <div id={@id}>
@@ -82,7 +85,7 @@ defmodule BulmaWidgets.Widgets.TabView do
   end
 
   def handle_event("menu-select-action", data, socket) do
-    Logger.info("tab_view:event: data: #{inspect(data, pretty: true)}")
+    Logger.info("tab_view:event: data: #{inspect(data, pretty: false)}")
     %{"id" => menu_name, "value-hash" => hash} = data
 
     # lookup menu item based on selected value hash

@@ -37,11 +37,13 @@ defmodule BulmaWidgets.Actions.Widgets do
 
   Set data into field:
 
-      Widgets.send_action_data("test-value-set", into: :value_set),
+      Widgets.send_action_data("test-value-set", into: :value_set)
 
   Or:
 
-      Widgets.send_action_data("test-value-set", command: fn e -> e end),
+      Widgets.send_action_data("test-value-set", command: fn e ->
+        %{e | data: %FieldAssigns{into: "some_name", fields: %{"some_name" => 1}}}
+      end)
 
   """
   def send_action_data(topic, pubsub, opts) do

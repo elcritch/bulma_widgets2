@@ -56,3 +56,15 @@ defmodule BulmaWidgets.Event do
   def doval(d, default), do: d || default
 
 end
+
+defimpl String.Chars, for: BulmaWidgets.Event do
+  def to_string(evt) do
+
+    sock = case evt.socket do
+      nil -> "nil"
+      sock -> "Socket<id: #{sock[:id]}, view: #{sock[:view]}, ...>"
+    end
+
+    "BulmaWidgets.Event<id: #{inspect(evt.id)}, data: #{inspect(evt.data)}, socket: #{sock}>"
+  end
+end

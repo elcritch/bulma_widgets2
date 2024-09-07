@@ -73,6 +73,20 @@ defmodule BulmaWidgets.WidgetActions do
   end
 
   @doc """
+  Creates an action which runs the given callback command
+  """
+  def command(cmd) when is_function(cmd) do
+    [{Commands, modify: false, commands: [cmd]}]
+  end
+
+  @doc """
+  Creates an action which runs the given callback command and modifies the return event
+  """
+  def command!(cmd) when is_function(cmd) do
+    [{Commands, modify: true, commands: [cmd]}]
+  end
+
+  @doc """
   Assigns data from a `BulmaWidgets.Action` event into the
   given field for the target. The target can be a component
   or liveview.

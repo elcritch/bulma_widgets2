@@ -62,7 +62,7 @@ defimpl String.Chars, for: BulmaWidgets.Event do
 
     sock = case evt.socket do
       nil -> "nil"
-      sock -> "Socket<id: #{sock[:id]}, view: #{sock[:view]}, ...>"
+      sock -> "Socket<id: #{sock.id}, view: #{sock.view}, ...>"
     end
 
     "BulmaWidgets.Event<id: #{inspect(evt.id)}, data: #{inspect(evt.data)}, socket: #{sock}>"

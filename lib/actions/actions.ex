@@ -77,7 +77,7 @@ defmodule BulmaWidgets.Actions do
 
     quote do
       alias BulmaWidgets.Actions
-      alias BulmaWidgets.Actions.Widgets
+      alias BulmaWidgets.WidgetActions
 
       import BulmaWidgets.Actions,
         only: [

@@ -53,7 +53,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         value={51414}
         digits={{4,3,true}}
         extra_actions={[
-          Widgets.send_action_data("test-value-set", into: :switch_test)
+          WidgetActions.send_action_data("test-value-set", into: :switch_test)
         ]}
       >
       </.live_component>
@@ -91,7 +91,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         module={Switch}
         id="switch_test"
         extra_actions={[
-          Widgets.send_action_data("test-value-set", into: :switch_test)
+          WidgetActions.send_action_data("test-value-set", into: :switch_test)
         ]}
       >
         <:label when={true}>On</:label>
@@ -127,7 +127,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
             #  Logger.info("Wiper:hi!!! #{inspect({evt.id, evt.data}, pretty: false)}")
             #  evt
             # end},
-            Widgets.set_action_data(into: :wiper_mode, to: self())
+            WidgetActions.set_action_data(into: :wiper_mode, to: self())
           ]
         }
       >
@@ -144,7 +144,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         extra_actions={
           [
             # broadcast value
-            Widgets.send_action_data("test-value-set", into: :value_set)
+            WidgetActions.send_action_data("test-value-set", into: :value_set)
             # Widgets.send_shared("test-value-set", loading: true),
           ]
         }
@@ -160,7 +160,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         module={ActionButton}
         is-primary
         extra_actions={[
-          Widgets.send_shared("test-value-set",
+          WidgetActions.send_shared("test-value-set",
             loading: true
           )
         ]}
@@ -173,7 +173,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         module={ActionButton}
         is-primary
         extra_actions={[
-          Widgets.send_shared("test-value-set",
+          WidgetActions.send_shared("test-value-set",
             loading: false
           )
         ]}
@@ -260,7 +260,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
           {"Inverted", -1}
         ]}
         extra_actions={[
-          Widgets.send_action_data("test-value-set", into: :wiper_options)
+          WidgetActions.send_action_data("test-value-set", into: :wiper_options)
         ]}
       >
       </.live_component>

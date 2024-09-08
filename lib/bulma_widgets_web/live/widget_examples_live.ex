@@ -58,7 +58,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       >
       </.live_component>
 
-      <.title size={5} dashed>Examples of using buttons</.title>
+      <.title size={5} dashed classes={["my-title-class"]}>Examples of using buttons</.title>
 
       <.button
         phx-click={

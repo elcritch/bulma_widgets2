@@ -18,6 +18,7 @@ defmodule BulmaWidgets do
   )
 
   @attrs ~w(
+    classes
     is-active
     is-fullwidth
     is-hoverable
@@ -213,6 +214,7 @@ defmodule BulmaWidgets do
     # Logger.info("CLASSES: #{inspect names}")
     attrs
     |> Map.take(names)
+    |> Map.drop([:classes])
     |> Enum.filter(fn {_,v} -> v end) # has a "truthy" value
     |> Enum.map(fn {k,_} -> k end) # take names
     |> Kernel.++(attrs[:classes] || [])

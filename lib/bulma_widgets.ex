@@ -211,7 +211,11 @@ defmodule BulmaWidgets do
   """
   def classes(attrs, names \\ @global_atoms) do
     # Logger.info("CLASSES: #{inspect names}")
-    attrs |> Map.take(names) |> Enum.filter(fn {_,v} -> v end) |> Enum.map(fn {k,_} -> k end)
+    attrs
+    |> Map.take(names)
+    |> Enum.filter(fn {_,v} -> v end) # has a "truthy" value
+    |> Enum.map(fn {k,_} -> k end) # take names
+    |> Kernel.++(attrs[:classes] || [])
   end
 
   @doc """

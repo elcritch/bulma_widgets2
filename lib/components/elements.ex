@@ -70,7 +70,7 @@ defmodule BulmaWidgets.Elements do
       |> assign(:size, (size == [] && :'is-medium' || size))
 
     ~H"""
-    <div class={["tags has-addons"]} >
+    <div id={@id} class={["tags", "has-addons"]} {extras(@rest)} >
       <span class={["tag", @size, classes(@rest)]} >
         <%= @label %>
       </span>

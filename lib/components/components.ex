@@ -118,8 +118,9 @@ defmodule BulmaWidgets.Components do
       assigns
       |> assign(:values, values)
 
-    Logger.info("DROPDOWN: #{inspect(assigns.values, pretty: true)} SELECTED: #{inspect(assigns.selected)}")
-    Logger.info("DROPDOWN:selected: #{inspect(assigns.values |> Map.new |> Map.get(assigns.selected), pretty: true)} ")
+    # Logger.info("DROPDOWN: #{inspect(assigns.values, pretty: true)} SELECTED: #{inspect(assigns.selected)}")
+    # Logger.info("DROPDOWN:selected: #{inspect(assigns.values |> Map.new |> Map.get(assigns.selected), pretty: true)} ")
+
     ~H"""
     <div
       id={@id}

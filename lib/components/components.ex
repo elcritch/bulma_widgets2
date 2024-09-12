@@ -118,7 +118,8 @@ defmodule BulmaWidgets.Components do
       assigns
       |> assign(:values, values)
 
-    Logger.info("DROPDOWN: #{inspect(assigns.values, pretty: true)}")
+    Logger.info("DROPDOWN: #{inspect(assigns.values, pretty: true)} SELECTED: #{inspect(assigns.selected)}")
+    Logger.info("DROPDOWN:selected: #{inspect(assigns.values |> Map.new |> Map.get(assigns.selected), pretty: true)} ")
     ~H"""
     <div
       id={@id}
@@ -133,7 +134,7 @@ defmodule BulmaWidgets.Components do
           aria-controls="dropdown-menu"
         >
           <span>
-            <%= render_slot(@label, Map.new(@values) |> Map.get(@selected)) %>
+            <%= render_slot(@label, Map.new(@values) |> Map.get(@selected |> Event.key())) %>
           </span>
           <.icon base={icon.base} name={icon.name} :for={icon <- @label_icon} />
         </button>

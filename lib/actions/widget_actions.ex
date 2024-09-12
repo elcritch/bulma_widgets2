@@ -56,7 +56,7 @@ defmodule BulmaWidgets.WidgetActions do
         opts |> Keyword.fetch!(:command)
       else
         name = opts |> Keyword.fetch!(:into)
-        Logger.debug("send_action_data: into: #{inspect name} ")
+        # Logger.debug("send_action_data: into: #{inspect name} ")
 
         fn evt ->
           data = evt.data

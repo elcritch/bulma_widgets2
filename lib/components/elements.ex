@@ -60,8 +60,9 @@ defmodule BulmaWidgets.Elements do
       <.tagged label="Test:" value={@value}/>
   """
   attr(:label, :string, required: true)
-  attr(:value, :string, required: true)
+  attr(:value, :string, default: "")
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  slot(:item, doc: "tagged item")
 
   def tagged(assigns) do
     size = classes(assigns.rest, [:'is-small', :'is-medium', :'is-large'])
@@ -76,6 +77,7 @@ defmodule BulmaWidgets.Elements do
       </span>
       <span class={["tag", @size]}>
         <%= @value %>
+        <%= render_slot(@item) %>
       </span>
     </div>
     """

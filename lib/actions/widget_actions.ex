@@ -52,7 +52,7 @@ defmodule BulmaWidgets.WidgetActions do
 
     cmd =
       if opts |> Keyword.get(:command, false) do
-        Logger.debug("send_action_data: command: #{inspect(opts |> Keyword.get(:command, false))} ")
+        # Logger.debug("send_action_data: command: #{inspect(opts |> Keyword.get(:command, false))} ")
         opts |> Keyword.fetch!(:command)
       else
         name = opts |> Keyword.fetch!(:into)
@@ -60,7 +60,7 @@ defmodule BulmaWidgets.WidgetActions do
 
         fn evt ->
           data = evt.data
-          Logger.debug("send_action_data: run: name: #{inspect(name)} data:#{inspect(data)}")
+          # Logger.debug("send_action_data: run: name: #{inspect(name)} data:#{inspect(data)}")
           %{evt | data: %FieldAssigns{into: name, fields: %{name => data}}}
         end
       end

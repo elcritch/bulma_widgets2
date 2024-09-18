@@ -55,7 +55,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <.live_component
         module={DigitPicker}
         id="digit_test"
-        value={56789}
+        value={65.6789}
         digits={{4,3,true}}
         extra_actions={[
           WidgetActions.send_action_data("test-value-set", into: :digit_test)

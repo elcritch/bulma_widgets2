@@ -36,8 +36,8 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
     # digits: {4, 3, true},
     digit_config = assigns.digits
 
-    unless is_integer(value),
-      do: raise(%ArgumentError{message: "value must be an integer version of a float - got #{inspect(value)}"})
+    # unless is_integer(value),
+    #   do: raise(%ArgumentError{message: "value must be an integer version of a float - got #{inspect(value)}"})
 
     keys =
       to_digit_indexes(digit_config)
@@ -151,36 +151,35 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
   def handle_event("menu-select-action", data, socket) do
     Logger.warning("menu-select-action: #{inspect(data, pretty: true)}")
     Logger.warning("menu-select-action:subitems:keys: #{inspect(socket.assigns.subitems |> Map.keys(), pretty: true)}")
-    %{"id" => menu_name, "data-index" => digit_index_raw} = data
+    %{"id" => menu_name, "data-index" => menu_index_raw} = data
 
     ## gross, really need to just redo this and change the {idx, label} stuff to structs
 
-    subkey =
+    {digit_index, ""} =
       menu_name
       |> String.replace_leading("#{socket.assigns.id}--", "")
       |> case do
         "sign" -> {:sign, ""}
         num -> Integer.parse(num)
       end
-      |> case do
-        {val, ""} -> val
-      end
+
+    subkey =
+      digit_index
       |> to_string()
       |> String.to_atom()
 
-    {digit_index, ""} = digit_index_raw |> Integer.parse()
+    {menu_index, ""} = menu_index_raw |> Integer.parse()
 
     Logger.warning("menu-select-action:subkey: #{inspect(subkey, pretty: false)}")
-    Logger.warning("menu-select-action:digit_index: #{inspect(digit_index, pretty: false)}")
-    {dkey, dvalue} = socket.assigns.subitems[subkey].values |> Enum.at(digit_index)
-    Logger.warning("menu-select-action:subkey: #{inspect(subkey)}")
+    Logger.warning("menu-select-action:digit_index: #{inspect(menu_index, pretty: false)}")
+    {dkey, dvalue} = socket.assigns.subitems[subkey].values |> Enum.at(menu_index)
     Logger.warning("menu-select-action:dkey: #{inspect(dkey)}")
     Logger.warning("menu-select-action:dvalue: #{inspect(dvalue)}")
 
-    Logger.warning("menu-select-action:subitems:pre: #{inspect(socket.assigns.subitems , pretty: true)}")
+    # Logger.warning("menu-select-action:subitems:pre: #{inspect(socket.assigns.subitems , pretty: true)}")
     subitems = put_in(socket.assigns.subitems, [subkey, :data], {dkey, dvalue} )
 
-    Logger.warning("menu-select-action:subitems: #{inspect(subitems , pretty: true)}")
+    Logger.warning("menu-select-action:subitems: #{inspect(subitems[subkey] , pretty: true)}")
 
     socket = socket |> assign(:subitems, subitems)
     data = [1, 2, 3]
@@ -210,7 +209,7 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
   end
 
   def number_to_digits(value, {digits, decimals, sign}) do
-    Logger.warning("NUMBER_TO_DIGITS: got: #{inspect value} <- #{inspect {digits, decimals, sign}}")
+    Logger.debug("NUMBER_TO_DIGITS: got: #{inspect value} <- #{inspect {digits, decimals, sign}}")
     digit_values =
       (abs(value) * :math.pow(10, decimals))
       |> round()
@@ -218,9 +217,16 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
       |> String.pad_leading(digits, "0")
       |> :erlang.binary_to_list()
       |> Enum.map(fn x -> x - 48 end)
-      |> Enum.take(digits)
+      |> case do
+        val ->
+          if length(val) > digits do
+            Logger.warning("#{__MODULE__}: truncating value: #{inspect(val)} exceeds digits: #{digits}")
+          end
+          val
+      end
+      |> Enum.take(-digits)
 
-    Logger.warning("NUMBER_TO_DIGITS: dvs: #{inspect(digit_values)}")
+    Logger.debug("NUMBER_TO_DIGITS: dvs: #{inspect(digit_values)}")
 
     result =
       if sign do
@@ -230,7 +236,7 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
         digit_values
       end
 
-    Logger.warning("NUMBER_TO_DIGITS: post: #{inspect(result)} ")
+    Logger.debug("NUMBER_TO_DIGITS: post: #{inspect(result)} ")
     result
   end
 
@@ -256,21 +262,21 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
     result
   end
 
-  def set_digit(value, dval, index, {digits, decimals, sign}) do
+  def set_digit(value, dval, index, {digits, decimals, do_sign}) do
     Logger.warning(
-      "SET_DIGIT: #{inspect({value, dval})} idx: #{inspect(index)} <- #{inspect({digits, decimals, sign})}"
+      "SET_DIGIT: #{inspect([value: value, dval: dval])} idx: #{inspect(index)} <- #{inspect({digits, decimals, do_sign})}"
     )
 
     numbers =
       value
-      |> number_to_digits({digits, decimals, sign})
+      |> number_to_digits({digits, decimals, do_sign})
 
-    Logger.warning("SET_DIGIT: #{inspect([numbers: numbers, sign: sign, index: index])} ")
+    Logger.debug("SET_DIGIT: #{inspect([numbers: numbers, sign: do_sign, index: index])} ")
 
     numbers =
-      if sign do
-        if dval in [:+, :-] do
-          numbers |> List.replace_at(0, index)
+      if do_sign do
+        if index == :sign do
+          numbers |> List.replace_at(0, dval)
         else
           numbers |> List.replace_at(index + 1, dval)
         end
@@ -280,7 +286,7 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
 
     Logger.warning("SET_DIGIT: numbers: post: #{inspect(numbers)} ")
 
-    result = numbers |> digits_to_number({digits, decimals, sign})
+    result = numbers |> digits_to_number({digits, decimals, do_sign})
     Logger.warning("SET_DIGIT: post: #{inspect(result)} ")
     result
   end

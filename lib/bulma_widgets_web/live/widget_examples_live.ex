@@ -30,7 +30,9 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
      |> assign(:wiper_selection, nil)
      |> assign(:wiper_options, nil)
      #  |> mount_broadcast(topics: ["test-value-set"])
-     |> mount_shared(topics: ["test-value-set"])}
+     |> mount_shared(topics: ["test-value-set"])
+     |> assign(:shared, %{digit_test: 51414})
+    }
   end
 
   def handle_info({:updates, assigns}, socket) do
@@ -44,16 +46,19 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
   def render(assigns) do
     ~H"""
     <.container>
+      <code>
+        <%= inspect(@shared, pretty: true) %>
+      </code>
       <.title notification={true} size={3}>Widget Examples</.title>
 
       <.title size={5} dashed>Digit Picker</.title>
       <.live_component
         module={DigitPicker}
         id="digit_test"
-        value={51414}
+        value={56789}
         digits={{4,3,true}}
         extra_actions={[
-          WidgetActions.send_action_data("test-value-set", into: :switch_test)
+          WidgetActions.send_action_data("test-value-set", into: :digit_test)
         ]}
       >
       </.live_component>

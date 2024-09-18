@@ -48,17 +48,17 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
     Logger.info("assign multi item: digits: #{inspect(digit_values)} ")
 
     subitems =
-      for {data, sub_key} <- Enum.zip(digit_values, keys), into: %{} do
-        scrollitems = if sub_key in [:sign], do: @sign_values, else: @digit_values
-        sub_id = subid(menu_id, sub_key)
+      for {data, key} <- Enum.zip(digit_values, keys), into: %{} do
+        scrollitems = if key in [:sign], do: @sign_values, else: @digit_values
+        subkey = subkey(menu_id, key)
         values = scrollitems |> Enum.to_list()
         Logger.info("  item: data: #{inspect(data)} ")
         item = values |> Enum.find(fn {_,l} -> l == data end)
 
-        {String.to_atom("#{sub_key}"),
+        {String.to_atom("#{key}"),
          %{
-           id: sub_id,
-           key: sub_key,
+           id: subkey,
+           key: key,
            data: item,
            values: values,
          }}
@@ -119,7 +119,7 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
                   |> JS.remove_class("is-active", to: "##{id}")
                 }
                 phx-value-id={id}
-                phx-value-digit={menu_key}
+                phx-value-data-index={menu_key}
                 phx-target={@rest.myself}
               >
                 <%= label %>
@@ -150,34 +150,43 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
 
   def handle_event("menu-select-action", data, socket) do
     Logger.warning("menu-select-action: #{inspect(data, pretty: true)}")
-    Logger.warning("menu-select-action:subitems: #{inspect(socket.assigns.subitems |> Map.keys(), pretty: true)}")
-    %{"id" => menu_name, "digit" => digit_raw} = data
+    Logger.warning("menu-select-action:subitems:keys: #{inspect(socket.assigns.subitems |> Map.keys(), pretty: true)}")
+    %{"id" => menu_name, "data-index" => digit_index_raw} = data
 
     ## gross, really need to just redo this and change the {idx, label} stuff to structs
-    subid =
+
+    subkey =
       menu_name
       |> String.replace_leading("#{socket.assigns.id}--", "")
-    {subid, ""} =
-      case subid do
+      |> case do
         "sign" -> {:sign, ""}
         num -> Integer.parse(num)
       end
-    digit_index = subid
-    subid = "#{subid}" |> String.to_atom()
+      |> case do
+        {val, ""} -> val
+      end
+      |> to_string()
+      |> String.to_atom()
 
-    Logger.warning("menu-select-action:digit_raw: #{inspect(digit_raw, pretty: false)}")
-    Logger.warning("menu-select-action:subid: #{inspect(subid, pretty: false)}")
-    {digit, ""} = digit_raw |> Integer.parse()
-    {dkey, dvalue} = socket.assigns.subitems[subid].values |> Enum.at(digit)
-    Logger.warning("menu-select-action:subid: #{inspect(subid , pretty: false)}")
-    Logger.warning("menu-select-action:dvalue: #{inspect(dvalue, pretty: false)}")
+    {digit_index, ""} = digit_index_raw |> Integer.parse()
 
-    subitems = put_in(socket.assigns.subitems, [subid, :data], {dkey, dvalue} )
+    Logger.warning("menu-select-action:subkey: #{inspect(subkey, pretty: false)}")
+    Logger.warning("menu-select-action:digit_index: #{inspect(digit_index, pretty: false)}")
+    {dkey, dvalue} = socket.assigns.subitems[subkey].values |> Enum.at(digit_index)
+    Logger.warning("menu-select-action:subkey: #{inspect(subkey)}")
+    Logger.warning("menu-select-action:dkey: #{inspect(dkey)}")
+    Logger.warning("menu-select-action:dvalue: #{inspect(dvalue)}")
+
+    Logger.warning("menu-select-action:subitems:pre: #{inspect(socket.assigns.subitems , pretty: true)}")
+    subitems = put_in(socket.assigns.subitems, [subkey, :data], {dkey, dvalue} )
+
+    Logger.warning("menu-select-action:subitems: #{inspect(subitems , pretty: true)}")
 
     socket = socket |> assign(:subitems, subitems)
     data = [1, 2, 3]
+    digit = 3
 
-    Logger.warning("menu-select-action:set_digit: #{inspect([dvalue: dvalue, subid: subid, dkey: dkey, digit: digit])}")
+    Logger.warning("menu-select-action:set_digit: #{inspect([dvalue: dvalue, subkey: subkey, dkey: dkey, digit: digit])}")
     result = set_digit(socket.assigns.value, dvalue, digit_index, socket.assigns.digit_config)
     Logger.warning("menu-select-action:result: #{inspect(result , pretty: false)}")
 
@@ -187,11 +196,7 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
      |> Actions.handle_event(menu_name, data, @standard_actions)}
   end
 
-  defp subid(menu_id, sub_key), do: String.to_atom("#{menu_id}--#{sub_key}")
-
-  def to_digit_indexes({:{}, _meta, value}) do
-    to_digit_indexes(value |> :erlang.list_to_tuple())
-  end
+  defp subkey(menu_id, sub_key), do: String.to_atom("#{menu_id}--#{sub_key}")
 
   def to_digit_indexes({digits, _decimals, sign}) do
     digs = Enum.to_list(0..(digits - 1))
@@ -205,7 +210,7 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
   end
 
   def number_to_digits(value, {digits, decimals, sign}) do
-    # Logger.warning("NUMBER_TO_DIGITS: #{inspect value} <- #{inspect {digits, decimals, sign}}")
+    Logger.warning("NUMBER_TO_DIGITS: got: #{inspect value} <- #{inspect {digits, decimals, sign}}")
     digit_values =
       (abs(value) * :math.pow(10, decimals))
       |> round()

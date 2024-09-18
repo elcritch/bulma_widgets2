@@ -26,7 +26,14 @@ defmodule BulmaWidgets.Action.UpdateHooks do
               end}]}
       ]}
   """
-  def call(%Event{id: id, data: {key, values}, socket: socket} = evt, opts \\ []) do
+  def call(%Event{id: id, data: data, socket: socket} = evt, opts \\ []) do
+
+    {key, values} =
+      case data do
+        {k,v} -> {k,v}
+        v -> {v, v}
+      end
+
     Logger.debug("UpdateHooks:call:opts: #{inspect(opts, pretty: false)}")
     Logger.debug("UpdateHooks:call:values: #{inspect(values, pretty: false)}")
 

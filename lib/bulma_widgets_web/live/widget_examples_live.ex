@@ -31,7 +31,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
      |> assign(:wiper_options, nil)
      #  |> mount_broadcast(topics: ["test-value-set"])
      |> mount_shared(topics: ["test-value-set"])
-     |> assign(:shared, %{digit_test: 51414})
+     |> assign(:shared, %{digit_test: -5.678})
     }
   end
 
@@ -55,7 +55,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
       <.live_component
         module={DigitPicker}
         id="digit_test"
-        value={65.6789}
+        value={@shared[:digit_test]}
         digits={{4,3,true}}
         extra_actions={[
           WidgetActions.send_action_data("test-value-set", into: :digit_test)

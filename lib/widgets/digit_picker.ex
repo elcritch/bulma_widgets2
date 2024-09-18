@@ -170,29 +170,27 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
 
     {menu_index, ""} = menu_index_raw |> Integer.parse()
 
-    Logger.warning("menu-select-action:subkey: #{inspect(subkey, pretty: false)}")
-    Logger.warning("menu-select-action:digit_index: #{inspect(menu_index, pretty: false)}")
+    Logger.debug("menu-select-action:subkey: #{inspect(subkey, pretty: false)}")
+    Logger.debug("menu-select-action:digit_index: #{inspect(menu_index, pretty: false)}")
     {dkey, dvalue} = socket.assigns.subitems[subkey].values |> Enum.at(menu_index)
-    Logger.warning("menu-select-action:dkey: #{inspect(dkey)}")
-    Logger.warning("menu-select-action:dvalue: #{inspect(dvalue)}")
+    Logger.debug("menu-select-action:dkey: #{inspect(dkey)}")
+    Logger.debug("menu-select-action:dvalue: #{inspect(dvalue)}")
 
     # Logger.warning("menu-select-action:subitems:pre: #{inspect(socket.assigns.subitems , pretty: true)}")
     subitems = put_in(socket.assigns.subitems, [subkey, :data], {dkey, dvalue} )
 
-    Logger.warning("menu-select-action:subitems: #{inspect(subitems[subkey] , pretty: true)}")
+    Logger.debug("menu-select-action:subitems: #{inspect(subitems[subkey] , pretty: true)}")
 
     socket = socket |> assign(:subitems, subitems)
-    data = [1, 2, 3]
-    digit = 3
 
-    Logger.warning("menu-select-action:set_digit: #{inspect([dvalue: dvalue, subkey: subkey, dkey: dkey, digit: digit])}")
-    result = set_digit(socket.assigns.value, dvalue, digit_index, socket.assigns.digit_config)
-    Logger.warning("menu-select-action:result: #{inspect(result , pretty: false)}")
+    Logger.debug("menu-select-action:set_digit: #{inspect([dvalue: dvalue, subkey: subkey, dkey: dkey, digit_index: digit_index])}")
+    number! = set_digit(socket.assigns.value, dvalue, digit_index, socket.assigns.digit_config)
+    Logger.debug("menu-select-action:result: #{inspect(number! , pretty: false)}")
 
     # Logger.warning("menu-select-action:subitems: #{inspect(subitems , pretty: true)}")
     {:noreply,
      socket
-     |> Actions.handle_event(menu_name, data, @standard_actions)}
+     |> Actions.handle_event(menu_name, number!, @standard_actions)}
   end
 
   defp subkey(menu_id, sub_key), do: String.to_atom("#{menu_id}--#{sub_key}")

@@ -58,7 +58,8 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         value={@shared[:digit_test]}
         digits={{4,3,true}}
         extra_actions={[
-          WidgetActions.send_action_data("test-value-set", into: :digit_test)
+          WidgetActions.send_action_data("test-value-set", into: :digit_test),
+          WidgetActions.set_action_data(into: :digit_test, to: self())
         ]}
       >
       </.live_component>

@@ -28,23 +28,24 @@ defmodule BulmaWidgets.Action.UpdateHooks do
   """
   def call(%Event{id: id, data: data, socket: socket} = evt, opts \\ []) do
 
-    {key, values} =
-      case data do
-        {k,v} -> {k,v}
-        v -> {v, v}
-      end
-
     Logger.debug("UpdateHooks:call:opts: #{inspect(opts, pretty: false)}")
-    Logger.debug("UpdateHooks:call:values: #{inspect(values, pretty: false)}")
+    Logger.debug("UpdateHooks:call:values: #{inspect(data, pretty: false)}")
 
     target = opts |> Keyword.get(:to, socket.assigns.id)
     hooks = [opts |> Keyword.fetch!(:hooks)] |> List.flatten()
     # |> Map.take(set_fields)
-    values = opts |> Keyword.get(:values, values)
+    data =
+      case data do
+        {key, values} ->
+          values = opts |> Keyword.get(:values, values)
+          {key, values}
+        data -> data
+      end
+
     id = opts |> Keyword.get(:id, id)
 
     Logger.debug("UpdateHooks:call:target: #{inspect(target, pretty: false)}")
-    msg = %{hooks: hooks, id: id, data: {key, values}}
+    msg = %{hooks: hooks, id: id, data: data}
 
     case target do
       %Phoenix.LiveComponent.CID{} = cid ->
@@ -62,11 +63,10 @@ defmodule BulmaWidgets.Action.UpdateHooks do
   end
 
   def exec_hooks(hooks, id, data, assigns, socket, _opts) do
-    {key, values} = data
 
     evt = %Event{
       id: id,
-      data: {key, values},
+      data: data,
       assigns: assigns,
       socket: socket
     }

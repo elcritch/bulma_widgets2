@@ -37,7 +37,7 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
     digit_config = assigns.digits
 
     unless is_integer(value),
-      do: raise(%ArgumentError{message: "value must be an string version of a float - got #{inspect(value)}"})
+      do: raise(%ArgumentError{message: "value must be an integer version of a float - got #{inspect(value)}"})
 
     keys =
       to_digit_indexes(digit_config)
@@ -102,7 +102,7 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
     # Logger.info("selection_menu:render: assigns:data: #{inspect(assigns.data)}")
 
     ~H"""
-    <div class="date-picker-field field is-grouped">
+    <div class="blmw-digit-picker field is-grouped">
       <%= for item <- @rest.keys do %>
         <% digit = @rest.subitems[item] %>
         <div class={["control", digit.key]}>

@@ -101,7 +101,7 @@ defmodule BulmaWidgets.Elements do
           <%= hh(assigns) %>
         </div>
       <% else %>
-        <div class="my-3">
+        <div class="blmw-title my-3">
           <%= hh(assigns) %>
           <hr class="bd-hr is-pulled-left" :if={@dashed} >
           <br class="my-0">

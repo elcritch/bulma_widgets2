@@ -11,7 +11,7 @@ defmodule BulmaWidgets.Widgets.VertTabView do
   ## Examples
 
       <.live_component
-        module={TabView}
+        module={VertTabView}
         id="example_tabs"
       >
         <:tab name="Tab 1" key="tab1">

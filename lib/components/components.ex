@@ -300,11 +300,13 @@ defmodule BulmaWidgets.Components do
     assigns = assign_new(assigns, :id, fn -> "flash-#{assigns.kind}" end)
 
     ~H"""
+      <nav class="level">
+        <div class="level-item has-text-centered">
     <div
       :if={msg = Phoenix.Flash.get(@flash, @kind)}
       id={@id}
       role="alert"
-      class={["cell", "blmw-flash-item"]}
+      class={["blmw-flash-item"]}
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       {extras(@rest)}
     >
@@ -327,6 +329,8 @@ defmodule BulmaWidgets.Components do
             </:body>
           </.message>
     </div>
+        </div>
+      </nav>
     """
   end
 
@@ -345,21 +349,23 @@ defmodule BulmaWidgets.Components do
   def flash_group(assigns) do
     ~H"""
 
-    <div class={["fixed-grid",
-                  "has-1-cols", "has-1-cols-mobile", "is-centered",
-                  "blmw-flash-group",
-                  "blmw-flash-#{@position}", classes(@rest)]}
-                  id={@id} >
+    <div class={[
+                 "blmw-flash-group",
+                 "blmw-flash-#{@position}", classes(@rest)]}
+                 id={@id} >
 
-      <nav class="level">
-        <div class="level-item has-text-centered">
+      <div class="block">
 
-          <div class="blmw-flash-grid grid">
             <.flash id="other" kind={:success} title={gettext("Other!")} flash={@flash} />
+            <br>
             <.flash id="success" kind={:success} title={gettext("Success!")} flash={@flash} />
+            <br>
             <.flash id="info" kind={:info} title={gettext("Info!")} flash={@flash} />
+            <br>
             <.flash id="warning" kind={:warning} title={gettext("Error!")} flash={@flash} />
+            <br>
             <.flash id="error" kind={:danger} title={gettext("Error!")} flash={@flash} />
+            <br>
             <.flash
               id="server-error"
               kind={:danger}
@@ -369,10 +375,9 @@ defmodule BulmaWidgets.Components do
             >
               <%= gettext("Hang in there while we get back on track") %>
             </.flash>
-        </div>
+            <br>
 
-        </div>
-      </nav>
+      </div>
     </div>
     """
   end

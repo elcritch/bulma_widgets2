@@ -357,15 +357,10 @@ defmodule BulmaWidgets.Components do
       <div class="block">
 
             <.flash id="other" kind={:success} title={gettext("Other!")} flash={@flash} />
-            <br>
             <.flash id="success" kind={:success} title={gettext("Success!")} flash={@flash} />
-            <br>
             <.flash id="info" kind={:info} title={gettext("Info!")} flash={@flash} />
-            <br>
             <.flash id="warning" kind={:warning} title={gettext("Error!")} flash={@flash} />
-            <br>
             <.flash id="error" kind={:danger} title={gettext("Error!")} flash={@flash} />
-            <br>
             <.flash
               id="server-error"
               kind={:danger}
@@ -375,7 +370,6 @@ defmodule BulmaWidgets.Components do
             >
               <%= gettext("Hang in there while we get back on track") %>
             </.flash>
-            <br>
 
       </div>
     </div>

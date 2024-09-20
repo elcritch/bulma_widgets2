@@ -303,29 +303,29 @@ defmodule BulmaWidgets.Components do
     <div
       :if={msg = Phoenix.Flash.get(@flash, @kind)}
       id={@id}
-      phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
-      class={["flash-item"]}
+      class={["cell", "blmw-flash-item"]}
+      phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       {extras(@rest)}
     >
-      <.message kind={@kind}>
-        <:header>
-          <p><%= "#{@kind}" |> String.capitalize() %></p>
-          <button
-            class="delete"
-            phx-click={
-              JS.push("lv:clear-flash", value: %{key: @kind})
-              |> hide("##{@id}")
-            }
-            aria-label="delete"
-          >
-          </button>
-        </:header>
-        <:body>
-          <%= msg %>
-          <%= render_slot(@inner_block) %>
-        </:body>
-      </.message>
+          <.message kind={@kind}>
+            <:header>
+              <p><%= "#{@kind}" |> String.capitalize() %></p>
+              <button
+                class="delete"
+                phx-click={
+                  JS.push("lv:clear-flash", value: %{key: @kind})
+                  |> hide("##{@id}")
+                }
+                aria-label="delete"
+              >
+              </button>
+            </:header>
+            <:body>
+              <%= msg %>
+              <%= render_slot(@inner_block) %>
+            </:body>
+          </.message>
     </div>
     """
   end
@@ -340,26 +340,39 @@ defmodule BulmaWidgets.Components do
   attr(:flash, :map, required: true, doc: "the map of flash messages")
   attr(:position, :string, values: ["top", "bottom", nil], default: nil)
   attr(:id, :string, default: "flash-group", doc: "the optional id of flash container")
+  attr(:rest, :global, doc: "the arbitrary HTML attributes to add to the flash container")
 
   def flash_group(assigns) do
     ~H"""
-    <div class={["flash-group", "is-centered", "flash-#{@position}"]} id={@id}>
-      <.flash id="other" kind={:success} title={gettext("Other!")} flash={@flash} />
 
-      <.flash id="success" kind={:success} title={gettext("Success!")} flash={@flash} />
-      <.flash id="info" kind={:info} title={gettext("Info!")} flash={@flash} />
-      <.flash id="warning" kind={:warning} title={gettext("Error!")} flash={@flash} />
-      <.flash id="error" kind={:danger} title={gettext("Error!")} flash={@flash} />
+    <div class={["fixed-grid",
+                  "has-1-cols", "has-1-cols-mobile", "is-centered",
+                  "blmw-flash-group",
+                  "blmw-flash-#{@position}", classes(@rest)]}
+                  id={@id} >
 
-      <.flash
-        id="server-error"
-        kind={:danger}
-        title={gettext("Something went wrong!")}
-        phx-disconnected={show(".phx-server-error #server-error")}
-        phx-connected={hide("#server-error")}
-      >
-        <%= gettext("Hang in there while we get back on track") %>
-      </.flash>
+      <nav class="level">
+        <div class="level-item has-text-centered">
+
+          <div class="blmw-flash-grid grid">
+            <.flash id="other" kind={:success} title={gettext("Other!")} flash={@flash} />
+            <.flash id="success" kind={:success} title={gettext("Success!")} flash={@flash} />
+            <.flash id="info" kind={:info} title={gettext("Info!")} flash={@flash} />
+            <.flash id="warning" kind={:warning} title={gettext("Error!")} flash={@flash} />
+            <.flash id="error" kind={:danger} title={gettext("Error!")} flash={@flash} />
+            <.flash
+              id="server-error"
+              kind={:danger}
+              title={gettext("Something went wrong!")}
+              phx-disconnected={show(".phx-server-error #server-error")}
+              phx-connected={hide("#server-error")}
+            >
+              <%= gettext("Hang in there while we get back on track") %>
+            </.flash>
+        </div>
+
+        </div>
+      </nav>
     </div>
     """
   end

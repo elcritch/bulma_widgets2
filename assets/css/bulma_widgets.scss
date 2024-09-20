@@ -3,25 +3,29 @@
 @import "modal-fx/main.scss";
 @import "bulma-switch-control.scss";
 
-.flash-group {
-  display: grid;
+.blmw-flash-group {
+  display: flex;
   position: fixed;
-  grid-template-columns: 1fr minmax(20em, 4fr) 1fr;
-  justify-content: center;
   left: 0px;
   width: 100%;
   align-items: center;
   z-index: 40;
 }
-.flash-bottom {
-  bottom: 0px;
+
+.blmw-flash-grid nav {
+  width: 100%;
 }
-.flash-top {
+
+.blmw-flash-bottom {
+  bottom: 20px;
+}
+
+.blmw-flash-top {
   top: 0px;
 }
-.flash-item {
-  grid-column-start: 2;
-  grid-column-end: 3;
+
+.blmw-flash-item {
+  width: 80%;
 }
 
 .bd-hr {

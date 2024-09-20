@@ -257,7 +257,7 @@ defmodule BulmaWidgets.Actions do
   updates for a given `topics`. Must provide `module` of the component.
   """
   def mount_broadcast(socket, module, opts) do
-    Logger.debug("mount_broadcast:socket: #{inspect(socket)}")
+    # Logger.debug("mount_broadcast:socket: #{inspect(socket)}")
     topics = opts |> Keyword.fetch!(:topics)
     pubsub = opts |> Keyword.fetch!(:pubsub)
 

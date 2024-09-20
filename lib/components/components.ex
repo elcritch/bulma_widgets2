@@ -354,6 +354,7 @@ defmodule BulmaWidgets.Components do
                  id={@id}
     >
       <div class="block">
+        <.flash id="other" kind={:success} title={gettext("Other!")} flash={@flash} />
         <.flash id="success" kind={:success} title={gettext("Success!")} flash={@flash} />
         <.flash id="info" kind={:info} title={gettext("Info!")} flash={@flash} />
         <.flash id="warning" kind={:warning} title={gettext("Error!")} flash={@flash} />

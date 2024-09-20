@@ -300,16 +300,15 @@ defmodule BulmaWidgets.Components do
     assigns = assign_new(assigns, :id, fn -> "flash-#{assigns.kind}" end)
 
     ~H"""
-      <nav class="level">
-        <div class="level-item has-text-centered">
-    <div
-      :if={msg = Phoenix.Flash.get(@flash, @kind)}
-      id={@id}
-      role="alert"
-      class={["blmw-flash-item"]}
-      phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
-      {extras(@rest)}
-    >
+    <nav class="level" :if={msg = Phoenix.Flash.get(@flash, @kind)} >
+      <div class="level-item has-text-centered">
+        <div
+          id={@id}
+          role="alert"
+          class={["blmw-flash-item"]}
+          phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
+          {extras(@rest)}
+        >
           <.message kind={@kind}>
             <:header>
               <p><%= "#{@kind}" |> String.capitalize() %></p>
@@ -328,9 +327,9 @@ defmodule BulmaWidgets.Components do
               <%= render_slot(@inner_block) %>
             </:body>
           </.message>
-    </div>
         </div>
-      </nav>
+      </div>
+    </nav>
     """
   end
 
@@ -352,25 +351,22 @@ defmodule BulmaWidgets.Components do
     <div class={[
                  "blmw-flash-group",
                  "blmw-flash-#{@position}", classes(@rest)]}
-                 id={@id} >
-
+                 id={@id}
+    >
       <div class="block">
-
-            <.flash id="other" kind={:success} title={gettext("Other!")} flash={@flash} />
-            <.flash id="success" kind={:success} title={gettext("Success!")} flash={@flash} />
-            <.flash id="info" kind={:info} title={gettext("Info!")} flash={@flash} />
-            <.flash id="warning" kind={:warning} title={gettext("Error!")} flash={@flash} />
-            <.flash id="error" kind={:danger} title={gettext("Error!")} flash={@flash} />
-            <.flash
-              id="server-error"
-              kind={:danger}
-              title={gettext("Something went wrong!")}
-              phx-disconnected={show(".phx-server-error #server-error")}
-              phx-connected={hide("#server-error")}
-            >
-              <%= gettext("Hang in there while we get back on track") %>
-            </.flash>
-
+        <.flash id="success" kind={:success} title={gettext("Success!")} flash={@flash} />
+        <.flash id="info" kind={:info} title={gettext("Info!")} flash={@flash} />
+        <.flash id="warning" kind={:warning} title={gettext("Error!")} flash={@flash} />
+        <.flash id="error" kind={:danger} title={gettext("Error!")} flash={@flash} />
+        <.flash
+          id="server-error"
+          kind={:danger}
+          title={gettext("Something went wrong!")}
+          phx-disconnected={show(".phx-server-error #server-error")}
+          phx-connected={hide("#server-error")}
+        >
+          <%= gettext("Hang in there while we get back on track") %>
+        </.flash>
       </div>
     </div>
     """

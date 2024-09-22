@@ -73,10 +73,10 @@ defmodule BulmaWidgets.Elements do
 
     ~H"""
     <div class={["tags", "has-addons"]} {extras(@rest)} >
-      <span class={["tag", @size, classes(@rest)]} >
+      <span class={["tag", "tag-label", @size, classes(@rest)]} >
         <%= @label %>
       </span>
-      <span class={["tag", @size]}>
+      <span class={["tag", "tag-value", @size]}>
         <%= @value %>
         <%= render_slot(@inner_block) %>
       </span>

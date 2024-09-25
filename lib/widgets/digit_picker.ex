@@ -44,8 +44,8 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
 
     digit_values = number_to_digits(value, digit_config)
 
-    Logger.info("assign multi item: keys: #{inspect(keys)} ")
-    Logger.info("assign multi item: digits: #{inspect(digit_values)} ")
+    # Logger.info("assign multi item: keys: #{inspect(keys)} ")
+    # Logger.info("assign multi item: digits: #{inspect(digit_values)} ")
 
     subitems =
       for {data, key} <- Enum.zip(digit_values, keys), into: %{} do
@@ -68,8 +68,8 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
     # item = %{item | layout: struct(item.layout, opts)}
 
     # IO.inspect(item, label: :date_picker_values)
-    Logger.info("multi item: #{inspect(assigns, pretty: true)} ")
-    Logger.info("multi subitems: #{inspect(subitems)} ")
+    # Logger.info("multi item: #{inspect(assigns, pretty: true)} ")
+    # Logger.info("multi subitems: #{inspect(subitems)} ")
 
     # data = for sub_key <- digit_config
     socket =

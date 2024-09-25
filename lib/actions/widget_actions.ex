@@ -112,12 +112,17 @@ defmodule BulmaWidgets.WidgetActions do
   def set_action_data(opts) do
     name = opts |> Keyword.fetch!(:into)
     target = opts |> Keyword.fetch!(:to)
+    value = opts |> Keyword.fetch(:value)
 
     [
       {UpdateHooks,
        to: target,
        hooks: fn evt ->
-         socket = evt.socket |> Phoenix.Component.assign(name, evt.data)
+         data = case value do
+          {:ok, val} -> val
+          _ -> evt.data
+         end
+         socket = evt.socket |> Phoenix.Component.assign(name, data)
          %{evt | socket: socket}
        end}
     ]

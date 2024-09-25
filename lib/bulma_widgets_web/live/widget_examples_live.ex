@@ -48,6 +48,7 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
     <.container>
       <code>
         <%= inspect(@shared, pretty: true) %>
+        <%= inspect(assigns[:digit_modified], pretty: true) %>
       </code>
       <.title notification={true} size={3}>Widget Examples</.title>
 
@@ -59,7 +60,8 @@ defmodule BulmaWidgetsWeb.WidgetExamplesLive do
         digits={{4,3,true}}
         extra_actions={[
           WidgetActions.send_action_data("test-value-set", into: :digit_test),
-          WidgetActions.set_action_data(into: :digit_test, to: self())
+          WidgetActions.set_action_data(into: :digit_test, to: self()),
+          WidgetActions.set_action_data(into: :digit_modified, to: self(), value: true)
         ]}
       >
       </.live_component>

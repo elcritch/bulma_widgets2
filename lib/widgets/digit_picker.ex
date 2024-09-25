@@ -52,7 +52,7 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
         scrollitems = if key in [:sign], do: @sign_values, else: @digit_values
         subkey = subkey(menu_id, key)
         values = scrollitems |> Enum.to_list()
-        Logger.info("  item: data: #{inspect(data)} ")
+        # Logger.info("  item: data: #{inspect(data)} ")
         item = values |> Enum.find(fn {_,l} -> l == data end)
 
         {String.to_atom("#{key}"),

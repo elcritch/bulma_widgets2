@@ -170,22 +170,11 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
 
     {menu_index, ""} = menu_index_raw |> Integer.parse()
 
-    Logger.debug("menu-select-action:subkey: #{inspect(subkey, pretty: false)}")
-    Logger.debug("menu-select-action:digit_index: #{inspect(menu_index, pretty: false)}")
     {dkey, dvalue} = socket.assigns.subitems[subkey].values |> Enum.at(menu_index)
-    Logger.debug("menu-select-action:dkey: #{inspect(dkey)}")
-    Logger.debug("menu-select-action:dvalue: #{inspect(dvalue)}")
-
     # Logger.warning("menu-select-action:subitems:pre: #{inspect(socket.assigns.subitems , pretty: true)}")
     subitems = put_in(socket.assigns.subitems, [subkey, :data], {dkey, dvalue} )
-
-    Logger.debug("menu-select-action:subitems: #{inspect(subitems[subkey] , pretty: true)}")
-
     socket = socket |> assign(:subitems, subitems)
-
-    Logger.debug("menu-select-action:set_digit: #{inspect([dvalue: dvalue, subkey: subkey, dkey: dkey, digit_index: digit_index])}")
     number! = set_digit(socket.assigns.value, dvalue, digit_index, socket.assigns.digit_config)
-    Logger.debug("menu-select-action:result: #{inspect(number! , pretty: false)}")
 
     # Logger.warning("menu-select-action:subitems: #{inspect(subitems , pretty: true)}")
     {:noreply,
@@ -207,7 +196,6 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
   end
 
   def number_to_digits(value, {digits, decimals, sign}) do
-    Logger.debug("NUMBER_TO_DIGITS: got: #{inspect value} <- #{inspect {digits, decimals, sign}}")
     digit_values =
       (abs(value) * :math.pow(10, decimals))
       |> round()
@@ -224,8 +212,6 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
       end
       |> Enum.take(-digits)
 
-    Logger.debug("NUMBER_TO_DIGITS: dvs: #{inspect(digit_values)}")
-
     result =
       if sign do
         sdig = if value < 0, do: :-, else: :+
@@ -234,7 +220,6 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
         digit_values
       end
 
-    Logger.debug("NUMBER_TO_DIGITS: post: #{inspect(result)} ")
     result
   end
 
@@ -268,8 +253,6 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
     numbers =
       value
       |> number_to_digits({digits, decimals, do_sign})
-
-    Logger.debug("SET_DIGIT: #{inspect([numbers: numbers, sign: do_sign, index: index])} ")
 
     numbers =
       if do_sign do

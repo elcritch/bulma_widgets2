@@ -129,15 +129,15 @@ defmodule BulmaWidgets.Widgets.DigitPicker do
         </div>
         <%= if index(@digit_config, digit.key) == 0 do %>
           <span
-            class="icon has-text-centered is-size-1 has-text-white"
+            class="icon has-text-centered is-size-2 has-text-white"
           >
             .
           </span>
         <% end %>
         <%= if rem(index(@digit_config, digit.key), 3) == 0 && index(@digit_config, digit.key) != 0 do %>
           <span
-            class="icon has-text-centered is-size-1 has-text-white"
-            style="padding-right: 0.5em; width: 0.5em;"
+            class="icon has-text-centered is-size-2 has-text-white"
+            style="padding-right: 0.2em; width: 0.2em;"
           >
             ,
           </span>

@@ -357,7 +357,7 @@ defmodule BulmaWidgets.Components do
         <.flash id="blmw-flash-success" kind={:success} title={gettext("Success!")} flash={@flash} />
         <.flash id="blmw-flash-info" kind={:info} title={gettext("Info!")} flash={@flash} />
         <.flash id="blmw-flash-warning" kind={:warning} title={gettext("Warning!")} flash={@flash} />
-        <.flash id="blmw-flash-error" kind={:danger} title={gettext("Error!")} flash={@flash} />
+        <.flash id="blmw-flash-danger" kind={:danger} title={gettext("Error!")} flash={@flash} />
         <.flash id="blmw-flash-error" kind={:error} title={gettext("Error!")} flash={@flash} />
         <.flash
           id="server-error"

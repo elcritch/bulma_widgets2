@@ -19,6 +19,7 @@ defmodule BulmaWidgets do
 
   @attrs ~w(
     classes
+    disabled
     is-active
     is-fullwidth
     is-hoverable

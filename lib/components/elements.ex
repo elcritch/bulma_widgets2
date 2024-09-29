@@ -214,11 +214,12 @@ defmodule BulmaWidgets.Elements do
       <.button phx-click="go" class="ml-2">Send!</.button>
   """
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
+  attr(:disabled, :boolean, default: false)
   slot(:inner_block, required: true)
 
   def button(assigns) do
     ~H"""
-    <button class={["button", classes(@rest)]} {extras(@rest)}>
+    <button disabled={@disabled} class={["button", classes(@rest)]} {extras(@rest)}>
       <%= render_slot(@inner_block) %>
     </button>
     """

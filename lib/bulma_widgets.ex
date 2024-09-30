@@ -21,6 +21,7 @@ defmodule BulmaWidgets do
     classes
     disabled
     is-active
+    is-hidden
     is-fullwidth
     is-hoverable
     is-loading

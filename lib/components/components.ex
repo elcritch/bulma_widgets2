@@ -330,6 +330,7 @@ defmodule BulmaWidgets.Components do
         </div>
       </div>
     </nav>
+    <br :if={msg = Phoenix.Flash.get(@flash, @kind)} />
     """
   end
 
@@ -353,7 +354,7 @@ defmodule BulmaWidgets.Components do
                  "blmw-flash-#{@position}", classes(@rest)]}
                  id={@id}
     >
-      <div class="block">
+      <div class="container">
         <.flash id="blmw-flash-success" kind={:success} title={gettext("Success!")} flash={@flash} />
         <.flash id="blmw-flash-info" kind={:info} title={gettext("Info!")} flash={@flash} />
         <.flash id="blmw-flash-warning" kind={:warning} title={gettext("Warning!")} flash={@flash} />

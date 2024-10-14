@@ -323,14 +323,21 @@ defmodule BulmaWidgets.Components do
               </button>
             </:header>
             <:body>
-              <%= msg %>
+              <%= case msg do %>
+                <% %{message: msg} -> %>
+                  <%= msg %>
+                <% msg when is_binary(msg) -> %>
+                  <%= msg %>
+                <% msg -> %>
+                  <%= inspect(msg) %>
+              <% end %>
               <%= render_slot(@inner_block) %>
             </:body>
           </.message>
         </div>
       </div>
     </nav>
-    <br :if={msg = Phoenix.Flash.get(@flash, @kind)} />
+    <br :if={Phoenix.Flash.get(@flash, @kind)} />
     """
   end
 

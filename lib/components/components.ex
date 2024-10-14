@@ -328,6 +328,8 @@ defmodule BulmaWidgets.Components do
                   <%= msg %>
                 <% msg when is_binary(msg) -> %>
                   <%= msg %>
+                <% {:safe, msg} -> %>
+                  <%= {:safe, msg} %>
                 <% msg -> %>
                   <%= inspect(msg) %>
               <% end %>

@@ -18,7 +18,7 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
             a: 1.0,  # No process innovation
             c: 1.0,  # Measurement
             b: 0.0,  # No control input
-            q: 0.01,  # Process covariance
+            q: 0.005,  # Process covariance
             r: 1.0,  # Measurement covariance
             x: 20.0,  # Initial estimate
             p: 1.0  # Initial covariance
@@ -156,11 +156,22 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
       </.live_component>
 
       <.box is-fullwidth style="width: 50%;">
-        <.tagged label="Q" is-info is-fullwidth>
+        <%!-- <.tagged label="Q" is-info is-fullwidth>
           <%= @kalman.q %> &nbsp;
           <input class="slider is-info is-large" type="range"
                 step="0.001" min="0.001" max="0.2" value={@kalman.q}
-                phx-click="slide"
+                phx-click="slide-q"
+                style="width: 40em;"
+          >
+        </.tagged> --%>
+        <.tagged label="Q'" is-info is-fullwidth>
+          <span style="width: 3em;">
+            <%= (1.0/@kalman.q) |> round() %>
+          </span>
+          <input class="slider is-info is-large" type="range"
+                step="0.1" min="1" max="200" value={1.0/@kalman.q}
+                phx-click="slide-q-inv"
+                phx-window-keydown="slide-q-inv-key"
                 style="width: 40em;"
           >
         </.tagged>
@@ -170,17 +181,45 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
     """
   end
 
-  def handle_event("slide", params, socket) do
-    Logger.info("slide! params: #{inspect(params)}")
+  def handle_event("slide-q-inv", params, socket) do
     %{"value" => value} = params
-    {q, ""} = Float.parse(value)
+    {q!, ""} = Float.parse(value)
 
     kalman = socket.assigns.kalman
     socket =
       socket
-      |> assign(kalman: %{kalman | q: q})
+      |> assign(kalman: %{kalman | q: 1/q!})
       |> update_estimates()
       |> put_graph()
+
+    {:noreply, socket}
+  end
+
+  def handle_event("slide-q-inv-key", params, socket) do
+    Logger.info("key: slide-q-inv-key: #{inspect(params)}")
+    %{"key" => key, "value" => _} = params
+
+    kalman = socket.assigns.kalman
+
+    {update, q!} =
+      case key do
+        "ArrowLeft" ->
+          {true, 1.0/kalman.q - 1.0}
+        "ArrowRight" ->
+          {true, 1.0/kalman.q + 1.0}
+        _other ->
+          {false, 0.0}
+      end
+
+    socket =
+      if update do
+        socket
+        |> assign(kalman: %{kalman | q: 1.0/max(q!, 1.0)})
+        |> update_estimates()
+        |> put_graph()
+      else
+        socket
+      end
 
     {:noreply, socket}
   end

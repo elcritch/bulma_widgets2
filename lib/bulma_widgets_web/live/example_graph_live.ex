@@ -15,11 +15,12 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
       |> assign(:menu_items, BulmaWidgetsWeb.MenuUtils.menu_items())
       |> assign(:wiper_options, nil)
       |> assign(:moving_count, 5)
+      |> assign(:key_selection, "qinv")
       |> assign(:kalman, Kalman.new(
             a: 1.0,  # No process innovation
             c: 1.0,  # Measurement
             b: 0.0,  # No control input
-            q: 0.005,  # Process covariance
+            q: 0.01,  # Process covariance
             r: 1.0,  # Measurement covariance
             x: 20.0,  # Initial estimate
             p: 1.0  # Initial covariance
@@ -47,9 +48,10 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
   end
 
   def update_estimates(socket) do
-    %{xdata: xdata, random_data: random_data, kalman: kalman} = socket.assigns
+    %{xdata: xdata, random_data: random_data,
+      kalman: kalman, moving_count: moving_count} = socket.assigns
 
-    moving_est = random_data |> box_average(5)
+    moving_est = random_data |> box_average(moving_count)
 
     {_, kalman_est} =
       for yy <- random_data, reduce: {kalman, []} do
@@ -156,28 +158,30 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
         </:custom_svg>
       </.live_component>
 
-      <.box is-fullwidth style="width: 50%;">
-        <%!-- <.tagged label="Q" is-info is-fullwidth>
-          <%= @kalman.q %> &nbsp;
-          <input class="slider is-info is-large" type="range"
-                step="0.001" min="0.001" max="0.2" value={@kalman.q}
-                phx-click="slide-q"
-                style="width: 40em;"
+      <.box is-fullwidth
+            phx-window-keydown="slide-key"
+            style="width: 50%;">
+        <.tagged label="Q'"
+                  is-info={@key_selection == "qinv"}
+                  phx-click="key_select"
+                  phx-value-item="qinv"
+                  is-fullwidth>
+          <span style="width: 3em;"
           >
-        </.tagged> --%>
-        <.tagged label="Q'" is-info is-fullwidth>
-          <span style="width: 3em;">
             <%= (1.0/@kalman.q) |> round() %>
           </span>
           <input class="slider is-info is-large" type="range"
                 step="0.1" min="1" max="200" value={1.0/@kalman.q}
                 phx-click="slide-q-inv"
-                phx-window-keydown="slide-q-inv-key"
                 style="width: 40em;"
           >
         </.tagged>
 
-        <.tagged label="Moving Average" is-info is-fullwidth>
+        <.tagged label="Moving Average"
+                  is-info={@key_selection == "moving"}
+                  phx-click="key_select"
+                  phx-value-item="moving"
+                  is-fullwidth>
           <span style="width: 3em;">
             <%= (@moving_count) |> round() %>
           </span>
@@ -190,6 +194,16 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
       </.box>
     </div>
     """
+  end
+
+  def handle_event("key_select", params, socket) do
+    Logger.warning("key_select: #{inspect(params)}")
+    %{"item" => item} = params
+
+    socket =
+      socket
+      |> assign(key_selection: item)
+    {:noreply, socket}
   end
 
   def handle_event("slide-q-inv", params, socket) do
@@ -206,30 +220,46 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
     {:noreply, socket}
   end
 
-  def handle_event("slide-q-inv-key", params, socket) do
-    Logger.info("key: slide-q-inv-key: #{inspect(params)}")
-    %{"key" => key, "value" => _} = params
+  def handle_event("slide-key", params, socket) do
+    Logger.info("key: slide-key: #{inspect(params)}")
+
+    %{"key" => key} = params
 
     kalman = socket.assigns.kalman
+    moving_count = socket.assigns.moving_count
+    key_selection = socket.assigns.key_selection
 
-    {update, q!} =
+    {update, adj} =
       case key do
         "ArrowLeft" ->
-          {true, 1.0/kalman.q - 1.0}
+          {true, -1}
         "ArrowRight" ->
-          {true, 1.0/kalman.q + 1.0}
+          {true, +1}
         _other ->
-          {false, 0.0}
+          {false, 0}
       end
 
     socket =
-      if update do
-        socket
-        |> assign(kalman: %{kalman | q: 1.0/max(q!, 1.0)})
-        |> update_estimates()
-        |> put_graph()
-      else
-        socket
+      case {update, key_selection, key} do
+        {false, selection, k} when k == "ArrowDown" or k == "ArrowUp" ->
+          case selection do
+            "qinv" ->
+              socket |> assign(:key_selection, "moving")
+            "moving" ->
+              socket |> assign(:key_selection, "qinv")
+          end
+        {true, "qinv", _} ->
+          socket
+          |> assign(kalman: %{kalman | q: 1.0/max(1.0/kalman.q + adj, 1.0)})
+          |> update_estimates()
+          |> put_graph()
+        {true, "moving", _} ->
+          socket
+          |> assign(moving_count: moving_count + adj)
+          |> update_estimates()
+          |> put_graph()
+        {false, _, _} ->
+          socket
       end
 
     {:noreply, socket}
@@ -237,7 +267,7 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
 
   def handle_event("slide-moving", params, socket) do
     %{"value" => value} = params
-    {moving_count, ""} = Float.parse(value)
+    {moving_count, _} = Integer.parse(value)
 
     socket =
       socket

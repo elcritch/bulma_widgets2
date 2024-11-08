@@ -16,14 +16,21 @@ defmodule BulmaWidgets.MixProject do
   # Configuration for the OTP application.
   #
   def application do
-    [
-      mod: {BulmaWidgets.Application, []},
-      extra_applications: [:logger, :runtime_tools]
-    ]
+    if Mix.env() == :dev do
+      [
+        mod: {BulmaWidgets.Application, []},
+        extra_applications: [:logger, :runtime_tools]
+      ]
+    else
+      [
+
+      ]
+    end
   end
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:dev), do: ["lib", "lib/bulma_widgets_web", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.

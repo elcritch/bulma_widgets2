@@ -38,9 +38,13 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
 
   def generate_data(socket) do
     xdata = 1..200 |> Enum.map(&(1.0*&1))
-    random_data_init = 1..100 |> Enum.map(fn _ -> :rand.normal(20.0, 0.05) end)
-    random_data_then = 1..100 |> Enum.map(fn _ -> :rand.normal(22.0, 0.05) end)
+    random_data_init = 1..100 |> Enum.map(fn _ -> :rand.normal(20.0, 0.03) end)
+    random_data_then = 1..100 |> Enum.map(fn _ -> :rand.normal(22.0, 0.03) end)
     random_data = random_data_init ++ random_data_then
+
+    random_data =
+      random_data
+      |> List.replace_at(40, 23.55)
 
     socket
     |> assign(xdata: xdata)
@@ -274,35 +278,6 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
       |> assign(moving_count: moving_count)
       |> update_estimates()
       |> put_graph()
-
-    {:noreply, socket}
-  end
-
-  def handle_event("slide-moving-key", params, socket) do
-    Logger.info("key: slide-moving-key: #{inspect(params)}")
-    %{"key" => key, "value" => _} = params
-
-    moving_count = socket.assigns.moving_count
-
-    {update, q!} =
-      case key do
-        "ArrowLeft" ->
-          {true, moving_count - 1}
-        "ArrowRight" ->
-          {true, moving_count + 1}
-        _other ->
-          {false, 0}
-      end
-
-    socket =
-      if update do
-        socket
-        |> assign(moving_count: moving_count)
-        |> update_estimates()
-        |> put_graph()
-      else
-        socket
-      end
 
     {:noreply, socket}
   end

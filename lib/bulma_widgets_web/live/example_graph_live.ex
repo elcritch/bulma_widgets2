@@ -14,6 +14,7 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
       |> assign(:page_title, "Widget Examples")
       |> assign(:menu_items, BulmaWidgetsWeb.MenuUtils.menu_items())
       |> assign(:wiper_options, nil)
+      |> assign(:moving_count, 5)
       |> assign(:kalman, Kalman.new(
             a: 1.0,  # No process innovation
             c: 1.0,  # Measurement
@@ -176,6 +177,16 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
           >
         </.tagged>
 
+        <.tagged label="Moving Average" is-info is-fullwidth>
+          <span style="width: 3em;">
+            <%= (@moving_count) |> round() %>
+          </span>
+          <input class="slider is-info is-large" type="range"
+                step="0.1" min="1" max="100" value={@moving_count}
+                phx-click="slide-moving"
+                style="width: 40em;"
+          >
+        </.tagged>
       </.box>
     </div>
     """
@@ -215,6 +226,48 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
       if update do
         socket
         |> assign(kalman: %{kalman | q: 1.0/max(q!, 1.0)})
+        |> update_estimates()
+        |> put_graph()
+      else
+        socket
+      end
+
+    {:noreply, socket}
+  end
+
+  def handle_event("slide-moving", params, socket) do
+    %{"value" => value} = params
+    {moving_count, ""} = Float.parse(value)
+
+    socket =
+      socket
+      |> assign(moving_count: moving_count)
+      |> update_estimates()
+      |> put_graph()
+
+    {:noreply, socket}
+  end
+
+  def handle_event("slide-moving-key", params, socket) do
+    Logger.info("key: slide-moving-key: #{inspect(params)}")
+    %{"key" => key, "value" => _} = params
+
+    moving_count = socket.assigns.moving_count
+
+    {update, q!} =
+      case key do
+        "ArrowLeft" ->
+          {true, moving_count - 1}
+        "ArrowRight" ->
+          {true, moving_count + 1}
+        _other ->
+          {false, 0}
+      end
+
+    socket =
+      if update do
+        socket
+        |> assign(moving_count: moving_count)
         |> update_estimates()
         |> put_graph()
       else

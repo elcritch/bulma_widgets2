@@ -153,8 +153,33 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
         </:custom_svg>
       </.live_component>
 
+      <.box style="width: 50%;">
+        <.tagged label="Q" is-info>
+          <%= @kalman.q %> &nbsp;
+          <input class="slider is-fullwidth is-info is-large" type="range"
+                step="0.001" min="0.001" max="0.1" value={@kalman.q}
+                phx-click="slide"
+          >
+        </.tagged>
+
+      </.box>
     </div>
     """
+  end
+
+  def handle_event("slide", params, socket) do
+    Logger.info("slide! params: #{inspect(params)}")
+    %{"value" => value} = params
+    {q, ""} = Float.parse(value)
+
+    kalman = socket.assigns.kalman
+    socket =
+      socket
+      |> assign(kalman: %{kalman | q: q})
+      |> update_estimates()
+      |> put_graph()
+
+    {:noreply, socket}
   end
 
   ## very dumb box average, but avoids shortening the sample

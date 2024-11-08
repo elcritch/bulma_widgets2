@@ -38,7 +38,7 @@ defmodule BulmaWidgets.Components do
   attr(:checked, :boolean, default: false)
   attr(:rest, :global, include: BulmaWidgets.colors() ++ BulmaWidgets.attrs())
 
-  slot(:label, default: false)
+  slot(:label)
 
   def switch(assigns) do
     ~H"""

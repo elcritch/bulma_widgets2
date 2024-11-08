@@ -129,6 +129,8 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
           width: 1200px;
           stroke-width: 0.1;
         }
+
+
       </style>
       <.tagged is-link label="Wiper Options:" value={Event.key(@shared[:wiper_options]) }/>
 
@@ -153,12 +155,13 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
         </:custom_svg>
       </.live_component>
 
-      <.box style="width: 50%;">
-        <.tagged label="Q" is-info>
+      <.box is-fullwidth style="width: 50%;">
+        <.tagged label="Q" is-info is-fullwidth>
           <%= @kalman.q %> &nbsp;
-          <input class="slider is-fullwidth is-info is-large" type="range"
-                step="0.001" min="0.001" max="0.1" value={@kalman.q}
+          <input class="slider is-info is-large" type="range"
+                step="0.001" min="0.001" max="0.2" value={@kalman.q}
                 phx-click="slide"
+                style="width: 40em;"
           >
         </.tagged>
 

@@ -15,11 +15,12 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
       |> assign(:menu_items, BulmaWidgetsWeb.MenuUtils.menu_items())
       |> assign(:wiper_options, nil)
       |> assign(:moving_count, 5)
+      |> assign(:alpha, 0.5)
       |> assign(:key_selection, "qinv")
       |> assign(:kalman, Kalman.new(
             a: 1.0,  # No process innovation
-            c: 1.0,  # Measurement
             b: 0.0,  # No control input
+            c: 1.0,  # Measurement
             q: 0.01,  # Process covariance
             r: 1.0,  # Measurement covariance
             x: 20.0,  # Initial estimate
@@ -52,7 +53,7 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
   end
 
   def update_estimates(socket) do
-    %{xdata: xdata, random_data: random_data,
+    %{xdata: xdata, random_data: random_data, alpha: alpha,
       kalman: kalman, moving_count: moving_count} = socket.assigns
 
     moving_est = random_data |> box_average(moving_count)
@@ -65,16 +66,23 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
           {k!, [Kalman.estimate(k!) | prev ]}
       end
 
-    kalman_est = kalman_est |> Enum.reverse()
+    {_, exp_est} =
+      for yy <- random_data, reduce: {random_data |> Enum.at(0), []} do
+        {s, prev} ->
+          # IO.puts("YY: #{inspect yy}")
+          s! = s + alpha * (yy - s)
+          {s!, [ s! | prev ]}
+      end
 
     socket
-    |> assign(kalman_est: kalman_est)
     |> assign(moving_est: moving_est)
+    |> assign(kalman_est: kalman_est |> Enum.reverse())
+    |> assign(exp_est: exp_est |> Enum.reverse())
   end
 
 
   def put_graph(socket) do
-    %{xdata: xdata, random_data: random_data,
+    %{xdata: xdata, random_data: random_data, exp_est: exp_est,
       kalman_est: kalman_est, moving_est: moving_est} = socket.assigns
 
     plt =
@@ -83,6 +91,7 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
           {xdata, random_data},
           {xdata, kalman_est},
           {xdata, moving_est},
+          {xdata, exp_est},
         ],
         xaxis: [
           ticks: 5,
@@ -132,8 +141,8 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
         #marker-2 > .plx-data-point { stroke: var(--graph-color2); fill: var(--graph-color2); }
 
         .plx-graph {
-          height: 500px;
-          width: 1200px;
+          height: 700px;
+          width: 1400px;
           stroke-width: 0.1;
         }
 
@@ -195,6 +204,21 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
                 style="width: 40em;"
           >
         </.tagged>
+
+        <.tagged label="Alpha"
+                  is-info={@key_selection == "alpha"}
+                  phx-click="key_select"
+                  phx-value-item="alpha"
+                  is-fullwidth>
+          <span style="width: 3em;">
+            <%= round(@alpha * 1000.0)/1000.0 %>
+          </span>
+          <input class="slider is-info is-large" type="range"
+                step="0.01" min="0" max="1.0" value={@alpha}
+                phx-click="slide-exp"
+                style="width: 40em;"
+          >
+        </.tagged>
       </.box>
     </div>
     """
@@ -213,15 +237,26 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
   def handle_event("slide-q-inv", params, socket) do
     %{"value" => value} = params
     {q!, ""} = Float.parse(value)
-
     kalman = socket.assigns.kalman
-    socket =
-      socket
-      |> assign(kalman: %{kalman | q: 1/q!})
-      |> update_estimates()
-      |> put_graph()
+    socket = socket |> assign(kalman: %{kalman | q: 1/q!})
 
-    {:noreply, socket}
+    {:noreply, socket |> update_estimates() |> put_graph() }
+  end
+
+  def handle_event("slide-moving", params, socket) do
+    %{"value" => value} = params
+    {moving_count, _} = Integer.parse(value)
+    socket = socket |> assign(moving_count: moving_count)
+
+    {:noreply, socket |> update_estimates() |> put_graph() }
+  end
+
+  def handle_event("slide-exp", params, socket) do
+    %{"value" => value} = params
+    {alpha, ""} = Float.parse(value)
+    socket = socket |> assign(alpha: alpha)
+
+    {:noreply, socket |> update_estimates() |> put_graph() }
   end
 
   def handle_event("slide-key", params, socket) do
@@ -230,6 +265,7 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
     %{"key" => key} = params
 
     kalman = socket.assigns.kalman
+    alpha = socket.assigns.alpha
     moving_count = socket.assigns.moving_count
     key_selection = socket.assigns.key_selection
 
@@ -250,18 +286,22 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
             "qinv" ->
               socket |> assign(:key_selection, "moving")
             "moving" ->
+              socket |> assign(:key_selection, "alpha")
+            "alpha" ->
               socket |> assign(:key_selection, "qinv")
           end
         {true, "qinv", _} ->
           socket
           |> assign(kalman: %{kalman | q: 1.0/max(1.0/kalman.q + adj, 1.0)})
-          |> update_estimates()
-          |> put_graph()
+          |> update!()
         {true, "moving", _} ->
           socket
           |> assign(moving_count: moving_count + adj)
-          |> update_estimates()
-          |> put_graph()
+          |> update!()
+        {true, "alpha", _} ->
+          socket
+          |> assign(alpha: alpha + adj/100.0)
+          |> update!()
         {false, _, _} ->
           socket
       end
@@ -269,19 +309,11 @@ defmodule BulmaWidgetsWeb.ExampleGraphLive do
     {:noreply, socket}
   end
 
-  def handle_event("slide-moving", params, socket) do
-    %{"value" => value} = params
-    {moving_count, _} = Integer.parse(value)
-
-    socket =
-      socket
-      |> assign(moving_count: moving_count)
-      |> update_estimates()
-      |> put_graph()
-
-    {:noreply, socket}
+  def update!(socket) do
+    socket
+    |> update_estimates()
+    |> put_graph()
   end
-
   ## very dumb box average, but avoids shortening the sample
   def box_average(data, 0) do
     data
